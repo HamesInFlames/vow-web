@@ -1,0 +1,36 @@
+---
+// Hours table from business.json; today's row is bolded in the browser (shop time zone).
+import business from '../../data/business.json';
+import { hoursRows, type Hours } from '../../lib/hours';
+import Confirm from './Confirm.astro';
+
+interface Props { tone?: 'light' | 'dark'; caption?: string }
+const { tone = 'light', caption = 'Opening hours' } = Astro.props;
+const rows = hoursRows(business.hours as Hours, business.closedDayNote);
+---
+<table class="hours-table w-full max-w-sm border-collapse tabular" data-tz={business.timeZone}>
+  <caption class="text-left font-semibold pb-1">{caption}<Confirm note="Hours: four versions conflict" /></caption>
+  <tbody>
+    {rows.map((r) => (
+      <tr data-days={r.days.join(' ')} class:list={['border-b', tone === 'dark' ? 'border-white/20' : 'border-rule']}>
+        <th scope="row" class="py-1.5 pr-4 text-left font-normal">{r.dayLabel}</th>
+        <td class="py-1.5 whitespace-nowrap">{r.text}</td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+{business.holidayNote && <p class="mt-2">{business.holidayNote}</p>}
+
+<script>
+  import { localParts } from '../../lib/hours';
+  for (const table of document.querySelectorAll<HTMLTableElement>('.hours-table')) {
+    const { day } = localParts(new Date(), table.dataset.tz!);
+    for (const row of table.querySelectorAll<HTMLTableRowElement>('tr[data-days]')) {
+      if (row.dataset.days!.split(' ').includes(day)) {
+        row.classList.add('font-bold');
+        row.querySelector('th')?.classList.replace('font-normal', 'font-bold');
+        row.querySelector('th')?.insertAdjacentHTML('beforeend', ' <span class="text-sm">(today)</span>');
+      }
+    }
+  }
+</script>

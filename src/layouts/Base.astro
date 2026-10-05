@@ -1,0 +1,77 @@
+---
+// Document shell: meta, self-hosted fonts, reduced-motion flag, JSON-LD, chrome (plan §3b, §3f).
+import { Font } from 'astro:assets';
+import '../styles/global.css';
+import business from '../data/business.json';
+import { localBusinessJsonLd } from '../lib/seo';
+import UtilityRow from '../components/astro/UtilityRow.astro';
+import Header from '../components/astro/Header.astro';
+import Footer from '../components/astro/Footer.astro';
+import StickyBar from '../components/astro/StickyBar.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+  variant?: 'full' | 'interim';
+  current?: string;
+  jsonLd?: object[];
+  noindex?: boolean;
+  /** The page's likely LCP image, preloaded so the browser fetches it before parsing the body. */
+  preloadImage?: { src: string; srcset?: string; sizes?: string };
+}
+const {
+  title,
+  description = business.description,
+  variant = 'full',
+  current,
+  jsonLd = [],
+  noindex = false,
+  preloadImage,
+} = Astro.props;
+// build.format 'file' makes Astro.url.pathname end in .html at build time; canonicals use the clean URL.
+const cleanPath = Astro.url.pathname.replace(/\.html$/, '').replace(/\/index$/, '/') || '/';
+const canonical = new URL(cleanPath, Astro.site).href;
+const fullTitle = title === business.brandName ? `${title} · RV service and parts in Concord, ON` : `${title} · ${business.brandName}`;
+const ld = [localBusinessJsonLd(), ...jsonLd];
+---
+<!doctype html>
+<html lang="en-CA">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <meta name="theme-color" content="#111315" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={business.brandName} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content="en_CA" />
+    <script is:inline>
+      // Mark JS as available (shows JS-only controls), and apply the footer "Reduce motion" choice before first paint.
+      document.documentElement.classList.add('js');
+      try { if (localStorage.getItem('vow-motion') === 'reduce') document.documentElement.dataset.motion = 'reduce'; } catch (e) {}
+    </script>
+    {preloadImage && (
+      <link rel="preload" as="image" href={preloadImage.src} imagesrcset={preloadImage.srcset} imagesizes={preloadImage.sizes} fetchpriority="high" />
+    )}
+    <Font cssVariable="--font-public-sans" preload={[{ weight: '400' }]} />
+    <Font cssVariable="--font-barlow-condensed" preload={[{ weight: '700' }]} />
+    {ld.map((obj) => <script type="application/ld+json" set:html={JSON.stringify(obj)} />)}
+  </head>
+  <body class="flex min-h-dvh flex-col">
+    <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:left-2 focus:top-2 focus:z-50 focus:rounded focus:bg-white focus:px-4 focus:py-3 focus:text-ink">Skip to content</a>
+    <UtilityRow />
+    <Header variant={variant} current={current} />
+    <main id="main" class="flex-1">
+      <slot />
+    </main>
+    <Footer variant={variant} />
+    <StickyBar />
+  </body>
+</html>

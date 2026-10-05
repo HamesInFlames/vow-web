@@ -1,0 +1,18 @@
+---
+import Base from '../layouts/Base.astro';
+import business from '../data/business.json';
+import { telHref } from '../lib/format';
+import { routeExists } from '../lib/site';
+---
+<Base title="Page not found" noindex>
+  <div class="wrap py-14">
+    <h1 class="m-0 text-[2.25rem] lg:text-[3rem]">That page isn’t here.</h1>
+    <span class="rule-accent mt-3" aria-hidden="true"></span>
+    <p class="mt-6 text-lead">Call <a href={telHref(business.phones.main)} class="font-semibold tabular">{business.phones.main}</a> and tell us what you need.</p>
+    <div class="mt-6 flex flex-wrap gap-3">
+      <a href="/" class="btn btn-primary">Home page</a>
+      {routeExists('/services') && <a href="/services" class="btn btn-secondary">All services</a>}
+      {routeExists('/book') && <a href="/book" class="btn btn-secondary">Book service</a>}
+    </div>
+  </div>
+</Base>

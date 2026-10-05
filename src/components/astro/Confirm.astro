@@ -1,0 +1,7 @@
+---
+// Yellow "[confirm]" chip, shown only in review builds (PUBLIC_REVIEW=1). Production builds render nothing.
+import { REVIEW } from '../../lib/site';
+interface Props { note: string }
+const { note } = Astro.props;
+---
+{REVIEW && <span class="confirm-chip" title={note}>[confirm]<span class="sr-only">: {note}</span></span>}

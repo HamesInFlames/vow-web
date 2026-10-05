@@ -1,0 +1,74 @@
+---
+// Site header (plan §3b). `interim` shows only the logo and the Call button.
+// Nav links render only for routes that exist, so no phase ships a dead link.
+import { Image } from 'astro:assets';
+import logo from '../../assets/brand/vow-logo.png';
+import business from '../../data/business.json';
+import { telHref } from '../../lib/format';
+import { primaryNav, routeExists } from '../../lib/site';
+
+interface Props { variant?: 'full' | 'interim'; current?: string }
+const { variant = 'full', current = '' } = Astro.props;
+const nav = variant === 'full' ? primaryNav.filter((n) => n.external || routeExists(n.href)) : [];
+---
+<header class="relative z-40 bg-white border-b border-rule">
+  <div class="wrap flex items-center gap-4 py-2.5 lg:py-3">
+    <!-- The badge's own lettering is too small to read at header size, so the name is set beside it in text. -->
+    <a href="/" class="flex shrink-0 items-center gap-3 rounded-sm text-ink no-underline hover:text-ink" aria-label={`${business.brandName} home`}>
+      <Image src={logo} alt="" width={64} height={61}
+        densities={[1, 2]} loading="eager" fetchpriority="high" class="h-12 w-auto lg:h-16" />
+      <span class="leading-none" aria-hidden="true">
+        <span class="block font-[family-name:var(--font-display)] text-[1.375rem] font-bold lg:text-[1.75rem]">{business.brandName}</span>
+        <span class="mt-1 hidden text-[0.9375rem] text-slate-60 sm:block">RV service and parts</span>
+      </span>
+    </a>
+
+    {nav.length > 0 && (
+      <nav aria-label="Main" class="hidden lg:block ml-4 print:hidden">
+        <ul class="flex items-center gap-1 list-none m-0 p-0">
+          {nav.map((item) => (
+            <li>
+              <a href={item.href}
+                class:list={['flex min-h-12 items-center rounded px-3 font-semibold text-ink no-underline hover:bg-paper hover:text-red',
+                  { 'text-red underline decoration-2 underline-offset-8': current === item.href }]}
+                aria-current={current === item.href ? 'page' : undefined}
+                {...(item.external ? { target: '_blank', rel: 'noopener' } : {})}>
+                {item.label}{item.external && <span class="sr-only"> ({item.note}, opens in a new tab)</span>}
+                {item.external && <span aria-hidden="true" class="ml-1 text-slate-60">↗</span>}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    )}
+
+    <div class="ml-auto flex items-center gap-2 print:hidden">
+      <a href={telHref(business.phones.main)} class="btn btn-primary px-4">
+        <span class="lg:hidden">Call</span>
+        <span class="hidden lg:inline tabular">Call {business.phones.main}</span>
+      </a>
+      {nav.length > 0 && (
+        <details class="lg:hidden group">
+          <summary class="btn btn-secondary list-none cursor-pointer px-3 [&::-webkit-details-marker]:hidden">
+            <span class="group-open:hidden">Menu</span><span class="hidden group-open:inline">Close</span>
+          </summary>
+          <nav aria-label="Main menu" class="absolute inset-x-0 top-full z-40 max-h-[calc(100dvh-7rem)] overflow-y-auto bg-white border-y border-rule shadow-[0_8px_16px_rgb(0_0_0/0.15)]">
+            <ul class="list-none m-0 p-0">
+              {nav.map((item) => (
+                <li class="border-b border-rule">
+                  <a href={item.href} class="wrap flex min-h-14 items-center text-lg font-semibold text-ink no-underline"
+                    {...(item.external ? { target: '_blank', rel: 'noopener' } : {})}>
+                    {item.label}{item.external && <span class="ml-2 text-base font-normal text-slate-60">({item.note})</span>}
+                  </a>
+                </li>
+              ))}
+            </ul>
+            <div class="wrap py-6">
+              <a href={telHref(business.phones.main)} class="btn btn-primary w-full text-lg tabular">Call {business.phones.main}</a>
+            </div>
+          </nav>
+        </details>
+      )}
+    </div>
+  </div>
+</header>

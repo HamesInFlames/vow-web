@@ -1,0 +1,22 @@
+---
+// Human-readable site map, generated from the real pages.
+import Base from '../layouts/Base.astro';
+import PageIntro from '../components/astro/PageIntro.astro';
+import { footerNav, legalNav, routeExists } from '../lib/site';
+
+const pages = [
+  { label: 'Home', href: '/' },
+  ...footerNav.flatMap((c) => c.items).filter((i) => !i.external && !i.href.includes('#')),
+  ...legalNav,
+].filter((p, i, all) => routeExists(p.href) && all.findIndex((q) => q.href === p.href) === i);
+const crumbs = [{ name: 'Home', path: '/' }, { name: 'Site map', path: '/sitemap' }];
+---
+<Base title="Site map" description="Every page on the Vacations on Wheels website.">
+  <PageIntro crumbs={crumbs} title="Site map" />
+  <div class="wrap py-10">
+    <section aria-labelledby="sm-pages">
+      <h2 id="sm-pages" class="m-0 text-[1.5rem]">Pages</h2>
+      <ul class="mt-3 list-none p-0">{pages.map((p) => <li><a href={p.href} class="tap">{p.label}</a></li>)}</ul>
+    </section>
+  </div>
+</Base>

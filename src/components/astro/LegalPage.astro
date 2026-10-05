@@ -1,0 +1,25 @@
+---
+// Shared shell for the legal pages. These are plain-language drafts for the client's lawyer to review.
+import Base from '../../layouts/Base.astro';
+import PageIntro from './PageIntro.astro';
+import Confirm from './Confirm.astro';
+import { breadcrumbJsonLd } from '../../lib/seo';
+
+interface Props { title: string; path: string; description: string; updated: string }
+const { title, path, description, updated } = Astro.props;
+const crumbs = [{ name: 'Home', path: '/' }, { name: title, path }];
+---
+<Base title={title} description={description} jsonLd={[breadcrumbJsonLd(crumbs)]}>
+  <PageIntro crumbs={crumbs} title={title}>
+    <p class="mt-3 text-slate-60">Last updated <time datetime={updated}>{new Date(updated + 'T12:00:00').toLocaleDateString('en-CA', { month: 'long', day: 'numeric', year: 'numeric' })}</time><Confirm note="Draft: client's lawyer to review before launch" /></p>
+  </PageIntro>
+  <article class="legal wrap max-w-[48rem] pb-16 pt-6">
+    <slot />
+  </article>
+</Base>
+
+<style>
+  .legal :global(h2) { margin: 2rem 0 0.5rem; font-size: 1.5rem; }
+  .legal :global(p), .legal :global(ul) { margin: 0.75rem 0 0; }
+  .legal :global(ul) { padding-left: 1.25rem; list-style: disc; }
+</style>

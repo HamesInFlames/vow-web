@@ -1,0 +1,92 @@
+---
+// Home (plan §3b). Phase 0 shell: hero, what the shop works on, RV Farm next door, visit block.
+// Phase 1 adds service tiles, the winterizing band, claims/warranty, parts, pick-up and reviews.
+import Base from '../layouts/Base.astro';
+import HoursTable from '../components/astro/HoursTable.astro';
+import Placeholder from '../components/astro/Placeholder.astro';
+import Claim from '../components/astro/Claim.astro';
+import business from '../data/business.json';
+import { telHref } from '../lib/format';
+import { routeExists } from '../lib/site';
+
+const d = business;
+// The eight service headings on the current vacationsonwheels.ca (docs/site-capture/vow-site-capture.md).
+const services = [
+  'Appliance repair and replacement',
+  'Awning and accessory repair',
+  'Water systems',
+  'Heating and air conditioning',
+  'Leak detection and repair',
+  'Winterizing',
+  'Annual RV inspection',
+  'Preventative maintenance',
+];
+const canBook = routeExists('/book');
+---
+<Base title={d.brandName}>
+  <!-- 1 Hero. No confirmed shop photo yet (plan V11), so the photo slot is an honest placeholder. -->
+  <section aria-labelledby="hero-h" class="wrap grid items-center gap-10 py-10 lg:grid-cols-12 lg:py-16">
+    <div class="lg:col-span-6">
+      <p class="eyebrow m-0 text-red">Service · Parts · Warranty · Insurance claims</p>
+      <span class="rule-accent mb-5 mt-3" aria-hidden="true"></span>
+      <h1 id="hero-h" class="m-0 text-[2.5rem] lg:text-[3.5rem]">RV repair, parts and insurance claims in Concord</h1>
+      <p class="mt-5 max-w-[34rem] text-lead">
+        RVs and trailers: repairs, maintenance, winterizing and parts, at 1841 Hwy 7. Call us and tell us what’s wrong.
+      </p>
+      <div class="mt-7 flex flex-wrap gap-3">
+        {canBook && <a href="/book" class="btn btn-primary min-h-14 px-6 text-lg">Book service</a>}
+        <a href={telHref(d.phones.main)} class:list={['btn min-h-14 px-6 text-lg tabular', canBook ? 'btn-secondary' : 'btn-primary']}>Call {d.phones.main}</a>
+      </div>
+    </div>
+    <div class="lg:col-span-6">
+      <Placeholder what="a service bay with an RV inside" ratio="16 / 10" />
+    </div>
+  </section>
+
+  <!-- 2 What the shop works on: the current site's eight services, as text until each has a page. -->
+  <section aria-labelledby="work-h" class="border-y border-rule bg-white">
+    <div class="wrap py-14">
+      <h2 id="work-h" class="m-0 text-[2rem] lg:text-[2.5rem]">What we work on</h2>
+      <span class="rule-accent mb-6 mt-2" aria-hidden="true"></span>
+      <ul class="m-0 grid list-none gap-3 p-0 sm:grid-cols-2 lg:grid-cols-4">
+        {services.map((s) => (
+          <li class="flex min-h-14 items-center rounded border border-rule bg-paper px-4 py-3 font-semibold text-ink">{s}</li>
+        ))}
+      </ul>
+      <ul class="m-0 mt-6 list-none space-y-1 p-0">
+        <Claim id="pickup" as="li" />
+        <Claim id="spanish" as="li" />
+      </ul>
+      <p class="mt-6">Not on the list? Call <a href={telHref(d.phones.main)} class="font-semibold tabular">{d.phones.main}</a> and ask.</p>
+    </div>
+  </section>
+
+  <!-- 3 Sales cross-band to RV Farm, same lot. -->
+  <section aria-labelledby="rvf-h" class="bg-slate text-mist">
+    <div class="wrap flex flex-wrap items-center justify-between gap-6 py-10">
+      <div class="max-w-[40rem]">
+        <h2 id="rvf-h" class="m-0 text-[1.75rem] text-white">Looking for a trailer? {d.sibling.name} is next door</h2>
+        <p class="mt-2">{d.sibling.name} sells used trailers and park models at the same address.</p>
+      </div>
+      <div class="flex flex-wrap gap-3">
+        <a href={telHref(d.sibling.phone)} class="btn border-2 border-white text-white hover:bg-white/10 hover:text-white tabular">Call sales {d.sibling.phone}</a>
+        <a href={d.sibling.url} target="_blank" rel="noopener" class="btn bg-white text-ink hover:bg-paper hover:text-ink">See RV Farm<span class="sr-only"> (opens in a new tab)</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 Visit: address, hours, map link. -->
+  <section aria-labelledby="visit-h" class="wrap grid gap-10 py-14 lg:grid-cols-12">
+    <div class="lg:col-span-5">
+      <h2 id="visit-h" class="m-0 text-[2rem]">Find the shop</h2>
+      <span class="rule-accent mb-4 mt-2" aria-hidden="true"></span>
+      <address class="not-italic text-lead">{d.address.street}<br />{d.address.city}, {d.address.region} {d.address.postal}</address>
+      <div class="mt-5 flex flex-wrap gap-3">
+        <a href={d.address.mapsUrl} target="_blank" rel="noopener" class="btn btn-primary">Get directions<span class="sr-only"> (opens Google Maps in a new tab)</span></a>
+        <a href={telHref(d.phones.main)} class="btn btn-secondary tabular">Call {d.phones.main}</a>
+      </div>
+    </div>
+    <div class="lg:col-span-3"><HoursTable /></div>
+    <div class="lg:col-span-4"><Placeholder what="the shop from Hwy 7" /></div>
+  </section>
+</Base>

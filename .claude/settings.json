@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "deny": [
+      "Read(./.env)", "Read(./.env.*)", "Edit(./.env)", "Edit(./.env.*)",
+      "Edit(./.claude/settings.json)", "Edit(./.claude/settings.local.json)", "Edit(./.claude/hooks/**)",
+      "Bash(git push --force *)", "Bash(git push -f *)", "Bash(git push --delete *)",
+      "PowerShell(git push --force *)", "PowerShell(git push -f *)", "PowerShell(git push --delete *)",
+      "Bash(gh repo delete *)", "PowerShell(gh repo delete *)",
+      "mcp__github__create_repository", "mcp__github__fork_repository"
+    ],
+    "ask": [
+      "Bash(git push *)", "PowerShell(git push *)",
+      "Bash(gh pr create *)", "PowerShell(gh pr create *)",
+      "Bash(gh pr merge *)", "PowerShell(gh pr merge *)",
+      "mcp__github__merge_pull_request", "mcp__github__push_files", "mcp__github__create_or_update_file",
+      "Bash(railway *)", "PowerShell(railway *)"
+    ]
+  },
+  "disableClaudeAiConnectors": true,
+  "env": {
+    "CLAUDE_CODE_SUBAGENT_MODEL": "sonnet",
+    "CLAUDE_CODE_DISABLE_FAST_MODE": "1"
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash|PowerShell|Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell.exe",
+            "args": ["-NoProfile", "-ExecutionPolicy", "Bypass", "-File", "${CLAUDE_PROJECT_DIR}/.claude/hooks/guard.ps1"]
+          }
+        ]
+      }
+    ]
+  }
+}

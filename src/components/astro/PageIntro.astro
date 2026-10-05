@@ -1,0 +1,15 @@
+---
+// Breadcrumbs + H1 + lead paragraph for inner pages.
+import Breadcrumbs from './Breadcrumbs.astro';
+
+interface Props { title: string; lead?: string; crumbs: { name: string; path: string }[]; eyebrow?: string }
+const { title, lead, crumbs, eyebrow } = Astro.props;
+---
+<Breadcrumbs items={crumbs} />
+<header class="wrap pb-2 pt-4">
+  {eyebrow && <p class="eyebrow m-0 text-red">{eyebrow}</p>}
+  <h1 class="m-0 max-w-[52rem] text-[2.25rem] lg:text-[3.25rem]">{title}</h1>
+  <span class="rule-accent mt-3" aria-hidden="true"></span>
+  {lead && <p class="mt-4 max-w-[44rem] text-lead">{lead}</p>}
+  <slot />
+</header>

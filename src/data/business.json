@@ -1,0 +1,58 @@
+{
+  "brandName": "Vacations on Wheels",
+  "legalName": "Vacations on Wheels Inc.",
+  "tagline": "RV service, parts and insurance claims",
+  "siteUrl": "https://vacationsonwheels.ca",
+  "description": "RV repair, maintenance, winterizing, parts and insurance-claim repairs at 1841 Hwy 7 in Concord, Ontario.",
+  "address": {
+    "street": "1841 Hwy 7",
+    "city": "Concord",
+    "region": "ON",
+    "postal": "L4K 1V4",
+    "country": "CA",
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=1841+Highway+7%2C+Concord%2C+ON+L4K+1V4"
+  },
+  "phones": {
+    "main": "905-738-1253",
+    "tollFree": null,
+    "sms": null
+  },
+  "email": "vacationsonwheel@gmail.com",
+  "timeZone": "America/Toronto",
+  "hours": {
+    "mon": ["09:00", "17:00"],
+    "tue": ["09:00", "17:00"],
+    "wed": ["09:00", "17:00"],
+    "thu": ["09:00", "17:00"],
+    "fri": ["09:00", "17:00"],
+    "sat": ["09:00", "17:00"],
+    "sun": null
+  },
+  "closedDayNote": {},
+  "holidayNote": "",
+  "memberships": [],
+  "social": {},
+  "google": {
+    "rating": 4.4,
+    "count": 140,
+    "url": "https://www.google.com/maps/search/?api=1&query=Vacations+on+Wheels+1841+Highway+7+Concord+ON",
+    "asOf": "2026-09-17",
+    "confirmed": false
+  },
+  "sibling": {
+    "name": "RV Farm",
+    "what": "Used trailers and park models",
+    "url": "https://thervfarm.ca",
+    "phone": "905-605-7056"
+  },
+  "confirm": [
+    "legalName: is \"Vacations on Wheels Inc.\" the registered name? (current site footer and JSON-LD)",
+    "address: \"1841 Hwy 7\" (header) or \"1841 Hwy 7 W\" (JSON-LD, Google)?",
+    "email: vacationsonwheel@gmail.com is the only address on the current site (About page). Keep it, or publish one on the domain?",
+    "phones.sms: is there a text-capable line? The sticky bar shows Text only when set",
+    "hours: current site says Mon–Sat 9–5, Sun closed; Google says Mon–Fri 9–6, weekends closed. Holidays?",
+    "social: the current site's links are empty; facebook.com/vacationsonwheels and instagram.com/vacationsonwheelsinc exist (audit). Are they VOW's and used?",
+    "google: rating and review count (4.4★, ~140 on Sept 17) are re-read at launch; the profile URL should be the exact listing",
+    "sibling.url: links to RV Farm's current site (thervfarm.ca); switch when the new RV Farm site launches on its domain (rvfarm.ca vs thervfarm.ca)"
+  ]
+}

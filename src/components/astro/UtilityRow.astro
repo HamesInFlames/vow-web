@@ -1,0 +1,47 @@
+---
+// Charcoal top row on every page: today's status, address, phone (plan §3b). Status is computed in the
+// browser in the shop’s time zone; the static fallback is the week's hours summary.
+import business from '../../data/business.json';
+import { hoursRows, type Hours } from '../../lib/hours';
+import { telHref } from '../../lib/format';
+import { routeExists } from '../../lib/site';
+
+const rows = hoursRows(business.hours as Hours, business.closedDayNote);
+const summary = rows
+  .filter((r) => r.text !== 'Closed')
+  .map((r) => `${r.dayLabel} ${r.text.replaceAll(':00', '')}`)
+  .join(' · ');
+const contactHref = routeExists('/contact') ? '/contact#map' : business.address.mapsUrl;
+---
+<section aria-label="Today's hours, address and phone" class="bg-ink text-white">
+  <div class="wrap flex items-center gap-x-5 py-1 text-[0.9375rem] leading-snug whitespace-nowrap overflow-hidden">
+    <p class="m-0 flex items-center gap-2 print:hidden">
+      <span id="open-dot" class="inline-block size-2.5 rounded-full bg-white/35 ring-1 ring-white" aria-hidden="true"></span>
+      <span id="open-status" data-hours={JSON.stringify(business.hours)} data-tz={business.timeZone}>
+        <span class="hidden sm:inline">{summary}</span><span class="sm:hidden">See hours below</span>
+      </span>
+    </p>
+    <a class="hidden sm:inline text-white underline decoration-white/50 hover:text-white min-h-11 content-center" href={contactHref}
+      {...(contactHref.startsWith('http') ? { rel: 'noopener' } : {})}>
+      {business.address.street}, {business.address.city}
+    </a>
+    <a class="ml-auto font-semibold text-white no-underline hover:text-white hover:underline min-h-11 content-center tabular" href={telHref(business.phones.main)}>
+      <span class="sr-only">Call Vacations on Wheels at </span>{business.phones.main}
+    </a>
+  </div>
+</section>
+
+<script>
+  import { openStatus, type Hours } from '../../lib/hours';
+  const el = document.getElementById('open-status');
+  const dot = document.getElementById('open-dot');
+  if (el) {
+    const status = openStatus(JSON.parse(el.dataset.hours!) as Hours, new Date(), el.dataset.tz!);
+    el.innerHTML = '';
+    const long = Object.assign(document.createElement('span'), { className: 'hidden sm:inline', textContent: status.text });
+    const short = Object.assign(document.createElement('span'), { className: 'sm:hidden', textContent: status.short });
+    el.append(long, short);
+    dot?.classList.toggle('bg-white', status.open);
+    dot?.classList.toggle('bg-white/35', !status.open);
+  }
+</script>

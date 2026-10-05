@@ -1,0 +1,189 @@
+@import 'tailwindcss';
+
+/* no-js:… utilities apply when the inline script in Base.astro hasn't run. */
+@custom-variant no-js (html:not(.js) &);
+
+/*
+  VOW tokens (plan §3d, override V3). Red and black sampled from the VOW logo badge (red #BE1A2C, black #000);
+  text-safe red darkened to reach 7:1 with white. Cool greys instead of RV Farm's warm sand, so the sister
+  sites read as one family without being confused. Sand stays only for the "Photo coming" placeholder.
+  `npm run contrast` checks every pair; keep hexes there in sync by name.
+*/
+@theme {
+  --color-mist: #EEF1F4;
+  --color-paper: #F8F9FB;
+  --color-white: #FFFFFF;
+  --color-sand: #F4EFE6;
+  --color-slate: #262B31;
+  --color-slate-60: #434A53;
+  --color-rule: #CDD3DA;
+  --color-ink: #111315;
+  --color-red-brand: #BE1A2C;
+  --color-red: #9A1020;
+  --color-red-pressed: #740B17;
+  --color-accent: #BE1A2C;
+  --color-on-accent: #FFFFFF;
+  --color-ok: #2E7D4F;
+  --color-confirm: #FFE08A;
+
+  --font-display: var(--font-barlow-condensed), 'Arial Narrow', sans-serif;
+  --font-body: var(--font-public-sans), Arial, sans-serif;
+
+  --radius-sm: 2px;
+  --radius: 4px;
+
+  --container-site: 80rem;
+
+  --text-body: 1.0625rem;
+  --text-body--line-height: 1.6;
+  --text-lead: 1.25rem;
+  --text-lead--line-height: 1.5;
+  --text-caption: 1rem;
+  --text-caption--line-height: 1.5;
+}
+
+@layer base {
+  html {
+    background: var(--color-mist);
+    color: var(--color-slate);
+    font-family: var(--font-body);
+    font-size: 100%;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    font-size: var(--text-body);
+    line-height: 1.6;
+    min-height: 100dvh;
+  }
+  @media (min-width: 64rem) {
+    body { font-size: 1.125rem; }
+  }
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    line-height: 1.1;
+    color: var(--color-ink);
+    text-wrap: balance;
+  }
+  a { color: var(--color-red); text-decoration-line: underline; text-underline-offset: 0.15em; }
+  a:hover { color: var(--color-red-pressed); }
+  :focus-visible {
+    outline: 3px solid var(--color-ink);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 5px var(--color-white);
+  }
+  .tabular { font-variant-numeric: tabular-nums; }
+}
+
+@layer components {
+  .wrap {
+    width: 100%;
+    max-width: var(--container-site);
+    margin-inline: auto;
+    padding-inline: 1rem;
+  }
+  @media (min-width: 48rem) {
+    .wrap { padding-inline: 1.5rem; }
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 3rem;
+    padding: 0.625rem 1.25rem;
+    border-radius: var(--radius);
+    font-weight: 600;
+    text-decoration: none;
+    line-height: 1.2;
+    transition: background-color 150ms ease;
+  }
+  .btn-primary { background: var(--color-red); color: var(--color-white); }
+  .btn-primary:hover { background: var(--color-red-pressed); color: var(--color-white); }
+  .btn-secondary {
+    background: var(--color-white);
+    color: var(--color-ink);
+    border: 2px solid var(--color-ink);
+  }
+  .btn-secondary:hover { background: var(--color-paper); color: var(--color-ink); }
+  /* Standalone links (not inside running text) get a 44px tap height. */
+  .tap {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+  }
+  .eyebrow {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 0.9375rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .rule-accent {
+    display: block;
+    width: 3.5rem;
+    height: 4px;
+    background: var(--color-accent);
+  }
+  .confirm-chip {
+    display: inline-block;
+    margin-inline-start: 0.375rem;
+    padding: 0 0.375rem;
+    border-radius: var(--radius-sm);
+    background: var(--color-confirm);
+    color: var(--color-ink);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    line-height: 1.5;
+    vertical-align: middle;
+  }
+}
+
+/* Controls that do nothing without JS (e.g. the inventory filter) are hidden then. */
+html:not(.js) .needs-js { display: none; }
+
+/* Native cross-document view transitions (Chromium/Safari); silent elsewhere. */
+@view-transition { navigation: auto; }
+
+/* Reduced motion: the OS setting or the footer toggle (html[data-motion="reduce"]) turns all motion off. */
+@media (prefers-reduced-motion: reduce) {
+  @view-transition { navigation: none; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+html[data-motion='reduce'] *,
+html[data-motion='reduce'] *::before,
+html[data-motion='reduce'] *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+html[data-motion='reduce'] { view-transition-name: none; }
+html[data-motion='reduce']::view-transition-group(*) { animation: none !important; }
+
+/* Hero Ken Burns (plan §3f): one slow pass on desktop only; off under reduced motion via the rules above. */
+@media (min-width: 64rem) and (prefers-reduced-motion: no-preference) {
+  .hero-kb { animation: hero-kb 16s ease-out 1 both; transform-origin: 60% 50%; }
+}
+@keyframes hero-kb { from { transform: scale(1); } to { transform: scale(1.06); } }
+
+/* Unit pages print as a spec sheet (plan §3g Phase 3): no chrome, black on white, price and specs kept. */
+@media print {
+  @page { margin: 12mm; }
+  html, body { background: #fff; font-size: 11pt; }
+  a { color: inherit; text-decoration: none; }
+  .wrap { max-width: none; padding-inline: 0; }
+  .lg\:sticky { position: static !important; }
+  img { break-inside: avoid; }
+  table { break-inside: avoid; }
+  aside, main .lg:col-span-8, main .lg:col-span-4 { grid-column: auto !important; }
+  .print-photo img { max-height: 90mm; width: 100%; object-fit: cover; }
+  h1 { font-size: 22pt; }
+  h2 { font-size: 15pt; }
+  .mt-10, .mt-12, .mt-14, .mt-16 { margin-top: 6mm !important; }
+}

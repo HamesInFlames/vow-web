@@ -1,0 +1,101 @@
+---
+// Footer (plan §3b). `interim` keeps the contact block, hours, sibling link and legal line only.
+import { Image } from 'astro:assets';
+import logo from '../../assets/brand/vow-logo.png';
+import business from '../../data/business.json';
+import { telHref } from '../../lib/format';
+import { footerNav, legalNav, routeExists } from '../../lib/site';
+import HoursTable from './HoursTable.astro';
+import Confirm from './Confirm.astro';
+
+interface Props { variant?: 'full' | 'interim' }
+const { variant = 'full' } = Astro.props;
+const year = new Date().getFullYear();
+const columns = variant === 'full'
+  ? footerNav
+      .map((c) => ({ ...c, items: c.items.filter((i) => i.external || routeExists(i.href)) }))
+      .filter((c) => c.items.length > 0)
+  : [];
+const legal = legalNav.filter((i) => routeExists(i.href));
+const d = business;
+---
+<footer class="bg-slate text-mist pb-24 lg:pb-0 print:hidden">
+  {variant === 'full' && (
+  <div class="wrap grid gap-10 py-12 md:grid-cols-2 lg:grid-cols-12">
+    <section aria-labelledby="footer-contact" class="lg:col-span-5">
+      <div class="mb-5 inline-block rounded bg-white p-2">
+        <Image src={logo} alt="" width={112} height={112} densities={[1, 2]} class="size-28" />
+      </div>
+      <h2 id="footer-contact" class="text-mist text-2xl mb-3">{d.brandName}</h2>
+      <address class="not-italic leading-relaxed">
+        <a class="tap text-mist underline decoration-mist/50 hover:text-white" href={d.address.mapsUrl} target="_blank" rel="noopener">
+          {d.address.street}, {d.address.city}, {d.address.region} {d.address.postal}<span class="sr-only"> (opens Google Maps in a new tab)</span>
+        </a><br />
+        <a class="tap mt-1 text-2xl font-semibold text-white no-underline hover:underline tabular font-[family-name:var(--font-display)]" href={telHref(d.phones.main)}>
+          {d.phones.main}
+        </a>
+        {d.email
+          ? <><br /><a class="tap text-mist underline decoration-mist/50 hover:text-white" href={`mailto:${d.email}`}>{d.email}</a></>
+          : <Confirm note="Which email address to publish" />}
+      </address>
+    </section>
+
+    <section aria-label="Hours" class="lg:col-span-3 text-mist">
+      <HoursTable tone="dark" caption="Hours" />
+    </section>
+
+    {columns.length > 0 ? (
+      <nav aria-label="Footer" class="lg:col-span-4 grid grid-cols-2 gap-6">
+        {columns.map((col) => (
+          <div>
+            <h2 class="eyebrow text-mist mb-2">{col.heading}</h2>
+            <ul class="list-none m-0 p-0">
+              {col.items.map((i) => (
+                <li><a href={i.href} class="inline-flex min-h-11 items-center text-mist underline decoration-mist/40 hover:text-white"
+                  {...(i.external ? { target: '_blank', rel: 'noopener' } : {})}>{i.label}{i.external && <span class="sr-only"> (opens in a new tab)</span>}</a></li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </nav>
+    ) : (
+      <section aria-labelledby="footer-service" class="lg:col-span-4">
+        <h2 id="footer-service" class="eyebrow text-mist mb-2">Sales</h2>
+        <p class="m-0">{d.sibling.name} is at the same address.</p>
+        <p class="mt-1"><a class="tap text-white font-semibold no-underline hover:underline tabular" href={telHref(d.sibling.phone)}>{d.sibling.phone}</a></p>
+        <p class="mt-1"><a class="inline-flex min-h-11 items-center text-mist underline decoration-mist/40 hover:text-white" href={d.sibling.url} target="_blank" rel="noopener">thervfarm.ca<span class="sr-only"> (opens in a new tab)</span></a></p>
+      </section>
+    )}
+  </div>
+  )}
+
+  <div class:list={[{ 'border-t border-white/15': variant === 'full' }]}>
+    <div class="wrap flex flex-wrap items-center gap-x-6 gap-y-2 py-5 text-[0.9375rem]">
+      <p class="m-0">© {year} {d.legalName}<Confirm note="Registered name: Vacations on Wheels Inc.?" /></p>
+      {legal.length > 0 && (
+        <ul class="flex flex-wrap gap-x-4 list-none m-0 p-0">
+          {legal.map((i) => <li><a class="inline-flex min-h-11 items-center text-mist underline decoration-mist/40 hover:text-white" href={i.href}>{i.label}</a></li>)}
+        </ul>
+      )}
+      <button type="button" id="motion-toggle" aria-pressed="false"
+        class="min-h-11 rounded border border-mist/50 px-3 text-mist hover:bg-white/10">
+        Reduce motion
+      </button>
+      <p class="m-0 ml-auto text-mist/90">Site by <a class="tap text-mist underline decoration-mist/40 hover:text-white" href="https://www.kimconsultant.net" target="_blank" rel="noopener">Kim Consultant<span class="sr-only"> (opens in a new tab)</span></a></p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Footer "Reduce motion" toggle: same effect as the OS setting (html[data-motion="reduce"]), remembered per browser.
+  const btn = document.getElementById('motion-toggle');
+  const root = document.documentElement;
+  const sync = () => btn?.setAttribute('aria-pressed', String(root.dataset.motion === 'reduce'));
+  sync();
+  btn?.addEventListener('click', () => {
+    const reduce = root.dataset.motion !== 'reduce';
+    if (reduce) root.dataset.motion = 'reduce'; else delete root.dataset.motion;
+    try { localStorage.setItem('vow-motion', reduce ? 'reduce' : 'full'); } catch { /* storage blocked */ }
+    sync();
+  });
+</script>

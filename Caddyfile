@@ -1,0 +1,43 @@
+# Static file server for Railway. Railway sets $PORT; default 8080 for local `docker run`.
+{
+	admin off
+	auto_https off
+}
+
+:{$PORT:8080} {
+	root * /srv
+	encode zstd gzip
+
+	header {
+		X-Content-Type-Options nosniff
+		Strict-Transport-Security "max-age=31536000"
+		Referrer-Policy strict-origin-when-cross-origin
+		X-Frame-Options DENY
+		Permissions-Policy "camera=(), microphone=(), geolocation=()"
+		-Server
+	}
+
+	# Hashed build assets never change.
+	@hashed path /_astro/*
+	header @hashed Cache-Control "public, max-age=31536000, immutable"
+	@html not path /_astro/*
+	header @html Cache-Control "public, max-age=300, must-revalidate"
+
+	# /services → /services.html (Astro build.format = "file"). Trailing slashes and explicit .html
+	# redirect to the clean URL (the canonical), keeping any query string.
+	@trailing path_regexp trailing ^(.+)/$
+	redir @trailing {re.trailing.1}{?query} 301
+	@index path /index.html
+	redir @index /{?query} 301
+	@dothtml path_regexp dothtml ^(/.+)\.html$
+	redir @dothtml {re.dothtml.1}{?query} 301
+
+	try_files {path} {path}.html
+	file_server
+
+	handle_errors {
+		@404 expression {err.status_code} == 404
+		rewrite @404 /404.html
+		file_server
+	}
+}

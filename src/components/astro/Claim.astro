@@ -1,0 +1,14 @@
+---
+// An unverified client claim (src/data/claims.json). Production shows it only once "confirmed" is true;
+// review builds show it with a [confirm] chip so Rae can check it.
+import claims from '../../data/claims.json';
+import { REVIEW } from '../../lib/site';
+import Confirm from './Confirm.astro';
+
+interface Props { id: string; as?: 'p' | 'li' }
+const { id, as: Tag = 'p' } = Astro.props;
+const claim = claims.items.find((c) => c.id === id);
+if (!claim) throw new Error(`Unknown claim "${id}" (src/data/claims.json)`);
+const show = claim.confirmed || REVIEW;
+---
+{show && <Tag class="m-0">{claim.text}{!claim.confirmed && <Confirm note="Unverified claim from the old site" />}</Tag>}

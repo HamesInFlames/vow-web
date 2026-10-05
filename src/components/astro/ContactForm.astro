@@ -1,0 +1,21 @@
+---
+// LeadForm with the site-wide settings filled in (key, redirect, phone, privacy link).
+import LeadForm, { type ExtraField } from '../islands/LeadForm';
+import business from '../../data/business.json';
+import { routeExists } from '../../lib/site';
+
+interface Props {
+  subject: string;
+  topics?: string[];
+  defaultTopic?: string;
+  messageLabel?: string;
+  messagePlaceholder?: string;
+  extraFields?: ExtraField[];
+  submitLabel?: string;
+}
+const p = Astro.props;
+const accessKey = import.meta.env.PUBLIC_WEB3FORMS_KEY as string | undefined;
+---
+<LeadForm client:visible {...p} accessKey={accessKey} subject={`Website: ${p.subject}`}
+  redirectUrl={new URL('/thanks', import.meta.env.PUBLIC_SITE_ORIGIN || Astro.site).href} phoneDisplay={business.phones.main}
+  privacyHref={routeExists('/privacy') ? '/privacy' : undefined} />
