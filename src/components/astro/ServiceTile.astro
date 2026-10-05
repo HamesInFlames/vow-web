@@ -1,0 +1,18 @@
+---
+// One service as a card: name, summary, price line. The whole card is the link (stretched ::after).
+import type { Service } from '../../lib/services';
+import { serviceHref } from '../../lib/services';
+import { priceLine } from '../../lib/format';
+import Confirm from './Confirm.astro';
+
+interface Props { service: Service; headingLevel?: 'h2' | 'h3' }
+const { service: s, headingLevel: H = 'h3' } = Astro.props;
+---
+<li class="relative flex flex-col rounded border border-rule bg-white p-5 hover:border-slate/60 focus-within:border-slate/60">
+  <H class="m-0 text-[1.5rem]">
+    <a href={serviceHref(s)} class="text-ink no-underline after:absolute after:inset-0 after:content-[''] hover:text-red">{s.data.name}</a>
+    {!s.data.confirmed && <Confirm note="Service not on the current site; hidden in production until Paul confirms it" />}
+  </H>
+  <p class="mb-0 mt-2 flex-1">{s.data.summary}</p>
+  <p class="mb-0 mt-4 font-semibold text-ink">{priceLine(s.data.fromPriceCad, s.data.priceNote)}</p>
+</li>

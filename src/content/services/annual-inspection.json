@@ -1,0 +1,26 @@
+{
+  "name": "Annual RV inspection",
+  "order": 3,
+  "summary": "A yearly check of the brakes, tires, lights, electrical and plumbing, so you know your RV is safe before you head out.",
+  "includes": [
+    "Brakes",
+    "Tires",
+    "Lights",
+    "Electrical systems",
+    "Plumbing",
+    "A call to go through what we found and what needs work"
+  ],
+  "bring": [
+    "The keys to the unit and any compartment locks",
+    "Your last inspection or service paperwork, if you have it"
+  ],
+  "faq": [
+    { "q": "How much does an inspection cost?", "a": "Call the shop for the current price for your unit." },
+    { "q": "What happens if you find a problem?", "a": "We call you, tell you what we found and quote the repair. You decide what we fix.", "confirm": "Is this how the shop works: no work beyond the estimate without the customer’s OK? (plan §2 #6)" },
+    { "q": "Can you do an Ontario safety standards certificate?", "a": "Call us to check for your unit.", "confirm": "Is VOW a licensed Motor Vehicle Inspection Station? Can it certify trailers and motorhomes?" }
+  ],
+  "related": ["preventative-maintenance", "winterizing"],
+  "photo": "a technician checking an RV’s brakes",
+  "confirmed": true,
+  "confirm": ["An inspection price, and how long it usually takes"]
+}

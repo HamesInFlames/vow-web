@@ -1,0 +1,23 @@
+{
+  "name": "Leak detection and repair",
+  "order": 7,
+  "summary": "We find where water is getting in, fix it and reseal the weak spots before it causes rot or mould.",
+  "includes": [
+    "Finding where the water is getting in",
+    "Fixing the leak",
+    "Resealing the roof, windows and other weak spots"
+  ],
+  "bring": [
+    "The keys to the unit and any compartment locks",
+    "Where you’ve seen stains, soft spots or water, and after what kind of weather"
+  ],
+  "faq": [
+    { "q": "There’s a water stain on the ceiling. Is it urgent?", "a": "Book it in soon. Water that gets into the roof or walls can cause rot and mould long before you see much on the inside." },
+    { "q": "How often does the roof need resealing?", "a": "It depends on the roof and how the RV is stored. We check the sealant during preventative maintenance and tell you when it needs doing." },
+    { "q": "How much does leak repair cost?", "a": "We can’t say until we’ve found the leak, so we quote after we’ve inspected it." }
+  ],
+  "related": ["preventative-maintenance", "water-systems", "insurance-claim-repairs"],
+  "photo": "a technician resealing around an RV window",
+  "confirmed": true,
+  "confirm": ["Does the shop also repair water damage (soft floors, rotted walls), or only small leaks?"]
+}

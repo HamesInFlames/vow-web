@@ -1,0 +1,26 @@
+{
+  "name": "Engine and electrical",
+  "order": 9,
+  "summary": "Engine diagnostics on motorhomes, and repairs to the 12-volt and 120-volt electrical systems.",
+  "includes": [
+    "Engine diagnostics",
+    "12-volt systems: batteries, lights and the converter",
+    "120-volt systems: shore power and outlets"
+  ],
+  "bring": [
+    "The keys to the unit and any compartment locks",
+    "Any warning lights or fault codes you’ve seen"
+  ],
+  "faq": [
+    { "q": "Do you work on gas and diesel motorhomes?", "a": "Yes, both.", "confirm": "Gas and diesel engine work: both? (handoff mentions three diesel techs)" },
+    { "q": "My lights work on shore power but not on the battery. Can you fix that?", "a": "Yes. We test the battery, the converter and the wiring and find the fault." },
+    { "q": "How much does it cost?", "a": "It depends on the fault, so we quote after we’ve diagnosed it." }
+  ],
+  "related": ["appliance-repair", "annual-inspection"],
+  "photo": "a technician testing an RV’s electrical panel",
+  "confirmed": false,
+  "confirm": [
+    "Not one of the 8 services on the current site; About mentions \"engine diagnostics\" and the handoff mentions diesel techs",
+    "Which engine work: diagnostics only, or repairs too? Chassis work?"
+  ]
+}

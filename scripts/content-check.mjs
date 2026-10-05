@@ -12,6 +12,10 @@ const BANNED = [
   // Legacy liabilities from the old site (audit)
   /Islington/i, /Woodbridge/i, /free delivery/i, /free warranty/i, /\$0 USD/i, /sale ends/i,
   /Toronto'?s largest/i, /voted best/i, /Grand River/i, /\bSIN\b/, /social insurance/i, /date of birth/i,
+  // The current VOW site's dealer-template leftovers and unsourced claims (docs/site-capture, plan V14)
+  /hold with deposit/i, /\bbuy now\b/i, /4\.3\s*\/\s*5/, /thousands of happy/i, /100 years/i, /\bdealership\b/i,
+  // Prices (AGENTS.md): "From $X + HST" or "Quote after inspection", never these
+  /call for price/i, /contact for price/i,
 ];
 
 // Exact phrases where a banned word is used correctly: promises NOT to collect sensitive data.

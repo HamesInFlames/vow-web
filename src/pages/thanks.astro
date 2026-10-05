@@ -1,0 +1,24 @@
+---
+// Where Web3Forms sends people after a no-JS form submit.
+import Base from '../layouts/Base.astro';
+import business from '../data/business.json';
+import { telHref } from '../lib/format';
+import { routeExists } from '../lib/site';
+import HoursTable from '../components/astro/HoursTable.astro';
+---
+<Base title="Thanks, we got your request" noindex>
+  <div class="wrap grid gap-10 py-14 lg:grid-cols-12">
+    <div class="lg:col-span-7">
+      <h1 class="m-0 text-[2.25rem] lg:text-[3rem]">Thanks, we got it.</h1>
+      <p class="mt-4 text-lead">If you asked for a booking, it isn’t confirmed yet. We’ll call you to confirm. If it’s urgent, call us now:</p>
+      <p class="mt-2"><a href={telHref(business.phones.main)} class="tap text-3xl font-semibold tabular">{business.phones.main}</a></p>
+      <div class="mt-8 flex flex-wrap gap-3">
+        {routeExists('/services') && <a href="/services" class="btn btn-primary">See our services</a>}
+        <a href="/" class="btn btn-secondary">Home</a>
+      </div>
+    </div>
+    <div class="lg:col-span-5">
+      <HoursTable caption="When we answer the phone" />
+    </div>
+  </div>
+</Base>

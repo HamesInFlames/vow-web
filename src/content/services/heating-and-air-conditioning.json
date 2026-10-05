@@ -1,0 +1,23 @@
+{
+  "name": "Heating and air conditioning",
+  "order": 5,
+  "summary": "Furnace and A/C repair and replacement, plus A/C covers and roof covers to protect them.",
+  "includes": [
+    "Furnace repair and replacement",
+    "A/C repair and replacement",
+    "A/C covers and roof covers"
+  ],
+  "bring": [
+    "The keys to the unit and any compartment locks",
+    "What the furnace or A/C is doing (no heat, no cold air, a noise, a fault light)"
+  ],
+  "faq": [
+    { "q": "The furnace fan runs but there’s no heat. What’s wrong?", "a": "Usually it’s the ignition, the propane supply or a sensor. We test each one, find the fault and quote the repair." },
+    { "q": "Is it worth repairing an old A/C unit?", "a": "Sometimes. Once we’ve found the fault we tell you what a repair costs and what a replacement costs, so you can choose." },
+    { "q": "How much does it cost?", "a": "It depends on the unit and the fault, so we quote after we’ve inspected it." }
+  ],
+  "related": ["appliance-repair", "winterizing"],
+  "photo": "a rooftop A/C unit being serviced",
+  "confirmed": true,
+  "confirm": []
+}

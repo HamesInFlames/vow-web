@@ -1,0 +1,30 @@
+{
+  "name": "Preventative maintenance",
+  "order": 2,
+  "summary": "We inspect and service the parts that wear out (roof, seals, tires, brakes, systems) before they turn into a big repair.",
+  "includes": [
+    "Roofs, including resealing",
+    "Slide-out seals",
+    "Window gaskets",
+    "Caulking and sealing",
+    "Tires, axles and bearings",
+    "Brakes",
+    "Electrical and water systems",
+    "Appliances",
+    "The structure of the unit"
+  ],
+  "bring": [
+    "The keys to the unit and any compartment locks",
+    "A list of anything that’s been bothering you",
+    "Your last service paperwork, if you have it"
+  ],
+  "faq": [
+    { "q": "How often should I bring it in?", "a": "Once a year, and before a long trip. Sealant, seals and bearings wear out whether or not the RV moves." },
+    { "q": "How is this different from the annual inspection?", "a": "The inspection checks the unit and tells you what needs work. Preventative maintenance also does the work: resealing, adjusting and servicing parts so small problems don’t become big ones." },
+    { "q": "How much does it cost?", "a": "It depends on the size of the unit and what we find, so we quote after we’ve looked at it." }
+  ],
+  "related": ["annual-inspection", "leak-detection", "winterizing"],
+  "photo": "a technician resealing an RV roof",
+  "confirmed": true,
+  "confirm": ["A price or price range for preventative maintenance, if Paul wants one shown"]
+}

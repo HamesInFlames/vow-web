@@ -11,6 +11,13 @@ const builtRoutes = new Set(
     f.replace(/^\/src\/pages/, '').replace(/\.(astro|ts|md)$/, '').replace(/\/index$/, '') || '/',
   ),
 );
+// /services/[slug] builds one page per visible service (same rule as lib/services.ts).
+if (builtRoutes.has('/services/[slug]')) {
+  const services = import.meta.glob<{ confirmed: boolean }>('/src/content/services/*.json', { eager: true, import: 'default' });
+  for (const [file, s] of Object.entries(services)) {
+    if (s.confirmed || REVIEW) builtRoutes.add(`/services/${file.split('/').pop()!.replace(/\.json$/, '')}`);
+  }
+}
 
 /** True when `path` (e.g. "/book", "/services#winter") maps to a page in src/pages. */
 export function routeExists(path: string): boolean {

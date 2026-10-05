@@ -16,5 +16,10 @@ export function telHref(phone: string): string {
   return `tel:+${digits.length === 10 ? '1' + digits : digits}`;
 }
 
+/** Service price line (AGENTS.md): "From $129 + HST" only once Paul confirms a price; otherwise the note. */
+export function priceLine(fromPriceCad: number | undefined, note = 'Quote after inspection'): string {
+  return fromPriceCad ? `From ${formatCad(fromPriceCad)} + HST` : note;
+}
+
 /** "905-605-7056" → "sms:+19056057056" */
 export const smsHref = (phone: string) => telHref(phone).replace(/^tel:/, 'sms:');

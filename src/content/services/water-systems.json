@@ -1,0 +1,25 @@
+{
+  "name": "Water system repair",
+  "order": 6,
+  "summary": "Fresh, grey and black water systems: tank replacements, pipe and fitting repairs, and water heaters.",
+  "includes": [
+    "Fresh water, grey water and black water systems",
+    "Tank replacement",
+    "Pipe and fitting repairs",
+    "Water heater repairs"
+  ],
+  "bring": [
+    "The keys to the unit and any compartment locks",
+    "Empty grey and black tanks, please",
+    "Where you’ve seen water or smelled something"
+  ],
+  "faq": [
+    { "q": "Can you replace a cracked holding tank?", "a": "Yes. Tank replacement is part of our water system work. We quote once we’ve seen the tank and how it’s mounted." },
+    { "q": "Water is dripping under the RV. Is it the plumbing or a leak from outside?", "a": "Bring it in and we’ll find out. If it’s rain getting in rather than the plumbing, that’s our leak detection service." },
+    { "q": "How much does it cost?", "a": "It depends on what’s broken and where, so we quote after we’ve inspected it." }
+  ],
+  "related": ["leak-detection", "winterizing", "appliance-repair"],
+  "photo": "RV water lines and tanks under repair",
+  "confirmed": true,
+  "confirm": ["Should customers empty the grey and black tanks before drop-off? (\"what to bring\" list)"]
+}

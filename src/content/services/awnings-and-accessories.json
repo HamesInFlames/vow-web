@@ -1,0 +1,23 @@
+{
+  "name": "Awning and accessory repair",
+  "order": 8,
+  "summary": "Torn fabric, a bent arm or an awning that won’t roll out: we repair or replace awnings and broken accessories.",
+  "includes": [
+    "Repairing awnings that are torn, bent or won’t open or close",
+    "Replacing the awning fabric or the whole awning",
+    "Repairing or replacing broken accessories"
+  ],
+  "bring": [
+    "The keys to the unit and any compartment locks",
+    "A photo of the damage, if it happened on the road"
+  ],
+  "faq": [
+    { "q": "My awning fabric is torn. Do I need a whole new awning?", "a": "Not always. Often the fabric can be replaced on the existing arms. We look at it and tell you which makes sense." },
+    { "q": "Do you work on electric awnings?", "a": "Yes, manual and electric.", "confirm": "Does the shop repair electric (powered) awnings?" },
+    { "q": "How much does it cost?", "a": "It depends on the awning and the damage, so we quote after we’ve inspected it." }
+  ],
+  "related": ["leak-detection", "insurance-claim-repairs"],
+  "photo": "an RV awning being replaced",
+  "confirmed": true,
+  "confirm": ["Which accessories does this cover (steps, ladders, vents, covers, hitches)?"]
+}

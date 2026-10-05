@@ -1,0 +1,25 @@
+{
+  "name": "Appliance repair and replacement",
+  "order": 4,
+  "summary": "We repair and replace RV fridges, stoves, microwaves, furnaces, hot water heaters and A/C units.",
+  "includes": [
+    "Finding out why the appliance isn’t working",
+    "Repairing it where a repair makes sense",
+    "Replacing it where it doesn’t, or when you want to upgrade",
+    "Fridges, stoves, microwaves, furnaces, hot water heaters and A/C units"
+  ],
+  "bring": [
+    "The keys to the unit and any compartment locks",
+    "The appliance’s make and model if you have it (usually on a label inside the door or on the side)",
+    "What it’s doing wrong and when it started"
+  ],
+  "faq": [
+    { "q": "Should I repair my fridge or replace it?", "a": "It depends on the fault and the age of the fridge. We look at it first, then tell you what we found and what each option would cost." },
+    { "q": "My fridge works on electric but not on propane. Can you fix that?", "a": "Yes. We check both the electric and the propane side and find where the fault is." },
+    { "q": "How much does an appliance repair cost?", "a": "It depends on the appliance and the fault, so we quote after we’ve inspected it." }
+  ],
+  "related": ["heating-and-air-conditioning", "water-systems", "engine-and-electrical"],
+  "photo": "an RV fridge being repaired",
+  "confirmed": true,
+  "confirm": ["Will the shop install an appliance the customer bought elsewhere?"]
+}

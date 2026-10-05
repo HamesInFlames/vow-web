@@ -1,0 +1,30 @@
+---
+// All services (plan §3b). Vehicle-type filter chips wait until the vehicle range is confirmed (plan V5).
+import Base from '../../layouts/Base.astro';
+import PageIntro from '../../components/astro/PageIntro.astro';
+import ServiceTile from '../../components/astro/ServiceTile.astro';
+import business from '../../data/business.json';
+import { telHref } from '../../lib/format';
+import { breadcrumbJsonLd } from '../../lib/seo';
+import { visibleServices } from '../../lib/services';
+
+const services = await visibleServices();
+const crumbs = [{ name: 'Home', path: '/' }, { name: 'Services', path: '/services' }];
+---
+<Base title="RV services" current="/services"
+  description="RV repair and maintenance in Concord: winterizing, inspections, appliances, heating and A/C, water systems, leaks and awnings."
+  jsonLd={[breadcrumbJsonLd(crumbs)]}>
+  <PageIntro title="RV services" crumbs={crumbs}
+    lead="Repairs and maintenance for RVs and trailers at our shop on Hwy 7 in Concord. Pick a service to see what’s included, or book and tell us what’s wrong." />
+
+  <section aria-label="Services" class="wrap pb-14 pt-6">
+    <ul class="m-0 grid list-none gap-4 p-0 sm:grid-cols-2 lg:grid-cols-3">
+      {services.map((s) => <ServiceTile service={s} headingLevel="h2" />)}
+    </ul>
+    <div class="mt-10 flex flex-wrap items-center gap-x-6 gap-y-3 rounded border border-rule bg-white p-5">
+      <p class="m-0 text-lead font-semibold text-ink">Not sure what it needs?</p>
+      <p class="m-0">Call <a href={telHref(business.phones.main)} class="font-semibold tabular">{business.phones.main}</a> and describe the problem, or book and tell us in your own words.</p>
+      <a href="/book" class="btn btn-primary">Book service</a>
+    </div>
+  </section>
+</Base>

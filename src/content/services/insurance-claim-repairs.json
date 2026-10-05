@@ -1,0 +1,30 @@
+{
+  "name": "Insurance claim repairs",
+  "order": 11,
+  "summary": "Storm, collision, fire or water damage: we inspect it, write the estimate for your insurer and do the repair.",
+  "includes": [
+    "Storm, hail and water damage",
+    "Collision and structural repairs",
+    "Fire and smoke damage",
+    "Roof and siding repairs",
+    "Interior repairs",
+    "Awning and window replacement",
+    "Electrical and plumbing repairs",
+    "Appliance and accessory replacement",
+    "An estimate with photos and a parts list for your insurer"
+  ],
+  "bring": [
+    "Your insurance company’s name and your claim number, if you have one",
+    "Your adjuster’s name and phone number, if you have one",
+    "Photos of the damage taken when it happened"
+  ],
+  "faq": [
+    { "q": "Do I call my insurer first, or you?", "a": "Call your insurer to open the claim, then call us to book the inspection.", "confirm": "Insurance claim steps: who calls the insurer first?" },
+    { "q": "Which insurance companies do you work with?", "a": "Call us and tell us who your insurer is.", "confirm": "Which insurers does VOW work with often? (The old site says \"all major insurance companies\", unverified.)" },
+    { "q": "How do I pay the deductible?", "a": "You pay the deductible to us when you pick up the RV.", "confirm": "How is the deductible paid, and when?" }
+  ],
+  "related": ["leak-detection", "awnings-and-accessories", "warranty-repair"],
+  "photo": "storm damage on an RV being repaired",
+  "confirmed": false,
+  "confirm": ["The insurance claim steps, start to finish (plan §5 #8)"]
+}

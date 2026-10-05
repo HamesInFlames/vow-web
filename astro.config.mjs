@@ -9,6 +9,8 @@ import business from './src/data/business.json' with { type: 'json' };
 export default defineConfig({
   site: business.siteUrl,
   output: 'static',
+  // The form tests build a second copy with a test Web3Forms key into dist-forms (playwright.config.ts).
+  outDir: process.env.VOW_OUT_DIR || 'dist',
   trailingSlash: 'never',
   build: { format: 'file' },
   // /thanks is noindex, so it stays out of the sitemap.

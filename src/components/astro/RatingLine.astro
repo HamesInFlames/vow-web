@@ -1,0 +1,18 @@
+---
+// The Google rating as a plain linked line (AGENTS.md: never a badge widget). Value and count come only from
+// business.json `google`; shown in production once `confirmed` is true (re-read at launch).
+import business from '../../data/business.json';
+import { REVIEW } from '../../lib/site';
+import Confirm from './Confirm.astro';
+
+const g = business.google;
+const show = g.confirmed || REVIEW;
+---
+{show && (
+  <p class="m-0">
+    <a href={g.url} target="_blank" rel="noopener" class="tap font-semibold">
+      Rated {g.rating.toFixed(1)} out of 5 on Google, from about {g.count} reviews<span class="sr-only"> (opens Google Maps in a new tab)</span>
+    </a>
+    {!g.confirmed && <Confirm note="Google rating and count: re-read at launch" />}
+  </p>
+)}

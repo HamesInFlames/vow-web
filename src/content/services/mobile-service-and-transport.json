@@ -1,0 +1,27 @@
+{
+  "name": "Pick-up and mobile service",
+  "order": 12,
+  "summary": "Can’t tow it in? We can pick up your RV or trailer and bring it to the shop.",
+  "includes": [
+    "Pick-up of your RV or trailer for service",
+    "Bringing it back to you when the work is done",
+    "Repairs at your site, for jobs that don’t need the shop"
+  ],
+  "bring": [
+    "The pick-up address and any gate or access code",
+    "The plate number and VIN",
+    "The year, make and model of the unit"
+  ],
+  "faq": [
+    { "q": "How far do you go?", "a": "Call us with the address and we’ll tell you.", "confirm": "Pick-up radius" },
+    { "q": "What does pick-up cost?", "a": "A pick-up fee applies. We tell you the cost when we call to confirm." },
+    { "q": "Can you do the repair at my place?", "a": "For some jobs, yes. Tell us what’s wrong and we’ll tell you if it can be done on site.", "confirm": "Does VOW do mobile (on-site) repairs?" }
+  ],
+  "related": ["winterizing", "annual-inspection"],
+  "photo": "the VOW truck picking up a trailer",
+  "confirmed": false,
+  "confirm": [
+    "Pick-up: radius, fee, and is the return trip included?",
+    "Mobile on-site service: offered at all? Which jobs?"
+  ]
+}

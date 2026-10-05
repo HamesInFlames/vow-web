@@ -1,0 +1,27 @@
+{
+  "name": "Winterizing",
+  "order": 1,
+  "season": "fall",
+  "summary": "We drain the lines, treat the water system and get your RV ready to sit through the cold, so it’s ready to go in spring.",
+  "includes": [
+    "Draining the water lines and tanks",
+    "Treating the water system so nothing freezes and splits",
+    "Getting the RV ready to sit through the winter"
+  ],
+  "bring": [
+    "The keys to the unit and any compartment locks",
+    "Tell us if you’ve already drained anything or added antifreeze"
+  ],
+  "faq": [
+    { "q": "When should I winterize?", "a": "Before overnight temperatures start dropping below freezing. Around Concord that’s usually late October to November. Water left in the lines can freeze and split pipes and fittings." },
+    { "q": "How much does winterizing cost?", "a": "We don’t publish a price yet. Call the shop and we’ll tell you the price for your unit." },
+    { "q": "Should I cover the roof and A/C for the winter?", "a": "A cover keeps snow, ice and debris out of the A/C unit and off the roof. We offer A/C covers and roof covers; ask when you book." }
+  ],
+  "related": ["heating-and-air-conditioning", "water-systems", "preventative-maintenance"],
+  "photo": "an RV being winterized in the bay",
+  "confirmed": true,
+  "confirm": [
+    "A winterizing price for the site (\"From $X + HST\"), and what it includes exactly (antifreeze or air blow-out? water heater bypass?)",
+    "Do you also de-winterize in spring?"
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "name": "Warranty repair",
+  "order": 10,
+  "summary": "Repairs covered by your RV maker’s warranty or by an extended warranty plan.",
+  "includes": [
+    "Repairs under your RV maker’s warranty",
+    "Repairs under extended warranty plans, including Global Warranty",
+    "The paperwork the warranty company needs"
+  ],
+  "bring": [
+    "Your warranty paperwork or plan number",
+    "Your bill of sale, if the RV is still under the maker’s warranty"
+  ],
+  "faq": [
+    { "q": "Which makers’ warranties do you handle?", "a": "Call us with your RV’s make and year and we’ll tell you.", "confirm": "Which manufacturers is VOW authorized to do warranty repairs for?" },
+    { "q": "Do you sell extended warranty plans?", "a": "Yes. We offer Global Warranty extended plans for motorized and towable RVs.", "confirm": "Is Global Warranty the extended plan VOW sells today?" },
+    { "q": "Do I pay anything for a warranty repair?", "a": "That depends on your plan: some have a deductible, and some parts aren’t covered. We check with the warranty company before we start.", "confirm": "Does the shop check coverage with the warranty company before starting?" }
+  ],
+  "related": ["insurance-claim-repairs", "appliance-repair"],
+  "photo": "a warranty repair in the bay",
+  "confirmed": false,
+  "confirm": ["Is warranty repair a service VOW offers today, and for which makers and plans?"]
+}

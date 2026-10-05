@@ -1,5 +1,5 @@
 // Collects every open [confirm] item into docs/confirm-report.md for Rae (plan §5, Phase 2 acceptance):
-// business.json, claims.json (and services once they exist), and every
+// business.json, claims.json, src/content/services/*.json, and every
 // <Confirm note="…"> in the source. `--strict` exits 1 while anything is open (use before launch).
 import { readFileSync, writeFileSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
@@ -7,6 +7,16 @@ import { join } from 'node:path';
 const json = (p) => JSON.parse(readFileSync(p, 'utf8'));
 const business = json('src/data/business.json');
 const claims = json('src/data/claims.json');
+const SERVICES_DIR = 'src/content/services';
+const services = readdirSync(SERVICES_DIR)
+  .filter((f) => f.endsWith('.json'))
+  .map((f) => ({ id: f.replace(/\.json$/, ''), ...json(join(SERVICES_DIR, f)) }))
+  .sort((a, b) => a.order - b.order);
+const serviceItems = services.flatMap((s) => [
+  ...(s.confirmed ? [] : [`**${s.name}**: offer this service? (hidden in production until confirmed)`]),
+  ...s.confirm.map((c) => `**${s.name}**: ${c}`),
+  ...(s.faq ?? []).filter((f) => f.confirm).map((f) => `**${s.name}**, FAQ "${f.q}": ${f.confirm}`),
+]);
 
 // <Confirm note="…" /> and <Confirm note={'…'} /> in components and pages, with the file they're in.
 const notes = new Map();
@@ -35,13 +45,16 @@ const lines = [
   '## Claims from the old site (`src/data/claims.json`, hidden in production until confirmed)',
   ...claims.items.filter((c) => !c.confirmed).map((c) => `- [ ] ${c.text}`),
   '',
+  '## Services (`src/content/services/`)',
+  ...serviceItems.map((c) => `- [ ] ${c}`),
+  '',
   '## Flags in page copy',
   '',
 ];
 for (const [note, files] of [...notes].sort()) lines.push(`- [ ] ${note} (${[...files].join(', ')})`);
 lines.push('');
 
-const total = business.confirm.length + claims.items.filter((c) => !c.confirmed).length + notes.size;
+const total = business.confirm.length + claims.items.filter((c) => !c.confirmed).length + serviceItems.length + notes.size;
 writeFileSync('docs/confirm-report.md', lines.join('\n'));
 console.log(`docs/confirm-report.md: ${total} open item(s)`);
 if (process.argv.includes('--strict') && total > 0) process.exit(1);

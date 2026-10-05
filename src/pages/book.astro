@@ -1,0 +1,39 @@
+---
+// Booking request (plan §1 row 5). ?service=<id> ticks that service (done in the island, after load).
+import Base from '../layouts/Base.astro';
+import PageIntro from '../components/astro/PageIntro.astro';
+import ContactForm from '../components/astro/ContactForm.astro';
+import HoursTable from '../components/astro/HoursTable.astro';
+import business from '../data/business.json';
+import { telHref } from '../lib/format';
+import { breadcrumbJsonLd } from '../lib/seo';
+import { visibleServices } from '../lib/services';
+
+const services = (await visibleServices()).map((s) => ({ id: s.id, name: s.data.name }));
+const crumbs = [{ name: 'Home', path: '/' }, { name: 'Book service', path: '/book' }];
+---
+<Base title="Book service" current="/book"
+  description="Ask for a service appointment at Vacations on Wheels in Concord. We call you to confirm the day."
+  jsonLd={[breadcrumbJsonLd(crumbs)]}>
+  <PageIntro title="Book service" crumbs={crumbs}
+    lead="Tell us about your RV and what it needs. We’ll call you to confirm a day." />
+
+  <div class="wrap grid gap-10 pb-14 pt-6 lg:grid-cols-12">
+    <section aria-label="Booking request form" class="lg:col-span-8">
+      <div class="rounded border border-rule bg-white p-5 lg:p-8">
+        <ContactForm kind="book" subject="Service booking request" services={services} submitLabel="Send booking request" />
+      </div>
+    </section>
+    <aside class="space-y-6 lg:col-span-4" aria-label="Other ways to book">
+      <div class="rounded border border-rule bg-white p-5">
+        <h2 class="m-0 text-[1.5rem]">Rather call?</h2>
+        <p class="mt-2">Call the shop and book over the phone.</p>
+        <a href={telHref(business.phones.main)} class="btn btn-primary mt-1 w-full text-lg tabular">Call {business.phones.main}</a>
+      </div>
+      <div class="rounded border border-rule bg-white p-5">
+        <HoursTable caption="Shop hours" />
+        <address class="mt-4 not-italic">{business.address.street}, {business.address.city}, {business.address.region} {business.address.postal}</address>
+      </div>
+    </aside>
+  </div>
+</Base>
