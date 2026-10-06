@@ -44,7 +44,7 @@ export const footerNav: { heading: string; items: NavItem[] }[] = [
       { label: 'All services', href: '/services' },
       { label: 'Winterizing', href: '/services/winterizing' },
       { label: 'Book service', href: '/book' },
-      { label: 'Pick-up and delivery', href: '/pick-up-and-delivery' },
+      { label: 'Pick-up', href: '/pick-up-and-delivery' },
     ],
   },
   {

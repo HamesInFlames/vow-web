@@ -1,0 +1,5 @@
+{
+  "note": "Real Google reviews only, quoted word for word with the first name and the month (plan §3b /reviews). James picks them from the profile; they show in production only once \"confirmed\" is true (Rae's OK to quote, plan §5 #15). Shape of an item: { \"name\": \"Ana\", \"date\": \"2026-08\", \"stars\": 5, \"quote\": \"...\" }",
+  "confirmed": false,
+  "items": []
+}

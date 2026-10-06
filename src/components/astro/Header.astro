@@ -13,24 +13,24 @@ const nav = variant === 'full' ? primaryNav.filter((n) => n.external || routeExi
 const showBook = variant === 'full' && routeExists('/book');
 ---
 <header class="relative z-40 bg-white border-b border-rule">
-  <div class="wrap flex items-center gap-4 py-2.5 lg:py-3">
+  <div class="wrap flex items-center gap-3 py-2.5 lg:py-3 xl:gap-4">
     <!-- The badge's own lettering is too small to read at header size, so the name is set beside it in text. -->
     <a href="/" class="flex min-w-0 items-center gap-2.5 sm:gap-3 lg:shrink-0 rounded-sm text-ink no-underline hover:text-ink" aria-label={`${business.brandName} home`}>
       <Image src={logo} alt="" width={64} height={61}
-        densities={[1, 2]} loading="eager" fetchpriority="high" class="h-12 w-auto lg:h-16" />
+        densities={[1, 2]} loading="eager" fetchpriority="high" class="h-12 w-auto xl:h-16" />
       <span class="leading-none" aria-hidden="true">
-        <span class="block font-[family-name:var(--font-display)] text-[1.25rem] font-bold leading-[1.05] sm:text-[1.375rem] lg:text-[1.75rem]">{business.brandName}</span>
+        <span class="block font-[family-name:var(--font-display)] text-[1.25rem] font-bold leading-[1.05] sm:text-[1.375rem] xl:text-[1.75rem]">{business.brandName}</span>
         <span class="mt-1 hidden text-[0.9375rem] text-slate-60 sm:block">RV service and parts</span>
       </span>
     </a>
 
     {nav.length > 0 && (
-      <nav aria-label="Main" class="hidden lg:block ml-4 print:hidden">
+      <nav aria-label="Main" class="hidden lg:block ml-2 xl:ml-4 print:hidden">
         <ul class="flex items-center gap-1 list-none m-0 p-0">
           {nav.map((item) => (
             <li>
               <a href={item.href}
-                class:list={['flex min-h-12 items-center rounded px-3 font-semibold text-ink no-underline hover:bg-paper hover:text-red',
+                class:list={['flex min-h-12 items-center whitespace-nowrap rounded px-2 font-semibold xl:px-3 text-ink no-underline hover:bg-paper hover:text-red',
                   { 'text-red underline decoration-2 underline-offset-8': current === item.href }]}
                 aria-current={current === item.href ? 'page' : undefined}
                 {...(item.external ? { target: '_blank', rel: 'noopener' } : {})}>
@@ -46,11 +46,12 @@ const showBook = variant === 'full' && routeExists('/book');
     <div class="ml-auto flex items-center gap-2 print:hidden">
       <!-- Phones: Call is the main button (Book is in the sticky bar). Desktop: phone number, then Book service. -->
       <a href={telHref(business.phones.main)} class="btn btn-primary px-4 lg:hidden">Call</a>
-      <a href={telHref(business.phones.main)} class:list={['btn hidden px-4 tabular lg:inline-flex', showBook ? 'btn-secondary' : 'btn-primary']}>
-        Call {business.phones.main}
+      <!-- 1024–1279 px: "Call" only (the number is in the utility row above), so the nav fits on one line. -->
+      <a href={telHref(business.phones.main)} class:list={['btn hidden gap-0 whitespace-nowrap px-4 tabular lg:inline-flex', showBook ? 'btn-secondary' : 'btn-primary']}>
+        Call<span class="ml-[0.3em] hidden xl:inline">{business.phones.main}</span>
       </a>
       {showBook && (
-        <a href="/book" class="btn btn-primary hidden px-4 lg:inline-flex" aria-current={current === '/book' ? 'page' : undefined}>Book service</a>
+        <a href="/book" class="btn btn-primary hidden whitespace-nowrap px-4 lg:inline-flex" aria-current={current === '/book' ? 'page' : undefined}>Book service</a>
       )}
       {nav.length > 0 && (
         <details class="lg:hidden group">

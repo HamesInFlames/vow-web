@@ -1,0 +1,29 @@
+---
+import LegalPage from '../components/astro/LegalPage.astro';
+import Confirm from '../components/astro/Confirm.astro';
+import business from '../data/business.json';
+import { telHref } from '../lib/format';
+const b = business;
+---
+<LegalPage title="Privacy" path="/privacy" updated="2026-10-05"
+  description="What the Vacations on Wheels website collects through its forms, why, and how to ask about your information.">
+  <p>This page explains what {b.brandName} ({b.legalName}<Confirm note="Confirm the registered legal name" />) collects when you use this website, in plain language. We are at {b.address.street}, {b.address.city}, {b.address.region}.</p>
+  <h2>What we collect</h2>
+  <p>Only what you type into a form on this site. We never ask for your SIN, date of birth or banking details on this website. Please do not put them in a notes box.</p>
+  <ul>
+    <li><strong>Service booking request:</strong> your name, phone number, email address, how you prefer to be contacted, your RV type, year, make and model, the services you want, your preferred date, any notes, and whether you bought the RV at RV Farm. If you ask us to pick up your RV, also the pick-up address.</li>
+    <li><strong>Part request:</strong> your name, how to reach you, your RV details (including the VIN or serial number, if you give it), and the part, its number and how many you need.</li>
+    <li><strong>Insurance claim form:</strong> your name, how to reach you, your RV details, the kind of damage and when it happened, your insurer’s name, your claim number, and a short description of what happened. Photos you email us afterwards are kept with your claim.</li>
+  </ul>
+  <h2>Why we collect it</h2>
+  <p>To answer your request: call or email you back, confirm a date, quote a repair or a pick-up, check on a part, or start work on a claim. We don’t sell your information or add you to a mailing list.</p>
+  <h2>Insurance claims</h2>
+  <p>If you send a claim form, we share your claim details with your insurer only as needed to handle that claim.</p>
+  <h2>How it reaches us</h2>
+  <p>Form messages are delivered to the shop’s email through a form service (Web3Forms). The site itself doesn’t keep a copy of what you send. We keep your request for as long as we need it to serve you and to meet our records duties.</p>
+  <h2>Cookies and tracking</h2>
+  <p>This site doesn’t use advertising or tracking cookies, and it has no analytics. If you turn on “Reduce motion”, your browser remembers that choice on your own device.</p>
+  <h2>Your information</h2>
+  <p>You can ask what information we have about you, ask us to correct it, or ask us to delete it. Call <a href={telHref(b.phones.main)}>{b.phones.main}</a> or email <a href={`mailto:${b.email}`}>{b.email}</a>.</p>
+  <p>This page follows the principles of Canada’s Personal Information Protection and Electronic Documents Act (PIPEDA). If we can’t settle a concern, you can contact the Office of the Privacy Commissioner of Canada.</p>
+</LegalPage>

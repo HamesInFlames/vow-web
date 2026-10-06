@@ -1,0 +1,30 @@
+---
+import LegalPage from '../components/astro/LegalPage.astro';
+import Confirm from '../components/astro/Confirm.astro';
+import business from '../data/business.json';
+import { telHref } from '../lib/format';
+import { REVIEW } from '../lib/site';
+const b = business;
+---
+<LegalPage title="Terms" path="/terms" updated="2026-10-05"
+  description="Terms for using the Vacations on Wheels website: estimates, booking requests, parts, links and Ontario law.">
+  <p>These terms cover your use of this website, run by {b.brandName} ({b.legalName}<Confirm note="Confirm the registered legal name" />). By using the site you agree to them.</p>
+  <h2>Information on this site</h2>
+  <p>What we say about our services and parts is general. Every RV is different, so what your RV needs is decided after we look at it. We work to keep the site correct, but it may be out of date.</p>
+  <h2>Prices and estimates</h2>
+  <p>This site has no price list. Repair and service prices are quoted after inspection, and an estimate may change if we find more work is needed.{REVIEW && <> We will tell you before we do extra work.<Confirm note="Estimate approval: is this how the shop works (plan §2 #6)? Lawyer: check Ontario Consumer Protection Act repair-estimate rules" /></>}</p>
+  <h2>Booking and pick-up requests</h2>
+  <p>A booking or pick-up request is not a confirmed appointment. It is confirmed only when we call or write to you and agree on a date. Pick-up fees are quoted when we confirm.</p>
+  <h2>Parts</h2>
+  <p>A part request is a question, not an order. A part is not guaranteed to be available, and its price is not set, until we confirm both with you.</p>
+  <h2>Insurance claims</h2>
+  <p>Sending a claim form does not mean your insurer has approved the repair. Your insurer decides what its policy covers.</p>
+  <h2>Links to other sites</h2>
+  <p>This site links to other sites, such as Global Warranty, the NTP parts catalogue and <a href={b.sibling.url} rel="noopener">{b.sibling.name}</a>. We don’t run those sites and are not responsible for what they say or do. Their terms and privacy practices apply there.</p>
+  <h2>Photos and content</h2>
+  <p>Photos and text on this site belong to {b.brandName} and may not be reused without permission.</p>
+  <h2>Governing law</h2>
+  <p>These terms are governed by the laws of Ontario and the federal laws of Canada that apply there.</p>
+  <h2>Contact</h2>
+  <p>Questions about these terms: call <a href={telHref(b.phones.main)}>{b.phones.main}</a> or email <a href={`mailto:${b.email}`}>{b.email}</a>.</p>
+</LegalPage>

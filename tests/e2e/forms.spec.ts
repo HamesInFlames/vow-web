@@ -103,3 +103,49 @@ test.describe('without JS', () => {
     expect(posted).toBe(false);
   });
 });
+
+test.describe('part request and insurance claim (with JS)', () => {
+  test('?handover=pick-up selects pick-up on the booking form', async ({ page }) => {
+    await page.goto('/book?handover=pick-up');
+    await expect(page.getByLabel(/Please pick it up/)).toBeChecked();
+    await expect(page.getByLabel(/Where should we pick it up/)).toBeVisible();
+  });
+
+  test('part request needs the part, then posts it', async ({ page }) => {
+    let sent = '';
+    await page.route(WEB3FORMS, (route) => {
+      sent = body(route.request());
+      return route.fulfill({ status: 200, contentType: 'application/json', body: '{"success":true}' });
+    });
+    await page.goto('/parts/request');
+    await page.getByRole('textbox', { name: 'Your name' }).fill('Parts Person');
+    await page.getByRole('textbox', { name: 'Phone', exact: true }).fill('905-555-0100');
+    await page.getByRole('checkbox', { name: /OK to contact me/ }).check();
+    await page.getByRole('button', { name: 'Send part request' }).click();
+    await expect(page.getByLabel('What part do you need?')).toBeFocused();
+    await page.getByLabel('What part do you need?').fill('Fresh water pump');
+    await page.getByRole('button', { name: 'Send part request' }).click();
+    await expect(page.getByRole('status')).toContainText('This is a request, not an order.');
+    expect(sent).toContain('Fresh water pump');
+    expect(sent).toContain('Part request');
+  });
+
+  test('insurance claim form posts the insurer and the damage', async ({ page }) => {
+    let sent = '';
+    await page.route(WEB3FORMS, (route) => {
+      sent = body(route.request());
+      return route.fulfill({ status: 200, contentType: 'application/json', body: '{"success":true}' });
+    });
+    await page.goto('/insurance-claims');
+    await page.getByRole('textbox', { name: 'Your name' }).fill('Claim Person');
+    await page.getByRole('textbox', { name: 'Phone', exact: true }).fill('905-555-0100');
+    await page.getByLabel(/What kind of damage/).selectOption('Collision');
+    await page.getByLabel(/Insurance company/).fill('Example Mutual');
+    await page.getByRole('checkbox', { name: /OK to contact me/ }).check();
+    await page.getByRole('button', { name: 'Send to the shop' }).click();
+    await expect(page.getByRole('status')).toContainText('book an inspection');
+    expect(sent).toContain('Example Mutual');
+    expect(sent).toContain('Collision');
+    expect(sent).toContain('Insurance claim repair');
+  });
+});

@@ -46,14 +46,45 @@ test('without a form key the booking form is replaced by a call block (no lead c
   await expect(page.getByText('Our online form isn’t switched on yet.')).toBeVisible();
 });
 
-test('phones: no sideways scroll and the header Menu button stays on screen (320 and 375 px)', async ({ page }) => {
-  for (const w of [320, 375]) {
+test('no sideways scroll; header controls stay on screen and on one line (320, 375, 1024, 1280 px)', async ({ page }) => {
+  for (const w of [320, 375, 1024, 1280]) {
     await page.setViewportSize({ width: w, height: 800 });
     for (const path of builtPages()) {
       await page.goto(path);
       expect(await page.evaluate(() => document.documentElement.scrollWidth), `${w}px ${path}`).toBeLessThanOrEqual(w);
-      const menu = await page.locator('header summary').boundingBox();
-      if (menu) expect(menu.x + menu.width, `${w}px ${path} Menu button`).toBeLessThanOrEqual(w);
+      const overflow = await page.$$eval('body > header a, body > header summary', (els, vw) =>
+        els.filter((el) => {
+          if (el.closest('details:not([open]) > :not(summary)')) return false; // inside the closed phone menu
+          const r = el.getBoundingClientRect();
+          // Off the right edge, or squeezed so its label wraps onto several lines.
+          return r.width > 0 && (r.right > vw || r.height > 64);
+        })
+          .map((el) => (el.textContent ?? '').trim().slice(0, 30)), w);
+      expect(overflow, `${w}px ${path} header`).toEqual([]);
     }
+  }
+});
+
+test('production build hides unconfirmed steps, plans lists and review placeholders', async ({ page }) => {
+  await page.goto('/insurance-claims');
+  await expect(page.getByText('You pay your deductible when you pick it up')).toHaveCount(0);
+  await expect(page.getByRole('heading', { name: 'What we repair' })).toBeVisible();
+  await page.goto('/parts');
+  await expect(page.getByRole('heading', { name: 'Onan generators' })).toHaveCount(0);
+  await page.goto('/reviews');
+  await expect(page.getByText('3–6 real Google reviews go here.')).toHaveCount(0);
+  await page.goto('/terms');
+  await expect(page.getByText('We will tell you before we do extra work.')).toHaveCount(0);
+  for (const path of ['/insurance-claims', '/parts', '/reviews', '/about', '/warranty', '/terms']) {
+    await page.goto(path);
+    await expect(page.locator('.confirm-chip'), path).toHaveCount(0);
+  }
+});
+
+test('every form page shows the call block when there is no form key', async ({ page }) => {
+  for (const path of ['/book', '/parts/request', '/insurance-claims']) {
+    await page.goto(path);
+    await expect(page.locator('form[action*="web3forms"]'), path).toHaveCount(0);
+    await expect(page.getByText('Our online form isn’t switched on yet.'), path).toBeVisible();
   }
 });

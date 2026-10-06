@@ -1,0 +1,11 @@
+---
+// One real Google review, quoted word for word with first name and month (src/data/reviews.json).
+interface Props { review: { name: string; date: string; stars?: number; quote: string } }
+const { review: r } = Astro.props;
+const month = new Date(`${r.date}-15`).toLocaleDateString('en-CA', { month: 'long', year: 'numeric' });
+---
+<li class="rounded border border-rule bg-white p-6">
+  <blockquote class="m-0"><p class="m-0 text-lead">“{r.quote}”</p></blockquote>
+  <p class="m-0 mt-4 font-semibold text-ink">{r.name}</p>
+  <p class="m-0 text-[0.9375rem] text-slate-60">Google review, {month}{r.stars ? `, ${r.stars} out of 5` : ''}</p>
+</li>

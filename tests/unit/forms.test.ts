@@ -29,6 +29,12 @@ test('validateLead: consent only checked on forms that have the box', () => {
   assert.equal(validateLead({ name: 'A', phone: '9057381253' }).consent, undefined);
 });
 
+test('validateLead: the part request needs the part', () => {
+  assert.ok(validateLead({ name: 'A', phone: '9057381253', part: ' ' }).part);
+  assert.equal(validateLead({ name: 'A', phone: '9057381253', part: 'Water pump' }).part, undefined);
+  assert.equal(validateLead({ name: 'A', phone: '9057381253' }).part, undefined);
+});
+
 test('priceLine: a confirmed price, otherwise the note (never "Call for price")', () => {
   assert.equal(priceLine(129), 'From $129 + HST');
   assert.equal(priceLine(undefined), 'Quote after inspection');

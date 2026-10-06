@@ -1,0 +1,51 @@
+---
+// Reviews (plan §2 #5, §3b): the rating as a plain linked line, real Google reviews only once James has picked
+// them and Rae has OK'd quoting them (reviews.json), and a direct line for anyone who had a problem.
+import Base from '../layouts/Base.astro';
+import PageIntro from '../components/astro/PageIntro.astro';
+import RatingLine from '../components/astro/RatingLine.astro';
+import ReviewQuote from '../components/astro/ReviewQuote.astro';
+import Confirm from '../components/astro/Confirm.astro';
+import business from '../data/business.json';
+import reviews from '../data/reviews.json';
+import { telHref } from '../lib/format';
+import { breadcrumbJsonLd } from '../lib/seo';
+import { REVIEW } from '../lib/site';
+
+const d = business;
+const crumbs = [{ name: 'Home', path: '/' }, { name: 'About us', path: '/about' }, { name: 'Reviews', path: '/reviews' }];
+const showQuotes = reviews.items.length > 0 && (reviews.confirmed || REVIEW);
+---
+<Base title="Reviews" current="/about" jsonLd={[breadcrumbJsonLd(crumbs)]}
+  description="What customers say about Vacations on Wheels on Google, and how to reach us if something went wrong.">
+  <PageIntro crumbs={crumbs} title="Reviews"
+    lead="Read what customers say about us on Google, and tell other RV owners how it went.">
+    <div class="mt-4"><RatingLine /></div>
+  </PageIntro>
+
+  {showQuotes && (
+    <section aria-label="Google reviews" class="wrap py-10">
+      <ul class="m-0 grid list-none gap-6 p-0 md:grid-cols-2">
+        {reviews.items.map((r) => <ReviewQuote review={r} />)}
+      </ul>
+    </section>
+  )}
+  {REVIEW && reviews.items.length === 0 && (
+    <p class="wrap py-6">3–6 real Google reviews go here.<Confirm note="James picks 3–6 Google reviews; Rae OKs quoting them by first name and month (plan §5 #15)" /></p>
+  )}
+
+  <section aria-label="Leave a review or tell us about a problem" class="mt-6 border-t border-rule bg-white">
+    <div class="wrap grid gap-6 py-12 md:grid-cols-2">
+      <div class="rounded border border-rule bg-paper p-6">
+        <h2 class="m-0 text-[1.75rem]">Had work done with us?</h2>
+        <p class="mt-2">Tell other RV owners how it went. Find us on Google Maps and choose “Write a review”.</p>
+        <a href={d.google.url} target="_blank" rel="noopener" class="btn btn-secondary mt-3">Find us on Google Maps<span class="sr-only"> (opens in a new tab)</span></a>
+      </div>
+      <div class="rounded border-2 border-red bg-white p-6">
+        <h2 class="m-0 text-[1.75rem]">Had a problem?</h2>
+        <p class="mt-2">Call us directly and we’ll work through it with you.</p>
+        <a href={telHref(d.phones.main)} class="btn btn-primary mt-3 tabular">Call {d.phones.main}</a>
+      </div>
+    </div>
+  </section>
+</Base>

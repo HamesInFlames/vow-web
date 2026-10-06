@@ -1,12 +1,55 @@
 {
   "note": "Claims from the current VOW site that nobody has verified yet (plan override V14). They render only in review builds (PUBLIC_REVIEW=1) with a [confirm] chip, and never in production until \"confirmed\" is true.",
   "items": [
-    { "id": "experience", "text": "100 years of combined experience.", "confirmed": false },
-    { "id": "certified", "text": "Certified technicians.", "confirmed": false },
-    { "id": "guarantee", "text": "We guarantee all our workmanship.", "confirmed": false },
-    { "id": "insurers", "text": "We work with all major insurance companies.", "confirmed": false },
-    { "id": "transport", "text": "Insured transport fleet.", "confirmed": false },
-    { "id": "spanish", "text": "Spanish-speaking technicians.", "confirmed": false },
-    { "id": "pickup", "text": "We pick up your RV and bring it back when the work is done.", "confirmed": false }
+    {
+      "id": "experience",
+      "text": "100 years of combined experience.",
+      "confirmed": false
+    },
+    {
+      "id": "certified",
+      "text": "Certified technicians.",
+      "confirmed": false
+    },
+    {
+      "id": "guarantee",
+      "text": "We guarantee all our workmanship.",
+      "confirmed": false
+    },
+    {
+      "id": "insurers",
+      "text": "We work with all major insurance companies.",
+      "confirmed": false
+    },
+    {
+      "id": "transport",
+      "text": "Insured transport fleet.",
+      "confirmed": false
+    },
+    {
+      "id": "spanish",
+      "text": "Spanish-speaking technicians.",
+      "confirmed": false
+    },
+    {
+      "id": "pickup",
+      "text": "We pick up your RV and bring it back when the work is done.",
+      "confirmed": false
+    },
+    {
+      "id": "family",
+      "text": "Family-owned and run.",
+      "confirmed": false
+    },
+    {
+      "id": "return",
+      "text": "When the work is done, we bring it back to you.",
+      "confirmed": false
+    },
+    {
+      "id": "in-store-parts",
+      "text": "We keep common parts in stock at the shop.",
+      "confirmed": false
+    }
   ]
 }

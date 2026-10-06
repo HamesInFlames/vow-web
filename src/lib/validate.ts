@@ -5,7 +5,9 @@ export interface LeadInput {
   phone?: string;
   email?: string;
   year?: string;
-  /** The booking form's "OK to contact me" box; undefined on forms that don't have it. */
+  /** The part request's "What part do you need?"; undefined on the other forms. */
+  part?: string;
+  /** The "OK to contact me" box; undefined skips the check. */
   consent?: boolean;
 }
 
@@ -21,8 +23,9 @@ export function validateLead(v: LeadInput): Record<string, string> {
   if (email && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) errors.email = 'That email address doesn’t look right.';
   const year = (v.year ?? '').trim();
   if (year && !(/^\d{4}$/.test(year) && +year >= 1950 && +year <= MAX_YEAR)) {
-    errors.year = `Please enter the year as four digits, like 2018.`;
+    errors.year = 'Please enter the year as four digits, like 2018.';
   }
+  if (v.part !== undefined && !v.part.trim()) errors.part = 'Please tell us which part you need.';
   if (v.consent === false) errors.consent = 'Please tick this box so we can call you back.';
   return errors;
 }

@@ -1,0 +1,23 @@
+---
+import LegalPage from '../components/astro/LegalPage.astro';
+import business from '../data/business.json';
+import { telHref } from '../lib/format';
+const b = business;
+---
+<LegalPage title="Accessibility" path="/accessibility" updated="2026-10-05"
+  description="How the Vacations on Wheels website is built to be easy to read and use, and how to tell us about a problem.">
+  <p>We want everyone to be able to use this site, including on an older phone, with a screen reader, or with the text made larger.</p>
+  <h2>What we’ve done</h2>
+  <ul>
+    <li>Built to meet the Web Content Accessibility Guidelines (WCAG) 2.2 level AA, checked with automated tests before each update goes live.</li>
+    <li>Large body text (17–18 px), high-contrast colours, and buttons at least 44 px tall.</li>
+    <li>Works with a keyboard alone; visible focus outlines; labels above every form field.</li>
+    <li>Pinch-to-zoom is never blocked.</li>
+    <li>Animation is minimal and turns off if your device asks for reduced motion, or with the “Reduce motion” button at the bottom of every page.</li>
+    <li>Our phone number is written out as text on every page.</li>
+  </ul>
+  <h2>Prefer the phone?</h2>
+  <p>Every form on this site (service booking, part request and insurance claim) can be done by phone instead. Call <a href={telHref(b.phones.main)}>{b.phones.main}</a> and we’ll take the details with you. You can also email <a href={`mailto:${b.email}`}>{b.email}</a>.</p>
+  <h2>Tell us about a problem</h2>
+  <p>If something on this site is hard to use, call or email us and we’ll help you directly and fix the page. We can also give you this site’s information in another format on request. This statement is part of our commitment under the Accessibility for Ontarians with Disabilities Act (AODA).</p>
+</LegalPage>

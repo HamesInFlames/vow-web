@@ -1,0 +1,63 @@
+---
+// Parts (plan §1 row 8, §3b). Facts from the current site: parts in store, specific or aftermarket parts ordered
+// in, and the NTP catalogue link. Brands stocked and the Onan generators are [confirm] (plan V8), so no tiles yet.
+import Base from '../../layouts/Base.astro';
+import PageIntro from '../../components/astro/PageIntro.astro';
+import StepList from '../../components/astro/StepList.astro';
+import Claim from '../../components/astro/Claim.astro';
+import Confirm from '../../components/astro/Confirm.astro';
+import Placeholder from '../../components/astro/Placeholder.astro';
+import business from '../../data/business.json';
+import { telHref } from '../../lib/format';
+import { breadcrumbJsonLd } from '../../lib/seo';
+import { REVIEW } from '../../lib/site';
+
+const d = business;
+const crumbs = [{ name: 'Home', path: '/' }, { name: 'Parts', path: '/parts' }];
+const CATALOGUE = 'https://rvflipbook.com/2026-RV-Big-Book/';
+const steps = [
+  { title: 'Find the part', text: 'Look it up in the catalogue below, read the number off the old part, or just describe it.' },
+  { title: 'Ask us', text: 'Send a part request or call. Include your RV’s year, make and model.' },
+  { title: 'We call you back', text: 'We tell you the price and when we can have it. If it isn’t on the shelf, we order it in.' },
+];
+---
+<Base title="RV parts" current="/parts" jsonLd={[breadcrumbJsonLd(crumbs)]}
+  description="RV parts at Vacations on Wheels in Concord: ask for a part by name or number and we’ll quote it and order it in.">
+  <PageIntro title="RV parts" crumbs={crumbs}
+    lead="Need a part for your RV or trailer? Tell us what it is and we’ll find it. If we don’t have it at the shop, we can order the exact part or an aftermarket one." />
+
+  <div class="wrap grid gap-10 pb-14 pt-6 lg:grid-cols-12">
+    <div class="space-y-10 lg:col-span-7">
+      <section aria-labelledby="how-h">
+        <h2 id="how-h" class="m-0 text-[1.75rem] lg:text-[2rem]">How to get a part</h2>
+        <div class="mt-4"><StepList steps={steps} /></div>
+        <ul class="m-0 mt-4 list-none p-0"><Claim id="in-store-parts" as="li" /></ul>
+      </section>
+
+      <section aria-labelledby="cat-h">
+        <h2 id="cat-h" class="m-0 text-[1.75rem] lg:text-[2rem]">Browse the catalogue</h2>
+        <p class="mt-3">The NTP catalogue lists thousands of RV parts with their numbers. Find what you need, note the part number, and send it to us. You can’t order from the catalogue directly.<Confirm note="Is the NTP 2026 RV Big Book link still the one to use? (plan §5 #11)" /></p>
+        <a href={CATALOGUE} target="_blank" rel="noopener" class="btn btn-secondary mt-2">Open the NTP parts catalogue<span class="sr-only"> (opens in a new tab)</span></a>
+      </section>
+
+      {REVIEW && (
+        <section aria-labelledby="gen-h">
+          <h2 id="gen-h" class="m-0 text-[1.75rem] lg:text-[2rem]">Onan generators<Confirm note="Are the 9 Onan generators on the old site in stock, with prices? A /parts/generators page waits on this (plan V8)" /></h2>
+          <p class="mt-3">Gasoline, LP and diesel Onan RV generators from 3,200 to 7,000 watts.</p>
+        </section>
+      )}
+    </div>
+
+    <aside class="space-y-6 lg:col-span-5" aria-label="Ask for a part">
+      <div class="rounded border border-rule bg-white p-5">
+        <h2 class="m-0 text-[1.5rem]">Ask for a part</h2>
+        <p class="mt-2">We quote by phone once we know which part fits.</p>
+        <div class="mt-3 grid gap-3">
+          <a href="/parts/request" class="btn btn-primary text-lg">Request a part</a>
+          <a href={telHref(d.phones.main)} class="btn btn-secondary tabular">Call {d.phones.main}</a>
+        </div>
+      </div>
+      <Placeholder what="the parts counter" />
+    </aside>
+  </div>
+</Base>

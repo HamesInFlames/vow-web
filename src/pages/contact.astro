@@ -1,0 +1,72 @@
+---
+// Contact (plan §3b): phone, address, hours, email, map link, the three ways to send a request, and RV Farm.
+// No general contact form (plan §1: three forms only).
+import Base from '../layouts/Base.astro';
+import PageIntro from '../components/astro/PageIntro.astro';
+import HoursTable from '../components/astro/HoursTable.astro';
+import Placeholder from '../components/astro/Placeholder.astro';
+import Confirm from '../components/astro/Confirm.astro';
+import business from '../data/business.json';
+import { telHref } from '../lib/format';
+import { breadcrumbJsonLd } from '../lib/seo';
+import { routeExists } from '../lib/site';
+
+const d = business;
+const crumbs = [{ name: 'Home', path: '/' }, { name: 'About us', path: '/about' }, { name: 'Contact', path: '/contact' }];
+const requests = [
+  { label: 'Book service', href: '/book', text: 'Repairs, maintenance, winterizing, pick-up.' },
+  { label: 'Request a part', href: '/parts/request', text: 'By name or part number.' },
+  { label: 'Insurance claim repair', href: '/insurance-claims#claim-form', text: 'Storm, collision, fire or water damage.' },
+].filter((r) => routeExists(r.href));
+---
+<Base title="Contact and directions" current="/about" jsonLd={[breadcrumbJsonLd(crumbs)]}
+  description={`Call ${d.brandName} at ${d.phones.main} or visit the shop at ${d.address.street}, ${d.address.city}, ON. Hours and directions.`}>
+  <PageIntro crumbs={crumbs} title="Call or visit the shop" />
+
+  <section id="map" aria-label="Phone, address and hours" class="wrap grid scroll-mt-4 gap-10 py-10 lg:grid-cols-12">
+    <div class="lg:col-span-4">
+      <h2 class="m-0 text-[1.5rem]">Call</h2>
+      <a href={telHref(d.phones.main)} class="tap font-[family-name:var(--font-display)] text-4xl font-bold tabular">{d.phones.main}</a>
+      {d.email && (
+        <>
+          <h2 class="m-0 mt-6 text-[1.5rem]">Email</h2>
+          <p class="m-0"><a href={`mailto:${d.email}`} class="tap">{d.email}</a><Confirm note="Keep vacationsonwheel@gmail.com, or publish an address on the domain? (plan §5 #3)" /></p>
+        </>
+      )}
+      <h2 class="m-0 mt-6 text-[1.5rem]">Visit</h2>
+      <address class="mt-2 not-italic text-lead">{d.address.street}<br />{d.address.city}, {d.address.region} {d.address.postal}</address>
+      <a href={d.address.mapsUrl} target="_blank" rel="noopener" class="btn btn-primary mt-4">Get directions<span class="sr-only"> (opens Google Maps in a new tab)</span></a>
+    </div>
+    <div class="lg:col-span-4">
+      <HoursTable caption="Shop hours" />
+    </div>
+    <div class="lg:col-span-4">
+      <Placeholder what="the shop entrance from Hwy 7" />
+    </div>
+  </section>
+
+  {requests.length > 0 && (
+    <section aria-labelledby="send-h" class="border-t border-rule bg-white">
+      <div class="wrap py-12">
+        <h2 id="send-h" class="m-0 text-[2rem]">Send us a request</h2>
+        <span class="rule-accent mb-6 mt-2" aria-hidden="true"></span>
+        <ul class="m-0 grid list-none gap-4 p-0 md:grid-cols-3">
+          {requests.map((r) => (
+            <li class="relative rounded border border-rule bg-paper p-5 hover:border-slate/60">
+              <h3 class="m-0 text-[1.5rem]"><a href={r.href} class="text-ink no-underline after:absolute after:inset-0 after:content-[''] hover:text-red">{r.label}</a></h3>
+              <p class="m-0 mt-1">{r.text}</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )}
+
+  <section aria-labelledby="rvf-h" class="wrap py-10">
+    <div class="rounded border border-rule bg-paper p-6">
+      <h2 id="rvf-h" class="m-0 text-[1.5rem]">Buying a trailer? That’s {d.sibling.name}</h2>
+      <p class="mt-2">Same address, separate phone: <a href={telHref(d.sibling.phone)} class="font-semibold tabular">{d.sibling.phone}</a>.</p>
+      <a href={d.sibling.url} target="_blank" rel="noopener" class="tap">See {d.sibling.name}<span class="sr-only"> (opens in a new tab)</span></a>
+    </div>
+  </section>
+</Base>

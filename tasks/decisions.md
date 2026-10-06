@@ -28,4 +28,9 @@
 ### 2026-10-05 — Phase 1: services data and form testing
 - **Services:** 12 JSON files, one per service, in a content collection. The 4 services not on the current site are `confirmed: false` and don't build in production. Unverified FAQ answers carry a `confirm` note and are hidden in production, the same rule as `claims.json`. No prices until Paul gives them ("Quote after inspection").
 - **Form tests without a real key:** a second build with a fake `PUBLIC_WEB3FORMS_KEY` into `dist-forms` (`VOW_OUT_DIR`), served on port 4322 by the Playwright `forms` project; the POST to Web3Forms is intercepted. The production build without a key still shows the call block (tested). No new packages.
-- **Booking fields** follow plan §1 row 5. The date field is a plain date input ("pick any day in the week"), since `type="week"` isn't supported in Safari or Firefox. Consent is required. No photo upload (V9): the form says we'll tell them where to send photos when we call.
+- **Booking fields:** follow plan §1 row 5. The date field is a plain date input ("pick any day in the week"), since `type="week"` isn't supported in Safari or Firefox. Consent is required. No photo upload (V9): the form says we'll tell them where to send photos when we call.
+
+### 2026-10-05 — Phase 2: what counts as confirmed, and three forms only
+- **Site facts:** what VOW’s own current site says it does is treated like the 8 services and shown in production: the insurance-claim repair list, Global Warranty extended plans by name (provider PDFs linked, brochure text not reproduced, V6), pick-up with “applicable pick-up fees”, parts in store or ordered in, and the NTP catalogue link. Unsourced claims and processes stay `[confirm]` and review-only: the claim steps, insurers, warranty makers, pick-up radius and return trip, the Onan stock, staff facts, and the estimate-approval sentence in the terms.
+- **Three forms (plan §1):** the island’s `general` kind was removed; `/contact` has no form and links to the three request pages instead.
+- **Header:** flat nav for now (no dropdown panels); at 1024–1279 px the Call button shows “Call” only.

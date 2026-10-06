@@ -1,0 +1,56 @@
+---
+// Warranty (plan V6): two meanings kept apart. 1) Warranty repair on your RV. 2) The Global Warranty extended
+// plans the current site sells, by name only with links to the provider; the brochure text isn't reproduced.
+import Base from '../layouts/Base.astro';
+import PageIntro from '../components/astro/PageIntro.astro';
+import Confirm from '../components/astro/Confirm.astro';
+import business from '../data/business.json';
+import { telHref } from '../lib/format';
+import { breadcrumbJsonLd } from '../lib/seo';
+import { REVIEW, routeExists } from '../lib/site';
+
+const d = business;
+const crumbs = [{ name: 'Home', path: '/' }, { name: 'Warranty', path: '/warranty' }];
+// Plan names as the current Warranty page lists them (docs/site-capture, "Warranty Repair").
+const plans = [
+  { name: 'Global Warranty for motorized RVs', href: 'https://assets.globalwarranty.com/media/global-warranty-motorized.pdf' },
+  { name: 'Global Warranty for towable (non-motorized) RVs and trailers', href: 'https://assets.globalwarranty.com/media/global-warranty-non-motorized.pdf' },
+];
+const trailerPlans = ['Platinum cargo and utility trailer coverage', 'Gold cargo and utility trailer coverage', 'Commercial use coverage (optional)', 'Tire and wheel protection'];
+---
+<Base title="Warranty" current="/warranty" jsonLd={[breadcrumbJsonLd(crumbs)]}
+  description="Warranty repairs on your RV, and the Global Warranty extended plans we offer. Vacations on Wheels, Concord.">
+  <PageIntro title="Warranty repairs and extended plans" crumbs={crumbs}
+    lead="Two different things share the word “warranty”: repairs covered by a warranty you already have, and extended warranty plans you can buy from us." />
+
+  <div class="wrap grid gap-6 pb-14 pt-6 lg:grid-cols-2">
+    <section aria-labelledby="repair-h" class="rounded border border-rule bg-white p-6">
+      <p class="eyebrow m-0 text-red">Already covered?</p>
+      <h2 id="repair-h" class="m-0 mt-1 text-[1.75rem] lg:text-[2rem]">Warranty repairs</h2>
+      <p class="mt-3">If your RV, or a part in it, is still under its maker’s warranty or an extended plan, tell us when you book and bring your warranty paperwork or plan number.</p>
+      {REVIEW && (
+        <p class="mt-3">We do warranty work for: <em>list of makers to come</em>.<Confirm note="Which manufacturers is VOW authorized to do warranty repairs for? (Dometic?) plan §5 #9" /></p>
+      )}
+      <div class="mt-5 flex flex-wrap gap-3">
+        {routeExists('/book') && <a href="/book" class="btn btn-primary">Book a repair</a>}
+        <a href={telHref(d.phones.main)} class="btn btn-secondary tabular">Call {d.phones.main}</a>
+      </div>
+    </section>
+
+    <section aria-labelledby="plans-h" class="rounded border border-rule bg-white p-6">
+      <p class="eyebrow m-0 text-red">Want more cover?</p>
+      <h2 id="plans-h" class="m-0 mt-1 text-[1.75rem] lg:text-[2rem]">Extended warranty plans<Confirm note="Is Global Warranty still the extended plan VOW sells? Same provider as RV Farm? plan §5 #9" /></h2>
+      <p class="mt-3">We offer extended plans from Global Warranty. The provider’s plan details:</p>
+      <ul class="m-0 mt-2 list-none space-y-1 p-0">
+        {plans.map((p) => (
+          <li><a href={p.href} target="_blank" rel="noopener" class="tap">{p.name} (PDF)<span class="sr-only">, opens in a new tab</span></a></li>
+        ))}
+      </ul>
+      <p class="mt-4">For cargo and utility trailers we also offer:</p>
+      <ul class="m-0 mt-2 list-disc space-y-1 pl-6">
+        {trailerPlans.map((p) => <li>{p}</li>)}
+      </ul>
+      <p class="mt-4">What each plan covers, its price and its terms depend on your RV. Call us and we’ll go through the options.</p>
+    </section>
+  </div>
+</Base>

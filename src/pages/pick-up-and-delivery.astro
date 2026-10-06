@@ -1,0 +1,63 @@
+---
+// Pick-up (plan §2 #3, §3b). The current site has a pick-up request form with "applicable pick-up fees"; the
+// radius, the fee and the return trip are [confirm]. Requests go through /book with pick-up selected.
+import Base from '../layouts/Base.astro';
+import PageIntro from '../components/astro/PageIntro.astro';
+import StepList from '../components/astro/StepList.astro';
+import Claim from '../components/astro/Claim.astro';
+import Confirm from '../components/astro/Confirm.astro';
+import Placeholder from '../components/astro/Placeholder.astro';
+import business from '../data/business.json';
+import { telHref } from '../lib/format';
+import { breadcrumbJsonLd } from '../lib/seo';
+
+const d = business;
+const crumbs = [{ name: 'Home', path: '/' }, { name: 'Pick-up', path: '/pick-up-and-delivery' }];
+const steps = [
+  { title: 'Ask for a pick-up', text: 'Book service and choose “Please pick it up”, or call us. Tell us where the RV is and what it needs.' },
+  { title: 'We call to confirm', text: 'We agree on the day, a morning or afternoon window, and the pick-up fee.' },
+  { title: 'We collect it', text: 'Be there, or leave the RV ready with the hitch clear and any gate code sent to us.' },
+];
+---
+<Base title="Pick-up" current="/services" jsonLd={[breadcrumbJsonLd(crumbs)]}
+  description="Can’t tow your trailer in? Vacations on Wheels can pick it up and bring it to our shop in Concord for service.">
+  <PageIntro title="We can pick up your RV" crumbs={crumbs}
+    lead="No truck, or no time to tow? We can collect your trailer and bring it to the shop for service. A pick-up fee applies; we tell you the cost when we call to confirm." />
+
+  <div class="wrap grid gap-10 pb-14 pt-6 lg:grid-cols-12">
+    <div class="space-y-10 lg:col-span-7">
+      <section aria-labelledby="how-h">
+        <h2 id="how-h" class="m-0 text-[1.75rem] lg:text-[2rem]">How it works</h2>
+        <div class="mt-4"><StepList steps={steps} /></div>
+        <ul class="m-0 mt-4 list-none space-y-1 p-0"><Claim id="return" as="li" /><Claim id="transport" as="li" /></ul>
+      </section>
+
+      <section aria-labelledby="need-h">
+        <h2 id="need-h" class="m-0 text-[1.75rem] lg:text-[2rem]">What we’ll ask you</h2>
+        <ul class="m-0 mt-3 list-disc space-y-1 pl-6">
+          <li>The pick-up address and any gate or access code</li>
+          <li>The type of RV, and its year, make and model</li>
+          <li>The plate number and VIN, if you have them</li>
+          <li>A day and a time window that suit you</li>
+        </ul>
+      </section>
+
+      <section aria-labelledby="far-h">
+        <h2 id="far-h" class="m-0 text-[1.75rem] lg:text-[2rem]">How far we go</h2>
+        <p class="mt-3">Call us with the address and we’ll tell you.<Confirm note="Pick-up radius and fee (plan §5 #10)" /></p>
+      </section>
+    </div>
+
+    <aside class="space-y-6 lg:col-span-5" aria-label="Ask for a pick-up">
+      <div class="rounded border border-rule bg-white p-5">
+        <h2 class="m-0 text-[1.5rem]">Ask for a pick-up</h2>
+        <p class="mt-2">A request isn’t a confirmed pick-up. We’ll call you to confirm.</p>
+        <div class="mt-3 grid gap-3">
+          <a href="/book?handover=pick-up" class="btn btn-primary text-lg">Book with pick-up</a>
+          <a href={telHref(d.phones.main)} class="btn btn-secondary tabular">Call {d.phones.main}</a>
+        </div>
+      </div>
+      <Placeholder what="a trailer being hitched up for pick-up" />
+    </aside>
+  </div>
+</Base>

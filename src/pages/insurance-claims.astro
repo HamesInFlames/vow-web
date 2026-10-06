@@ -1,0 +1,107 @@
+---
+// Insurance claims (plan §2 #2, §3b). What we repair comes from the current site's Insurance Claim page; the
+// step-by-step process and the insurers are [confirm] (plan §5 #8) and render only in review builds.
+import Base from '../layouts/Base.astro';
+import PageIntro from '../components/astro/PageIntro.astro';
+import ContactForm from '../components/astro/ContactForm.astro';
+import StepList from '../components/astro/StepList.astro';
+import Claim from '../components/astro/Claim.astro';
+import Placeholder from '../components/astro/Placeholder.astro';
+import business from '../data/business.json';
+import { telHref } from '../lib/format';
+import { breadcrumbJsonLd } from '../lib/seo';
+
+const d = business;
+const crumbs = [{ name: 'Home', path: '/' }, { name: 'Insurance claims', path: '/insurance-claims' }];
+
+// The current site's "What We Handle" list, rewritten plainly.
+const repairs = [
+  'Storm, hail and water damage',
+  'Collision and structural repairs',
+  'Fire and smoke damage',
+  'Roof and siding repairs',
+  'Interior repairs',
+  'Awning and window replacement',
+  'Electrical and plumbing repairs',
+  'Appliance and accessory replacement',
+];
+const steps = [
+  { title: 'Open a claim with your insurer', text: 'Call your insurance company, tell them what happened and write down the claim number.' },
+  { title: 'Book an inspection with us', text: 'Send the form below or call us. Bring the RV in, or ask us to pick it up.' },
+  { title: 'We write the estimate', text: 'We inspect the damage and send your insurer a written estimate with photos and a parts list.' },
+  { title: 'Your insurer approves it', text: 'The adjuster reviews the estimate. Some insurers send an adjuster to see the RV first.' },
+  { title: 'We repair it and call you', text: 'We order the parts, do the repair and call you when it’s ready. You pay your deductible when you pick it up.' },
+];
+const photograph = [
+  'The whole RV from each side, so the damage can be seen in context',
+  'Close-ups of every damaged spot, with something for scale (a hand, a coin, a tape measure)',
+  'Inside: stains, soft spots, broken fixtures',
+  'The VIN or serial plate',
+  'What caused it, if it’s still there: the branch, the hail, the other vehicle’s plate',
+];
+---
+<Base title="Insurance claims" current="/insurance-claims" jsonLd={[breadcrumbJsonLd(crumbs)]}
+  description="RV damaged in a storm, a collision or a fire? We inspect it, write the estimate for your insurer and repair it in Concord.">
+  <PageIntro title="RV insurance claim repairs" crumbs={crumbs}
+    lead="Storm, collision, fire or water damage: we inspect the RV, write an estimate for your insurer with photos and a parts list, and do the repair." />
+
+  <div class="wrap grid gap-10 pb-14 pt-6 lg:grid-cols-12">
+    <div class="space-y-10 lg:col-span-7">
+      <section aria-labelledby="what-h">
+        <h2 id="what-h" class="m-0 text-[1.75rem] lg:text-[2rem]">What we repair</h2>
+        <ul class="m-0 mt-4 grid list-none gap-2 p-0 sm:grid-cols-2">
+          {repairs.map((r) => (
+            <li class="flex gap-3"><span aria-hidden="true" class="mt-2.5 block size-2 shrink-0 bg-accent"></span><span>{r}</span></li>
+          ))}
+        </ul>
+        <ul class="m-0 mt-4 list-none p-0"><Claim id="insurers" as="li" /></ul>
+      </section>
+
+      <section aria-labelledby="steps-h">
+        <h2 id="steps-h" class="m-0 text-[1.75rem] lg:text-[2rem]">From damage to repair</h2>
+        <p class="mt-3">Every insurer works a little differently. Call us and we’ll tell you what to expect with yours.</p>
+        <div class="mt-4"><StepList steps={steps} confirm="Insurance claim steps: who calls the insurer, adjuster visits, deductible paid at pick-up? (plan §5 #8)" /></div>
+      </section>
+
+      <section aria-labelledby="photo-h">
+        <h2 id="photo-h" class="m-0 text-[1.75rem] lg:text-[2rem]">What to photograph</h2>
+        <p class="mt-3">Take photos as soon as it’s safe, before anything is moved or covered. They help your insurer and they help us.</p>
+        <ul class="m-0 mt-3 list-disc space-y-1 pl-6">
+          {photograph.map((p) => <li>{p}</li>)}
+        </ul>
+      </section>
+
+      <section aria-labelledby="ready-h">
+        <h2 id="ready-h" class="m-0 text-[1.75rem] lg:text-[2rem]">What to have ready</h2>
+        <ul class="m-0 mt-3 list-disc space-y-1 pl-6">
+          <li>Your insurance company’s name and your policy or claim number</li>
+          <li>Your adjuster’s name and phone number, if you have one</li>
+          <li>The date it happened and a short description</li>
+          <li>Your photos</li>
+        </ul>
+      </section>
+    </div>
+
+    <aside class="space-y-6 lg:col-span-5" aria-label="Call us">
+      <div class="rounded border border-rule bg-white p-5">
+        <h2 class="m-0 text-[1.5rem]">Talk to us first</h2>
+        <p class="mt-2">Not sure if it’s worth a claim? Call and describe the damage.</p>
+        <a href={telHref(d.phones.main)} class="btn btn-primary mt-1 w-full text-lg tabular">Call {d.phones.main}</a>
+      </div>
+      <Placeholder what="a storm-damaged RV roof being repaired" />
+    </aside>
+  </div>
+
+  <section id="claim-form" aria-labelledby="form-h" class="scroll-mt-4 border-t border-rule bg-white">
+    <div class="wrap grid gap-8 py-12 lg:grid-cols-12">
+      <div class="lg:col-span-4">
+        <h2 id="form-h" class="m-0 text-[2rem]">Tell us about the damage</h2>
+        <span class="rule-accent mb-4 mt-2" aria-hidden="true"></span>
+        <p class="m-0">We’ll call you to book an inspection. This doesn’t open a claim with your insurer; only they can do that.</p>
+      </div>
+      <div class="lg:col-span-8">
+        <ContactForm kind="claim" subject="Insurance claim repair" submitLabel="Send to the shop" />
+      </div>
+    </div>
+  </section>
+</Base>

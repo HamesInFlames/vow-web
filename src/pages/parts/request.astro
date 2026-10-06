@@ -1,0 +1,36 @@
+---
+// Part request form (plan §1 row 8): the form island in its `part` configuration.
+import Base from '../../layouts/Base.astro';
+import PageIntro from '../../components/astro/PageIntro.astro';
+import ContactForm from '../../components/astro/ContactForm.astro';
+import HoursTable from '../../components/astro/HoursTable.astro';
+import business from '../../data/business.json';
+import { telHref } from '../../lib/format';
+import { breadcrumbJsonLd } from '../../lib/seo';
+
+const d = business;
+const crumbs = [{ name: 'Home', path: '/' }, { name: 'Parts', path: '/parts' }, { name: 'Request a part', path: '/parts/request' }];
+---
+<Base title="Request a part" current="/parts" jsonLd={[breadcrumbJsonLd(crumbs)]}
+  description="Ask Vacations on Wheels for an RV part by name or number. We call you with the price and when we can have it.">
+  <PageIntro title="Request a part" crumbs={crumbs}
+    lead="Tell us the part and your RV. We’ll call you with the price and when we can have it." />
+
+  <div class="wrap grid gap-10 pb-14 pt-6 lg:grid-cols-12">
+    <section aria-label="Part request form" class="lg:col-span-8">
+      <div class="rounded border border-rule bg-white p-5 lg:p-8">
+        <ContactForm kind="part" subject="Part request" submitLabel="Send part request" />
+      </div>
+    </section>
+    <aside class="space-y-6 lg:col-span-4" aria-label="Other ways to ask">
+      <div class="rounded border border-rule bg-white p-5">
+        <h2 class="m-0 text-[1.5rem]">Rather call?</h2>
+        <p class="mt-2">Have the old part or its number handy.</p>
+        <a href={telHref(d.phones.main)} class="btn btn-primary mt-1 w-full text-lg tabular">Call {d.phones.main}</a>
+      </div>
+      <div class="rounded border border-rule bg-white p-5">
+        <HoursTable caption="Shop hours" />
+      </div>
+    </aside>
+  </div>
+</Base>
