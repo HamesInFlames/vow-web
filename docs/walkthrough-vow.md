@@ -4,7 +4,8 @@ The new Vacations on Wheels website is built. Before it can go live we need four
 
 **Already answered Part 5 of the RV Farm sheet?** Those 19 questions are repeated here, each marked *(RV Farm sheet 5.n)*. Copy the answer across instead of answering twice.
 
-**Review link:** not online yet. James shows the site from his laptop, or puts it on a private preview link like RV Farm's once you OK it (see "For James" at the end).
+**Review link:** https://vow-web-production.up.railway.app
+(A private preview. Google can't find it, and customers won't see it.)
 
 **Yellow tags on the preview** mark something we haven't confirmed yet: a price, an hour, a claim. On the real site, anything still unconfirmed is hidden, never guessed. Every tag goes away once you answer the matching question below.
 
@@ -185,7 +186,7 @@ vacationsonwheels.ca is registered to **Turnkey's company**, not Paul's (paid un
 ## For James (not for the meeting)
 
 **Before the meeting**
-- A preview link for Paul and Rae means a Railway service for `vow-web` (`dev` branch, `PUBLIC_REVIEW=1`), like RV Farm's. Not approved yet. Without it, run the review build on the laptop (Git Bash, in the repo):
+- The preview link is Railway service `vow-web` in project empowering-wholeness: it deploys every push to `dev`, with `PUBLIC_REVIEW=1`. Offline fallback (Git Bash, in the repo):
   `VOW_OUT_DIR=dist-review PUBLIC_REVIEW=1 npx astro build && VOW_OUT_DIR=dist-review npx astro preview --port 4330`, then open http://localhost:4330.
 - Pick 3–6 Google reviews for question 25 (first name, month, stars, exact words) so Rae can OK them in the room.
 

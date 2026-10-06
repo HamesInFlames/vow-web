@@ -11,13 +11,12 @@ Plan: `docs/plan.md` (§3g phases). Approved Oct 5, 2026.
 
 ## Blocked / waiting on James
 - [ ] Paul and Rae's answers (`docs/walkthrough-vow.md`; plan §5)
-- [ ] A Railway preview service for `vow-web` so Paul and Rae can see the review build on their phones (not approved; the sheet has the laptop fallback)
 - [ ] Web3Forms access key for VOW forms (`PUBLIC_WEB3FORMS_KEY`); until then forms show a call block
-- [ ] Railway service for the review build (not approved yet)
 - [ ] vacationsonwheels.ca is registered to Turnkey; nothing launches on it until the registrant is Paul's company (vault `92`)
 - [ ] A vector VOW logo (the badge is a 392 px raster)
 
 ## Completed
+- [x] Railway review service `vow-web` from `dev`: https://vow-web-production.up.railway.app (Oct 6)
 - [x] Phase 3 — `/code-review high` findings (8) fixed; `main` created from `dev` and made the default branch (Oct 6)
 - [x] Phase 4 prep — `docs/walkthrough-vow.md` (Oct 6)
 - [x] Phase 3 (part) — Lighthouse mobile 99–100 on 16 page types, emulated Android 4/4, print styles (Oct 5)

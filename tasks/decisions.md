@@ -39,3 +39,9 @@
 - **What:** `gh` 2.102.0 via `winget install GitHub.cli` (machine tool, not a project dependency; nothing added to package.json).
 - **Why:** repository settings (default branch) and PR work from Claude Code; the GitHub connector can’t change repo settings.
 - **Limits unchanged:** pushes to `main` stay blocked by the guard hook; James merges.
+
+### 2026-10-06 — Railway: review service `vow-web` (James asked: "using railway cli add the vow web to it")
+- **Where:** project empowering-wholeness (with `rvfarm-web` and `rvfarm-interim`), environment production. Service `vow-web`, GitHub repo HamesInFlames/vow-web, branch `dev`, Dockerfile build (Caddy serving `dist/`).
+- **URL:** https://vow-web-production.up.railway.app (Railway domain; no custom domain).
+- **Variables:** `PUBLIC_REVIEW=1` (yellow [confirm] chips), `PUBLIC_SITE_ORIGIN` = the Railway URL. No `PUBLIC_WEB3FORMS_KEY` yet (forms show the call block). No `PUBLIC_ALLOW_INDEX`, so `robots.txt` disallows everything.
+- **Every push to `dev` redeploys the review site.** Production (`main`, launch) is a separate decision.
