@@ -11,6 +11,8 @@ export default defineConfig({
   output: 'static',
   // The form tests build a second copy with a test Web3Forms key into dist-forms (playwright.config.ts).
   outDir: process.env.VOW_OUT_DIR || 'dist',
+  // Test builds run in parallel (playwright.config.ts), so each gets its own cache and content store.
+  ...(process.env.VOW_OUT_DIR ? { cacheDir: `./node_modules/.astro-${process.env.VOW_OUT_DIR}` } : {}),
   trailingSlash: 'never',
   build: { format: 'file' },
   // /thanks is noindex, so it stays out of the sitemap.

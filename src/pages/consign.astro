@@ -1,0 +1,133 @@
+---
+// Consignment ("Sell it with us"), VOW Phase 4 step 1 (plan V15). Paul's Facebook ads land here, so the form is
+// one tap from the top on a phone. Content: src/data/consign.json via lib/consign.ts. Powered vehicles under (or
+// possibly under) the Motor Vehicle Dealers Act are lawyer-gated: review builds only (vault 95 §1).
+import Base from '../layouts/Base.astro';
+import PageIntro from '../components/astro/PageIntro.astro';
+import ContactForm from '../components/astro/ContactForm.astro';
+import StepList from '../components/astro/StepList.astro';
+import Confirm from '../components/astro/Confirm.astro';
+import business from '../data/business.json';
+import { telHref } from '../lib/format';
+import { breadcrumbJsonLd } from '../lib/seo';
+import { REVIEW, routeExists } from '../lib/site';
+import { consign, consignTypes, consignTerms, consignFaq } from '../lib/consign';
+
+const d = business;
+const crumbs = [{ name: 'Home', path: '/' }, { name: 'Sell it with us', path: '/consign' }];
+// Production names only the types that are live; the review build shows Paul's full wording.
+const deck = REVIEW
+  ? 'We sell your trailer, park home, motorhome or toy for you. No upfront cost.'
+  : 'We sell your trailer, park home, boat or snowmobile for you. No upfront cost.';
+const needs = [
+  'Photos of the unit, and of where it sits',
+  'Any park fees or liens still owing on it',
+  'Your asking price, and whether you want it sold where it is (onsite) or moved and sold (offsite)',
+  'If it’s in a park: whether the park allows it to be removed',
+];
+const faqLd = consignFaq.length
+  ? [{
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: consignFaq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+    }]
+  : [];
+---
+<Base title="Sell it with us: consignment" current="/consign" jsonLd={[breadcrumbJsonLd(crumbs), ...faqLd]}
+  description="Vacations on Wheels sells your park home, trailer, boat or snowmobile for you. No upfront cost: our commission and agreed costs come out of the sale price.">
+  <PageIntro title="Sell it with us" crumbs={crumbs} lead={deck}>
+    <div class="mt-6 flex flex-wrap gap-3">
+      <a href="#consign-form" class="btn btn-primary min-h-14 px-6 text-lg">Get a quote</a>
+      <a href={telHref(d.phones.main)} class="btn btn-secondary min-h-14 px-6 text-lg tabular">Call {d.phones.main}</a>
+    </div>
+  </PageIntro>
+
+  <section aria-labelledby="take-h" class="wrap pb-4 pt-10">
+    <h2 id="take-h" class="m-0 text-[1.75rem] lg:text-[2rem]">What we take</h2>
+    <ul class="m-0 mt-4 grid list-none gap-3 p-0 sm:grid-cols-2 lg:grid-cols-4">
+      {consignTypes.map((t) => (
+        <li class="relative flex min-h-16 items-center rounded border border-rule bg-white px-4 py-3 font-semibold text-ink">
+          <a href={`?type=${t.id}#consign-form`} class="text-ink no-underline after:absolute after:inset-0 after:content-[''] hover:text-red">{t.label}</a>
+          {t.lawyer && <Confirm lawyer note={consign.lawyerNote} />}
+        </li>
+      ))}
+    </ul>
+    {routeExists('/park-home-removal') && (
+      <p class="mb-0 mt-4">Park home has to come out of the park? See <a href="/park-home-removal">park home removal</a>.</p>
+    )}
+  </section>
+
+  <div class="wrap grid gap-10 py-10 lg:grid-cols-12">
+    <section aria-labelledby="how-h" class="lg:col-span-7">
+      <h2 id="how-h" class="m-0 text-[1.75rem] lg:text-[2rem]">How it works</h2>
+      <div class="mt-4"><StepList steps={consign.steps} /></div>
+    </section>
+
+    <section aria-labelledby="cost-h" class="lg:col-span-5">
+      <div class="rounded border border-rule bg-white p-5">
+        <h2 id="cost-h" class="m-0 text-[1.75rem]">What it costs</h2>
+        <p class="mb-0 mt-3 font-semibold text-ink" data-cost-sentence>{consign.costSentence}</p>
+        <dl class="m-0 mt-4 grid gap-3">
+          {consignTerms.map((t) => (
+            <div>
+              <dt class="font-semibold text-ink">{t.label}</dt>
+              <dd class="m-0">{t.text}{t.confirm && <Confirm note={t.confirm} />}</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+    </section>
+  </div>
+
+  <section aria-labelledby="need-h" class="border-y border-rule bg-white">
+    <div class="wrap grid gap-10 py-12 lg:grid-cols-12">
+      <div class="lg:col-span-6">
+        <h2 id="need-h" class="m-0 text-[1.75rem] lg:text-[2rem]">What we need from you</h2>
+        <ul class="m-0 mt-4 list-disc space-y-1 pl-6">
+          {needs.map((n) => <li>{n}</li>)}
+        </ul>
+      </div>
+      {consignFaq.length > 0 && (
+        <div class="lg:col-span-6">
+          <h2 class="m-0 text-[1.75rem] lg:text-[2rem]">Questions people ask</h2>
+          <div class="mt-4 divide-y divide-rule border-y border-rule">
+            {consignFaq.map((f) => (
+              <details class="group" data-print-open>
+                <summary class="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 py-3 font-semibold text-ink [&::-webkit-details-marker]:hidden">
+                  <span>{f.q}{f.confirm && <Confirm note={f.confirm} />}</span>
+                  <span aria-hidden="true" class="text-2xl leading-none text-red transition-transform group-open:rotate-45">+</span>
+                </summary>
+                <p class="mb-4 mt-0">{f.a}</p>
+              </details>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  </section>
+
+  <section id="consign-form" aria-labelledby="form-h" class="scroll-mt-4 bg-paper">
+    <div class="wrap grid gap-8 py-12 lg:grid-cols-12">
+      <div class="lg:col-span-4">
+        <h2 id="form-h" class="m-0 text-[2rem]">Get a quote</h2>
+        <span class="rule-accent mb-4 mt-2" aria-hidden="true"></span>
+        <p class="m-0">Tell us what you have. We’ll call you, ask for photos, and tell you what we think it will sell for.</p>
+        <p class="mt-3">Rather talk? Call <a href={telHref(d.phones.main)} class="font-semibold tabular">{d.phones.main}</a>.</p>
+      </div>
+      <div class="lg:col-span-8">
+        <div class="rounded border border-rule bg-white p-5 lg:p-8">
+          <ContactForm kind="consign" subject="Consignment quote" submitLabel="Send for a quote"
+            consignTypes={consignTypes.map((t) => ({ id: t.id, label: t.label, lawyer: t.lawyer }))} />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="buy-h" class="wrap py-10">
+    <div class="rounded border border-rule bg-white p-6">
+      <h2 id="buy-h" class="m-0 text-[1.5rem]">Buying instead? {d.sibling.name} is next door</h2>
+      <p class="mt-2">{d.sibling.name} sells used trailers and park models at the same address. Call <a href={telHref(d.sibling.phone)} class="font-semibold tabular">{d.sibling.phone}</a>.</p>
+      <a href={d.sibling.url} target="_blank" rel="noopener" class="tap">See {d.sibling.name}<span class="sr-only"> (opens in a new tab)</span></a>
+    </div>
+  </section>
+</Base>

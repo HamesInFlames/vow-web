@@ -2,6 +2,7 @@
 import { test, expect } from '@playwright/test';
 import { builtPages } from './pages';
 import business from '../../src/data/business.json' with { type: 'json' };
+import consign from '../../src/data/consign.json' with { type: 'json' };
 
 test('canonical and og:url are clean URLs (no .html, no /index)', async ({ page }) => {
   for (const path of builtPages().filter((p) => p !== '/404')) {
@@ -47,8 +48,8 @@ test('without a form key the booking form is replaced by a call block (no lead c
   await expect(page.getByText('Our online form isn’t switched on yet.')).toBeVisible();
 });
 
-test('no sideways scroll; header controls stay on screen and on one line (320, 375, 1024, 1280 px)', async ({ page }) => {
-  for (const w of [320, 375, 1024, 1280]) {
+test('no sideways scroll; header controls stay on screen and on one line (320, 375, 1024, 1280, 1440 px)', async ({ page }) => {
+  for (const w of [320, 375, 1024, 1280, 1440]) {
     await page.setViewportSize({ width: w, height: 800 });
     for (const path of builtPages()) {
       await page.goto(path);
@@ -106,4 +107,34 @@ test('print: a service page prints its FAQ answers and the shop phone, without b
   await page.emulateMedia({ media: 'screen' });
   await expect(answer).toBeHidden();
   await expect(page.locator('.print-only')).toBeHidden();
+});
+
+test('consignment in production: no lawyer-gated types, no unconfirmed terms, cost sentence present', async ({ page }) => {
+  await page.goto('/consign');
+  const main = page.locator('main');
+  for (const t of consign.types.filter((x) => x.lawyer)) await expect(main.getByText(t.label)).toHaveCount(0);
+  for (const t of consign.terms.filter((x) => 'confirm' in x)) await expect(main.getByText(t.text)).toHaveCount(0);
+  await expect(main.locator('[data-cost-sentence]')).toHaveText(consign.costSentence);
+  await expect(page.locator('.confirm-chip')).toHaveCount(0);
+  // Production wording never invites a motorhome trade.
+  await expect(main).not.toContainText(/motorhome/i);
+});
+
+test('desktop menu panels open on click, one at a time, and close on Escape or an outside click', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto('/');
+  const nav = page.getByRole('navigation', { name: 'Main' });
+  const warranty = nav.getByRole('link', { name: 'Warranty' });
+  const reviews = nav.getByRole('link', { name: 'Reviews' });
+  await expect(warranty).toBeHidden();
+  await nav.locator('summary', { hasText: 'Services' }).click();
+  await expect(warranty).toBeVisible();
+  await nav.locator('summary', { hasText: 'About' }).click();
+  await expect(warranty).toBeHidden();
+  await expect(reviews).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(reviews).toBeHidden();
+  await nav.locator('summary', { hasText: 'Services' }).click();
+  await page.locator('main h1').click();
+  await expect(warranty).toBeHidden();
 });

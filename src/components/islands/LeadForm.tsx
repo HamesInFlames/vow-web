@@ -1,11 +1,12 @@
-// The one form island (plan §3e), in three configurations: `book` (/book), `part` (/parts/request) and
-// `claim` (/insurance-claims). A real <form method="post"> to Web3Forms, so it works without JS (Web3Forms
+// The one form island (plan §3e), in five configurations: `book` (/book), `part` (/parts/request),
+// `claim` (/insurance-claims), `consign` (/consign, /park-home-removal) and `financing` (/financing). A real <form method="post"> to Web3Forms, so it works without JS (Web3Forms
 // redirects to /thanks); with JS it submits in place. Never asks for SIN, DOB or banking. No upload (plan V9).
 import { useEffect, useId, useRef, useState, type ChangeEvent, type ReactNode, type SyntheticEvent } from 'react';
 import { validateLead } from '../../lib/validate';
 
 export interface ServiceOption { id: string; name: string }
-export type FormKind = 'book' | 'part' | 'claim';
+export type FormKind = 'book' | 'part' | 'claim' | 'consign' | 'financing';
+export interface ConsignTypeOption { id: string; label: string; lawyer: boolean }
 
 export interface LeadFormProps {
   kind: FormKind;
@@ -19,10 +20,16 @@ export interface LeadFormProps {
   // book
   services?: ServiceOption[];
   siblingName?: string;
+  // consign
+  consignTypes?: ConsignTypeOption[];
 }
 
 // The pick-up request form on the current site lists these types (docs/site-capture, "Pick up").
-const VEHICLE_TYPES = ['Travel trailer', 'Fifth wheel', 'Motorhome', 'Tent trailer', 'Other'];
+const RV_TYPES = ['Travel trailer', 'Fifth wheel', 'Motorhome', 'Tent trailer'];
+// Power sports (VOW Phase 4, plan V16): service and parts only. `?vehicle=<id>` pre-selects one on /book.
+const POWER_SPORTS: Record<string, string> = {
+  motorcycle: 'Motorcycle', atv: 'ATV or UTV', snowmobile: 'Snowmobile', boat: 'Boat or watercraft',
+};
 // The damage types the current Insurance Claim page lists, grouped.
 const DAMAGE_TYPES = ['Storm, hail or water', 'Collision', 'Fire or smoke', 'Vandalism or theft', 'Something else'];
 
@@ -30,6 +37,16 @@ const NOTE: Record<FormKind, string> = {
   book: 'This is a request, not a confirmed booking. We’ll call you to confirm.',
   part: 'This is a request, not an order. We’ll call you with the price and when we can have it.',
   claim: 'This doesn’t start a claim with your insurer. We’ll call you to book an inspection of the damage.',
+  consign: 'This is a request for a quote, not an agreement. We’ll call you.',
+  financing: 'This isn’t a credit application. We’ll call you to talk through the options.',
+};
+const YES_NO = ['Yes', 'No', 'Not sure'];
+const SOLD_WHERE = ['Onsite (sell it where it is)', 'Offsite (move it and sell it)', 'Not sure'];
+const MESSAGE: Record<Exclude<FormKind, 'part'>, { label: string; placeholder: string }> = {
+  book: { label: 'What’s going on with it?', placeholder: 'For example: the fridge won’t cool on propane, and we’d like it winterized too.' },
+  claim: { label: 'What happened?', placeholder: 'For example: a tree branch came down on the roof in the storm; water is getting in at the front.' },
+  consign: { label: 'Anything else we should know?', placeholder: 'Condition, extras that come with it, when you’d like it sold.' },
+  financing: { label: 'What would you like to finance?', placeholder: 'For example: a trailer I saw at RV Farm, or a repair.' },
 };
 
 const telOf = (phone: string) => `tel:+1${phone.replace(/\D/g, '')}`;
@@ -44,6 +61,10 @@ export default function LeadForm(p: LeadFormProps) {
   const [focusError, setFocusError] = useState(0);
   const [picked, setPicked] = useState<Set<string>>(new Set());
   const [handover, setHandover] = useState<'drop-off' | 'pick-up'>('drop-off');
+  const [vehicleType, setVehicleType] = useState('');
+  const [unitType, setUnitType] = useState('');
+  const [whereSold, setWhereSold] = useState('');
+  const [utm, setUtm] = useState({ source: '', medium: '', campaign: '' });
   const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
@@ -54,6 +75,13 @@ export default function LeadForm(p: LeadFormProps) {
     const pre = q.getAll('service').filter((w) => known.has(w));
     if (pre.length) setPicked(new Set(pre));
     if (q.get('handover') === 'pick-up') setHandover('pick-up');
+    const vehicle = POWER_SPORTS[q.get('vehicle') ?? ''];
+    if (vehicle) setVehicleType(vehicle);
+    // Consignment: /consign?type=park-home&removal=yes, plus Facebook ad parameters (utm_*) for Rae.
+    const type = q.get('type');
+    if (type && p.consignTypes?.some((t) => t.id === type)) setUnitType(type);
+    if (q.get('removal') === 'yes') setWhereSold(SOLD_WHERE[1]);
+    setUtm({ source: q.get('utm_source') ?? '', medium: q.get('utm_medium') ?? '', campaign: q.get('utm_campaign') ?? '' });
   }, []);
   // Move focus only after the error text and aria-invalid have rendered, so screen readers announce them.
   useEffect(() => {
@@ -181,13 +209,15 @@ export default function LeadForm(p: LeadFormProps) {
         </fieldset>
       )}
 
+      {(kind === 'book' || kind === 'part' || kind === 'claim') && (
       <fieldset className="m-0 grid gap-4 border-0 p-0 sm:col-span-2 sm:grid-cols-2">
-        <legend className={groupLegend}>Your RV</legend>
+        <legend className={groupLegend}>{kind === 'claim' ? 'Your RV' : 'Your RV or vehicle'}</legend>
         <div>
           <label htmlFor={`${id}-type`} className={label}>Type {optional}</label>
-          <select id={`${id}-type`} name="vehicle_type" className={field} defaultValue="">
+          <select id={`${id}-type`} name="vehicle_type" className={field} value={vehicleType}
+            onChange={(e) => setVehicleType(e.target.value)}>
             <option value="">Choose one</option>
-            {VEHICLE_TYPES.map((t) => <option key={t} value={t}>{t}</option>)}
+            {[...RV_TYPES, ...(kind === 'claim' ? [] : Object.values(POWER_SPORTS)), 'Other'].map((t) => <option key={t} value={t}>{t}</option>)}
           </select>
         </div>
         <div>
@@ -204,6 +234,62 @@ export default function LeadForm(p: LeadFormProps) {
           </div>
         )}
       </fieldset>
+      )}
+
+      {kind === 'consign' && (
+        <>
+          <fieldset className="m-0 grid gap-4 border-0 p-0 sm:col-span-2 sm:grid-cols-2">
+            <legend className={groupLegend}>What you’re selling</legend>
+            <div className="sm:col-span-2">
+              <label htmlFor={`${id}-unit`} className={label}>What is it? {optional}</label>
+              <select id={`${id}-unit`} name="unit_type" className={field} value={unitType} onChange={(e) => setUnitType(e.target.value)}>
+                <option value="">Choose one</option>
+                {p.consignTypes?.map((t) => (
+                  <option key={t.id} value={t.id}>{t.label}{t.lawyer ? ' (lawyer to review)' : ''}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label htmlFor={`${id}-year`} className={label}>Year {optional}</label>
+              <input id={`${id}-year`} name="vehicle_year" inputMode="numeric" maxLength={4} className={field} {...invalid('year')} />
+              {err('year')}
+            </div>
+            {text('length_ft', 'Length in feet', { inputMode: 'numeric' })}
+            {text('vehicle_make', 'Make')}
+            {text('vehicle_model', 'Model')}
+            <div className="sm:col-span-2">
+              {text('location', 'Where is it now?', { 'aria-describedby': `${id}-loc-hint` })}
+              <p id={`${id}-loc-hint`} className={hint}>The park’s name, or the town.</p>
+            </div>
+          </fieldset>
+
+          <fieldset className="m-0 grid gap-4 border-0 p-0 sm:col-span-2 sm:grid-cols-2">
+            <legend className={groupLegend}>The sale</legend>
+            <div className="sm:col-span-2">
+              {text('asking_price', 'Your asking price', { inputMode: 'numeric', 'aria-describedby': `${id}-price-hint` })}
+              <p id={`${id}-price-hint`} className={hint}>A rough number is fine. We’ll talk it through.</p>
+            </div>
+            <fieldset className="m-0 border-0 p-0 sm:col-span-2">
+              <legend className={legend}>Sell it where it sits, or move it?</legend>
+              <div className="flex flex-wrap gap-x-6">
+                {SOLD_WHERE.map((t) => radio('onsite_or_offsite', t, t, { checked: whereSold === t, onChange: () => setWhereSold(t) }))}
+              </div>
+            </fieldset>
+            <fieldset className="m-0 border-0 p-0 sm:col-span-2">
+              <legend className={legend}>Any park fees or liens owing on it?</legend>
+              <div className="flex flex-wrap gap-x-6">{YES_NO.map((t) => radio('fees_or_liens_owing', t, t))}</div>
+            </fieldset>
+            <fieldset className="m-0 border-0 p-0 sm:col-span-2">
+              <legend className={legend}>If it’s in a park: does the park allow it to be removed?</legend>
+              <div className="flex flex-wrap gap-x-6">{YES_NO.map((t) => radio('park_allows_removal', t, t))}</div>
+            </fieldset>
+          </fieldset>
+          {/* Where the lead came from (Facebook ads add utm_* to the link), so Rae sees it in the email. */}
+          <input type="hidden" name="utm_source" value={utm.source} />
+          <input type="hidden" name="utm_medium" value={utm.medium} />
+          <input type="hidden" name="utm_campaign" value={utm.campaign} />
+        </>
+      )}
 
       {kind === 'book' && (
         <>
@@ -291,18 +377,17 @@ export default function LeadForm(p: LeadFormProps) {
 
       {kind !== 'part' && (
         <div className="sm:col-span-2">
-          <label htmlFor={`${id}-message`} className={label}>
-            {kind === 'book' ? 'What’s going on with it?' : 'What happened?'} {optional}
-          </label>
-          <textarea id={`${id}-message`} name="message" rows={4} className={field}
-            placeholder={kind === 'book'
-              ? 'For example: the fridge won’t cool on propane, and we’d like it winterized too.'
-              : 'For example: a tree branch came down on the roof in the storm; water is getting in at the front.'} />
-          <p className={hint}>
-            {kind === 'claim' && p.email
-              ? <>Photos help. After you send this, email them to <a href={`mailto:${p.email}`}>{p.email}</a> with your name in the subject.</>
-              : 'Photos help. Once we call you, we’ll tell you where to send them.'}
-          </p>
+          <label htmlFor={`${id}-message`} className={label}>{MESSAGE[kind].label} {optional}</label>
+          <textarea id={`${id}-message`} name="message" rows={4} className={field} placeholder={MESSAGE[kind].placeholder} />
+          {kind !== 'financing' && (
+            <p className={hint}>
+              {kind === 'claim' && p.email
+                ? <>Photos help. After you send this, email them to <a href={`mailto:${p.email}`}>{p.email}</a> with your name in the subject.</>
+                : kind === 'consign'
+                  ? 'We’ll ask you for photos of the unit and where it sits by text or email.'
+                  : 'Photos help. Once we call you, we’ll tell you where to send them.'}
+            </p>
+          )}
         </div>
       )}
 

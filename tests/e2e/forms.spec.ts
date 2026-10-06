@@ -151,3 +151,50 @@ test.describe('part request and insurance claim (with JS)', () => {
     expect(sent).toContain('Insurance claim repair');
   });
 });
+
+test.describe('consignment form', () => {
+  test('?type= and ?removal= pre-fill; Facebook ad parameters ride along; JS send', async ({ page }) => {
+    let sent = '';
+    await page.route(WEB3FORMS, (route) => {
+      sent = body(route.request());
+      return route.fulfill({ status: 200, contentType: 'application/json', body: '{"success":true}' });
+    });
+    await page.goto('/consign?type=park-home&removal=yes&utm_source=facebook&utm_campaign=fall-consign#consign-form');
+    await expect(page.getByLabel(/What is it\?/)).toHaveValue('park-home');
+    await expect(page.getByLabel(/Offsite/)).toBeChecked();
+    await page.getByRole('textbox', { name: 'Your name' }).fill('Consign Person');
+    await page.getByRole('textbox', { name: 'Phone', exact: true }).fill('905-555-0100');
+    await page.getByRole('textbox', { name: /Where is it now/ }).fill('Sunny Acres park');
+    await page.getByRole('checkbox', { name: /OK to contact me/ }).check();
+    await page.getByRole('button', { name: 'Send for a quote' }).click();
+    await expect(page.getByRole('status')).toContainText('This is a request for a quote, not an agreement.');
+    for (const v of ['Consign Person', 'park-home', 'Sunny Acres park', 'facebook', 'fall-consign', 'Consignment quote']) expect(sent).toContain(v);
+  });
+
+  test('production form never offers lawyer-gated types', async ({ page }) => {
+    await page.goto('/consign');
+    const options = await page.getByLabel(/What is it\?/).locator('option').allTextContents();
+    expect(options.join('|')).not.toMatch(/Motorhome|Motorcycle|ATV/);
+    expect(options.length).toBeGreaterThan(3);
+  });
+
+  test('without JS the consign form posts and lands on /thanks', async ({ browser }) => {
+    const ctx = await browser.newContext({ javaScriptEnabled: false });
+    const page = await ctx.newPage();
+    let sent = '';
+    await page.route(WEB3FORMS, (route) => {
+      sent = body(route.request());
+      return route.fulfill({ status: 303, headers: { location: `${FORMS_ORIGIN}/thanks` } });
+    });
+    await page.goto(`${FORMS_ORIGIN}/consign`);
+    await page.getByRole('textbox', { name: 'Your name' }).fill('No Script Seller');
+    await page.getByRole('textbox', { name: 'Phone', exact: true }).fill('905-555-0100');
+    await page.getByLabel(/What is it\?/).selectOption('travel-trailer');
+    await page.getByRole('checkbox', { name: /OK to contact me/ }).check();
+    await page.getByRole('button', { name: 'Send for a quote' }).click();
+    await expect(page).toHaveURL(/\/thanks$/);
+    expect(sent).toContain('No Script Seller');
+    expect(sent).toContain('travel-trailer');
+    await ctx.close();
+  });
+});

@@ -1,7 +1,9 @@
 ---
-// Yellow "[confirm]" chip, shown only in review builds (PUBLIC_REVIEW=1). Production builds render nothing.
+// Yellow chip, shown only in review builds (PUBLIC_REVIEW=1). Production builds render nothing.
+// `lawyer` marks something built in but held back for the lawyer (VOW Phase 4: OMVIC-risk consignment).
 import { REVIEW } from '../../lib/site';
-interface Props { note: string }
-const { note } = Astro.props;
+interface Props { note: string; lawyer?: boolean }
+const { note, lawyer = false } = Astro.props;
+const label = lawyer ? '[lawyer to review]' : '[confirm]';
 ---
-{REVIEW && <span class="confirm-chip" title={note}>[confirm]<span class="sr-only">: {note}</span></span>}
+{REVIEW && <span class="confirm-chip" title={note}>{label}<span class="sr-only">: {note}</span></span>}

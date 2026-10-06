@@ -5,11 +5,13 @@ import { Image } from 'astro:assets';
 import logo from '../../assets/brand/vow-logo.png';
 import business from '../../data/business.json';
 import { telHref } from '../../lib/format';
-import { primaryNav, routeExists } from '../../lib/site';
+import { builtNav, primaryNav, routeExists, type NavItem } from '../../lib/site';
 
 interface Props { variant?: 'full' | 'interim'; current?: string }
 const { variant = 'full', current = '' } = Astro.props;
-const nav = variant === 'full' ? primaryNav.filter((n) => n.external || routeExists(n.href)) : [];
+const nav = variant === 'full' ? builtNav(primaryNav) : [];
+// A panel is "current" when the page is one of its links.
+const isCurrent = (n: NavItem) => current === n.href || (n.children?.some((c) => c.href === current) ?? false);
 const showBook = variant === 'full' && routeExists('/book');
 ---
 <header class="relative z-40 bg-white border-b border-rule">
@@ -26,17 +28,34 @@ const showBook = variant === 'full' && routeExists('/book');
 
     {nav.length > 0 && (
       <nav aria-label="Main" class="hidden lg:block ml-2 xl:ml-4 print:hidden">
-        <ul class="flex items-center gap-1 list-none m-0 p-0">
+        <ul class="flex items-center gap-0.5 list-none m-0 p-0 xl:gap-1">
           {nav.map((item) => (
-            <li>
-              <a href={item.href}
-                class:list={['flex min-h-12 items-center whitespace-nowrap rounded px-2 font-semibold xl:px-3 text-ink no-underline hover:bg-paper hover:text-red',
-                  { 'text-red underline decoration-2 underline-offset-8': current === item.href }]}
-                aria-current={current === item.href ? 'page' : undefined}
-                {...(item.external ? { target: '_blank', rel: 'noopener' } : {})}>
-                {item.label}{item.external && <span class="sr-only"> ({item.note}, opens in a new tab)</span>}
-                {item.external && <span aria-hidden="true" class="ml-1 text-slate-60">↗</span>}
-              </a>
+            <li class="relative">
+              {item.children && item.children.length > 1 ? (
+                <details class="nav-panel group/panel">
+                  <summary class:list={['flex min-h-12 cursor-pointer list-none items-center gap-1 whitespace-nowrap rounded px-1.5 font-semibold xl:px-3 text-ink hover:bg-paper hover:text-red [&::-webkit-details-marker]:hidden',
+                    { 'text-red underline decoration-2 underline-offset-8': isCurrent(item) }]}>
+                    {item.label}<span aria-hidden="true" class="hidden text-sm transition-transform group-open/panel:rotate-180 xl:inline">▾</span>
+                  </summary>
+                  <ul class="absolute left-0 top-full z-50 m-0 mt-1 min-w-64 list-none rounded border border-rule bg-white p-2 shadow-[0_8px_16px_rgb(0_0_0/0.15)]">
+                    {item.children.map((c) => (
+                      <li>
+                        <a href={c.href} class="flex min-h-11 items-center rounded px-3 font-semibold text-ink no-underline hover:bg-paper hover:text-red"
+                          aria-current={current === c.href ? 'page' : undefined}>{c.label}</a>
+                      </li>
+                    ))}
+                  </ul>
+                </details>
+              ) : (
+                <a href={item.children?.[0]?.href ?? item.href}
+                  class:list={['flex min-h-12 items-center whitespace-nowrap rounded px-1.5 font-semibold xl:px-3 text-ink no-underline hover:bg-paper hover:text-red',
+                    { 'text-red underline decoration-2 underline-offset-8': isCurrent(item) }]}
+                  aria-current={current === item.href ? 'page' : undefined}
+                  {...(item.external ? { target: '_blank', rel: 'noopener' } : {})}>
+                  {item.label}{item.external && <span class="sr-only"> ({item.note}, opens in a new tab)</span>}
+                  {item.external && <span aria-hidden="true" class="ml-1 text-slate-60">↗</span>}
+                </a>
+              )}
             </li>
           ))}
         </ul>
@@ -46,15 +65,15 @@ const showBook = variant === 'full' && routeExists('/book');
     <div class="ml-auto flex items-center gap-2 print:hidden">
       <!-- Phones: Call is the main button (Book is in the sticky bar). Desktop: phone number, then Book service. -->
       <a href={telHref(business.phones.main)} class="btn btn-primary px-4 lg:hidden">Call</a>
-      <!-- 1024–1279 px: "Call" only (the number is in the utility row above), so the nav fits on one line. -->
+      <!-- Below 1536 px: "Call" only (the number is in the utility row right above), so the nav fits on one line. -->
       <a href={telHref(business.phones.main)} class:list={['btn hidden gap-0 whitespace-nowrap px-4 tabular lg:inline-flex', showBook ? 'btn-secondary' : 'btn-primary']}>
-        Call<span class="ml-[0.3em] hidden xl:inline">{business.phones.main}</span>
+        Call<span class="ml-[0.3em] hidden 2xl:inline">{business.phones.main}</span>
       </a>
       {showBook && (
         <a href="/book" class="btn btn-primary hidden whitespace-nowrap px-4 lg:inline-flex" aria-current={current === '/book' ? 'page' : undefined}>Book service</a>
       )}
       {nav.length > 0 && (
-        <details class="lg:hidden group">
+        <details class="lg:hidden group" data-phone-menu>
           <summary class="btn btn-secondary list-none cursor-pointer px-3 [&::-webkit-details-marker]:hidden">
             <span class="group-open:hidden">Menu</span><span class="hidden group-open:inline">Close</span>
           </summary>
@@ -62,10 +81,17 @@ const showBook = variant === 'full' && routeExists('/book');
             <ul class="list-none m-0 p-0">
               {nav.map((item) => (
                 <li class="border-b border-rule">
-                  <a href={item.href} class="wrap flex min-h-14 items-center text-lg font-semibold text-ink no-underline"
+                  <a href={item.children?.[0]?.href ?? item.href} class="wrap flex min-h-14 items-center text-lg font-semibold text-ink no-underline"
                     {...(item.external ? { target: '_blank', rel: 'noopener' } : {})}>
                     {item.label}{item.external && <span class="ml-2 text-base font-normal text-slate-60">({item.note})</span>}
                   </a>
+                  {item.children && item.children.length > 1 && (
+                    <ul class="m-0 list-none pb-2 pl-0">
+                      {item.children.filter((c) => c.href !== (item.children?.[0]?.href)).map((c) => (
+                        <li><a href={c.href} class="wrap flex min-h-12 items-center pl-8 text-ink no-underline">{c.label}</a></li>
+                      ))}
+                    </ul>
+                  )}
                 </li>
               ))}
             </ul>
@@ -79,3 +105,16 @@ const showBook = variant === 'full' && routeExists('/book');
     </div>
   </div>
 </header>
+
+<script>
+  // Desktop menu panels: only one open at a time; Escape or a click outside closes them.
+  const panels = [...document.querySelectorAll<HTMLDetailsElement>('details.nav-panel')];
+  const closeAll = (except?: HTMLDetailsElement) => panels.forEach((d) => { if (d !== except) d.open = false; });
+  panels.forEach((d) => d.addEventListener('toggle', () => { if (d.open) closeAll(d); }));
+  document.addEventListener('click', (e) => { if (!(e.target as Element).closest('details.nav-panel')) closeAll(); });
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    const open = panels.find((d) => d.open);
+    if (open) { open.open = false; open.querySelector('summary')?.focus(); }
+  });
+</script>

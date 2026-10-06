@@ -14,7 +14,7 @@
     "test:unit": "node --experimental-strip-types --no-warnings --test tests/unit/*.test.ts",
     "contrast": "node scripts/contrast.mjs",
     "content-check": "node scripts/content-check.mjs",
-    "test:e2e": "playwright test --project=site --project=forms",
+    "test:e2e": "playwright test --project=site --project=forms --project=review",
     "shots": "playwright test --project=shots",
     "lighthouse": "lhci autorun",
     "verify": "npm run contrast && npm run test:unit && npm run check && npm run build && npm run content-check && npm run confirm-report && npm run test:e2e",

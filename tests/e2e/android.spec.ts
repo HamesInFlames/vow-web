@@ -51,7 +51,7 @@ test('android: every page loads fast enough, fits the screen and keeps the phone
 test('android: the phone menu opens by tap and every link in it is reachable', async ({ page }) => {
   await throttle(page);
   await page.goto('/');
-  await page.locator('header summary').tap();
+  await page.locator('header details[data-phone-menu] > summary').tap();
   const menu = page.getByRole('navigation', { name: 'Main menu' });
   await expect(menu).toBeVisible();
   for (const link of await menu.getByRole('link').all()) {
