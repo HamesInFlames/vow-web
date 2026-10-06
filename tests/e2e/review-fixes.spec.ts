@@ -138,3 +138,11 @@ test('desktop menu panels open on click, one at a time, and close on Escape or a
   await page.locator('main h1').click();
   await expect(warranty).toBeHidden();
 });
+
+test('park home removal in production: rate shown, unproven claims hidden', async ({ page }) => {
+  await page.goto('/park-home-removal');
+  const main = page.locator('main');
+  await expect(main).toContainText('$6.50 per km, plus HST');
+  for (const t of ['Fully insured', 'MTO oversize permits', '80 feet', 'every park']) await expect(main).not.toContainText(t);
+  await expect(page.locator('.confirm-chip')).toHaveCount(0);
+});

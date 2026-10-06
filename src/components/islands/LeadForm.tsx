@@ -22,6 +22,8 @@ export interface LeadFormProps {
   siblingName?: string;
   // consign
   consignTypes?: ConsignTypeOption[];
+  /** Pre-selections for a page that embeds the consign form (e.g. park home removal); URL params still win. */
+  preset?: { type?: string; removal?: boolean };
 }
 
 // The pick-up request form on the current site lists these types (docs/site-capture, "Pick up").
@@ -41,7 +43,7 @@ const NOTE: Record<FormKind, string> = {
   financing: 'This isn’t a credit application. We’ll call you to talk through the options.',
 };
 const YES_NO = ['Yes', 'No', 'Not sure'];
-const SOLD_WHERE = ['Onsite (sell it where it is)', 'Offsite (move it and sell it)', 'Not sure'];
+const SOLD_WHERE = ['Onsite (sell it where it is)', 'Offsite (move it and sell it)', 'Just move it (not selling)', 'Not sure'];
 const MESSAGE: Record<Exclude<FormKind, 'part'>, { label: string; placeholder: string }> = {
   book: { label: 'What’s going on with it?', placeholder: 'For example: the fridge won’t cool on propane, and we’d like it winterized too.' },
   claim: { label: 'What happened?', placeholder: 'For example: a tree branch came down on the roof in the storm; water is getting in at the front.' },
@@ -62,8 +64,8 @@ export default function LeadForm(p: LeadFormProps) {
   const [picked, setPicked] = useState<Set<string>>(new Set());
   const [handover, setHandover] = useState<'drop-off' | 'pick-up'>('drop-off');
   const [vehicleType, setVehicleType] = useState('');
-  const [unitType, setUnitType] = useState('');
-  const [whereSold, setWhereSold] = useState('');
+  const [unitType, setUnitType] = useState(p.preset?.type ?? '');
+  const [whereSold, setWhereSold] = useState(p.preset?.removal ? SOLD_WHERE[1] : '');
   const [utm, setUtm] = useState({ source: '', medium: '', campaign: '' });
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -270,7 +272,7 @@ export default function LeadForm(p: LeadFormProps) {
               <p id={`${id}-price-hint`} className={hint}>A rough number is fine. We’ll talk it through.</p>
             </div>
             <fieldset className="m-0 border-0 p-0 sm:col-span-2">
-              <legend className={legend}>Sell it where it sits, or move it?</legend>
+              <legend className={legend}>{p.preset?.removal ? 'Selling it, or just moving it?' : 'Sell it where it sits, or move it?'}</legend>
               <div className="flex flex-wrap gap-x-6">
                 {SOLD_WHERE.map((t) => radio('onsite_or_offsite', t, t, { checked: whereSold === t, onChange: () => setWhereSold(t) }))}
               </div>

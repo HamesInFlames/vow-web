@@ -198,3 +198,24 @@ test.describe('consignment form', () => {
     await ctx.close();
   });
 });
+
+test('park home removal: the embedded form starts on park home + move it, and sends its own subject', async ({ page }) => {
+  let sent = '';
+  await page.route(WEB3FORMS, (route) => {
+    sent = body(route.request());
+    return route.fulfill({ status: 200, contentType: 'application/json', body: '{"success":true}' });
+  });
+  await page.goto('/park-home-removal');
+  // The form hydrates when it scrolls into view (client:visible); wait for that before clicking radios.
+  await page.locator('#removal-form').scrollIntoViewIfNeeded();
+  await expect(page.locator('#removal-form form[novalidate]')).toBeAttached();
+  await expect(page.getByLabel(/What is it\?/)).toHaveValue('park-home');
+  await expect(page.getByLabel(/Offsite/)).toBeChecked();
+  await page.getByLabel(/Just move it/).check();
+  await page.getByRole('textbox', { name: 'Your name' }).fill('Mover Person');
+  await page.getByRole('textbox', { name: 'Phone', exact: true }).fill('905-555-0100');
+  await page.getByRole('checkbox', { name: /OK to contact me/ }).check();
+  await page.getByRole('button', { name: 'Send for a quote' }).click();
+  await expect(page.getByRole('status')).toBeVisible();
+  for (const v of ['Park home removal quote', 'Just move it', 'park-home']) expect(sent).toContain(v);
+});

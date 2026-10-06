@@ -20,12 +20,30 @@
   "email": "vacationsonwheel@gmail.com",
   "timeZone": "America/Toronto",
   "hours": {
-    "mon": ["09:00", "17:00"],
-    "tue": ["09:00", "17:00"],
-    "wed": ["09:00", "17:00"],
-    "thu": ["09:00", "17:00"],
-    "fri": ["09:00", "17:00"],
-    "sat": ["09:00", "17:00"],
+    "mon": [
+      "09:00",
+      "17:00"
+    ],
+    "tue": [
+      "09:00",
+      "17:00"
+    ],
+    "wed": [
+      "09:00",
+      "17:00"
+    ],
+    "thu": [
+      "09:00",
+      "17:00"
+    ],
+    "fri": [
+      "09:00",
+      "17:00"
+    ],
+    "sat": [
+      "09:00",
+      "17:00"
+    ],
     "sun": null
   },
   "closedDayNote": {},
@@ -38,6 +56,12 @@
     "url": "https://www.google.com/maps/search/?api=1&query=Vacations+on+Wheels+1841+Highway+7+Concord+ON",
     "asOf": "2026-09-17",
     "confirmed": false
+  },
+  "rates": {
+    "note": "Paul's Oct 5 fee list, final per vault 20-decisions 2026-10-06. Plus HST. Shown on /services, /services/winterizing and /park-home-removal.",
+    "labourTrailersPerHourCad": 199,
+    "labourMotorhomesPerHourCad": 249,
+    "deliveryPerKmCad": 6.5
   },
   "sibling": {
     "name": "RV Farm",
@@ -53,6 +77,8 @@
     "hours: current site says Mon–Sat 9–5, Sun closed; Google says Mon–Fri 9–6, weekends closed. Holidays?",
     "social: the current site's links are empty; facebook.com/vacationsonwheels and instagram.com/vacationsonwheelsinc exist (audit). Are they VOW's and used?",
     "google: rating and review count (4.4★, ~140 on Sept 17) are re-read at launch; the profile URL should be the exact listing",
-    "sibling.url: links to RV Farm's current site (thervfarm.ca); switch when the new RV Farm site launches on its domain (rvfarm.ca vs thervfarm.ca)"
+    "sibling.url: links to RV Farm's current site (thervfarm.ca); switch when the new RV Farm site launches on its domain (rvfarm.ca vs thervfarm.ca)",
+    "rates.deliveryPerKmCad: $6.50/km. How is distance counted (one way or both, from the shop?), and does it also apply to service pick-ups?",
+    "rates: is there a fee for a written estimate? (Ontario CPA s. 57: it must be disclosed first)"
   ]
 }

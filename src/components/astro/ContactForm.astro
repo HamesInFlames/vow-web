@@ -9,6 +9,7 @@ interface Props {
   subject: string;
   services?: ServiceOption[];
   consignTypes?: ConsignTypeOption[];
+  preset?: { type?: string; removal?: boolean };
   submitLabel?: string;
 }
 const p = Astro.props;

@@ -10,8 +10,10 @@ import { builtNav, primaryNav, routeExists, type NavItem } from '../../lib/site'
 interface Props { variant?: 'full' | 'interim'; current?: string }
 const { variant = 'full', current = '' } = Astro.props;
 const nav = variant === 'full' ? builtNav(primaryNav) : [];
-// A panel is "current" when the page is one of its links.
-const isCurrent = (n: NavItem) => current === n.href || (n.children?.some((c) => c.href === current) ?? false);
+// One top-level item is marked current: the one whose own page this is, else the last panel listing it
+// (a page in two panels, like park home removal, belongs to the later, more specific one: Sell or consign).
+const currentItem = nav.find((n) => n.href === current) ?? nav.findLast((n) => n.children?.some((c) => c.href === current));
+const isCurrent = (n: NavItem) => n === currentItem;
 const showBook = variant === 'full' && routeExists('/book');
 ---
 <header class="relative z-40 bg-white border-b border-rule">

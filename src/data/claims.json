@@ -50,6 +50,26 @@
       "id": "in-store-parts",
       "text": "We keep common parts in stock at the shop.",
       "confirmed": false
+    },
+    {
+      "id": "insured",
+      "text": "Fully insured, on every move.",
+      "confirmed": false
+    },
+    {
+      "id": "mto-permits",
+      "text": "We move oversize units under MTO oversize permits.",
+      "confirmed": false
+    },
+    {
+      "id": "length-range",
+      "text": "Units from 8 feet up to 80 feet long.",
+      "confirmed": false
+    },
+    {
+      "id": "park-coordination",
+      "text": "We work with every park’s own rules for removal.",
+      "confirmed": false
     }
   ]
 }
