@@ -79,10 +79,15 @@ Possible sixth, if Paul confirms it: **"No work beyond the estimate without your
 | V12 | **Booking note names no person**: "We'll call you to confirm." (Lisa is leaving; Steve moved to operations; Rae is Paul's assistant) | `40` "Rae confirms by phone" | `60` §3 |
 | V13 | **No interim page by default.** The domain can't move until Turnkey changes the registrant (`92`), so a VOW interim page has nowhere to go yet. If the domain frees up before the full site is approved, a one-page interim (1 h, same as RV Farm's) is built then | `20` 2026-09-29 (both sites to interim) | `92` |
 | V14 | **Dropped unsourced claims** from the current site: "100 years of combined experience", "4.3/5… thousands of happy RV owners", "certified technicians", "decades of expertise", "all major insurance companies", "we guarantee all our workmanship", "insured transport fleet". Each one goes in `claims.json` as `[confirm]` and shows only if Rae confirms it | Current site copy | AGENTS content rules |
+| V15 | **Consignment on VOW** (Oct 6): `/consign` for park models and mobile homes, trailers, snowmobiles, boats and watercraft. Motorhomes, motorcycles and ATVs/UTVs are built in but **lawyer-gated** (review builds only, one data change to publish) until the lawyer or VOW's OMVIC status clears them. "No upfront cost" only beside the commission-and-costs sentence. Amends V4 (trailers, park homes and non-MVDA toys are allowed) | V4's blanket "no brokerage copy" | Paul's Oct 5 texts; vault `20` 2026-10-06; `95` §1, §3, §6 |
+| V16 | **Power sports service** for motorcycles, ATVs/UTVs, snowmobiles, boats and watercraft (`/power-sports`); which jobs per type `[confirm]`. Lifts V5's hiding for these four types, for service only. Cars, trucks, semis and heavy equipment stay hidden | V5 for these four types | Paul's PDF draft; vault `20` 2026-10-06 |
+| V17 | **Financing page**, contact-only: no lender, rates, payments or 0% until a lender gives full cost-of-borrowing details; never SIN, date of birth, income or banking | `40` had none for VOW | Vault `95` §4, §7 |
+| V18 | **Paul's labour rates published** (Oct 5, final): $199/h trailers, $249/h motorhomes, winterizing $199 plus parts, transport $6.50/km, all plus HST, with "written estimate before any work". Other services stay "Quote after inspection" | §1 row 3 ("quote after inspection" until Paul gives prices) | Vault `20` 2026-10-06; `95` §4 |
+| — | **Park and mobile home removal** (`/park-home-removal`): the PDF's five services in plain words; insurance, MTO-permit, 8–80 ft and every-park wording via `claims.json` | — | Paul's PDF draft; `95` §3, §5 |
 
 ### 3b. Sitemap
 
-**Header:** VOW logo → `/`. Nav: **Services** (panel: every service with a page · Winterizing) · **Book service** (red button) · **Parts** (panel: Parts · Request a part · Generators if confirmed) · **Insurance claims** · **Warranty** · **About** (panel: About us · Reviews · Contact). Phone shown on desktop. Phones: logo · Call · Menu, and the sticky bar.
+**Header:** VOW logo → `/`. Nav: **Services** (panel: All services · Winterizing · Power sports · Pick-up · Park home removal · Warranty) · **Sell or consign** (panel: Sell it with us · Park home removal · Financing; Phase 4) · **Book service** (red button) · **Parts** (panel: Parts · Request a part · Generators if confirmed) · **Insurance claims** · **About** (panel: About us · Reviews · Contact). Warranty moved into the Services panel in Phase 4 so the header fits at 1024 px. Phone shown on desktop. Phones: logo · Call · Menu, and the sticky bar.
 
 **Utility row:** open/closed now · 1841 Hwy 7, Concord · 905-738-1253 · "RV Farm (sales) is next door ↗".
 
@@ -103,6 +108,10 @@ Possible sixth, if Paul confirms it: **"No work beyond the estimate without your
 | `/about` | Confirmed facts only: the shop, the lot it shares with RV Farm, Spanish-speaking techs `[confirm]`, staff count and bays `[confirm]`; photo blocks |
 | `/reviews` | Rating line, 6 real Google reviews, "Leave a review on Google" |
 | `/contact` | Map, address, hours, phone, email `[confirm]`, booking link |
+| `/consign` | Sell it with us (V15): unit-type tiles, 5 steps, cost sentence and terms, what we need, FAQs, consign form (`?type=`, utm passthrough) |
+| `/park-home-removal` | Removal services, who it's for, quote checklist, $6.50/km transport, consign form preset to park home + removal |
+| `/power-sports` | Service and parts per type (V16), Book service with `?vehicle=`, sell links per V15 |
+| `/financing` | Contact-only financing question (V17) |
 | `/thanks`, `/privacy`, `/terms`, `/accessibility`, `/sitemap`, `/404`, `robots.txt` | As RV Farm. Privacy and terms rewritten for a service shop (the current ones are Turnkey dealer boilerplate), drafts for the lawyer |
 
 About 30 pages. Not built: blog (the two 2025 posts are generic), spring packages (V7), storage (`91` V9, unconfirmed), motorhome brokerage (V4).

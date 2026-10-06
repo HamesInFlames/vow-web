@@ -35,7 +35,8 @@ test('production build hides unconfirmed services and FAQ answers', async ({ pag
 test('service pages: price line, pre-filled booking link, FAQPage JSON-LD', async ({ page }) => {
   await page.goto('/services/winterizing');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Winterizing');
-  await expect(page.getByRole('complementary', { name: 'Price and booking' })).toContainText('Quote after inspection');
+  // Winterizing has Paul's Oct 5 price; services without one say "Quote after inspection".
+  await expect(page.getByRole('complementary', { name: 'Price and booking' })).toContainText('$199 plus parts and HST');
   await expect(page.getByRole('link', { name: 'Book this service' })).toHaveAttribute('href', '/book?service=winterizing');
   const ld = await page.locator('script[type="application/ld+json"]').allTextContents();
   const types = ld.map((t) => JSON.parse(t)['@type']);
@@ -164,4 +165,14 @@ test('financing in production: no lender line, no rates or payment examples', as
   await expect(main).not.toContainText(/approved credit|OAC|APR|0%|per month|a month|\/mo|bi-?weekly/i);
   await expect(main).toContainText('This isn’t a credit application');
   await expect(page.locator('.confirm-chip')).toHaveCount(0);
+});
+
+test('services without a confirmed price say "Quote after inspection"; /services shows the shop rates', async ({ page }) => {
+  await page.goto('/services/annual-inspection');
+  await expect(page.getByRole('complementary', { name: 'Price and booking' })).toContainText('Quote after inspection');
+  await page.goto('/services');
+  const rates = page.getByRole('region', { name: 'Shop rates' });
+  await expect(rates).toContainText(`$${business.rates.labourTrailersPerHourCad} an hour for trailers`);
+  await expect(rates).toContainText(`$${business.rates.labourMotorhomesPerHourCad} an hour for motorhomes`);
+  await expect(rates).toContainText('written estimate before we start');
 });

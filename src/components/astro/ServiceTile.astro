@@ -14,5 +14,5 @@ const { service: s, headingLevel: H = 'h3' } = Astro.props;
     {!s.data.confirmed && <Confirm note="Service not on the current site; hidden in production until Paul confirms it" />}
   </H>
   <p class="mb-0 mt-2 flex-1">{s.data.summary}</p>
-  <p class="mb-0 mt-4 font-semibold text-ink">{priceLine(s.data.fromPriceCad, s.data.priceNote)}</p>
+  <p class="mb-0 mt-4 font-semibold text-ink">{priceLine(s.data.fromPriceCad, s.data.priceNote, s.data.priceFormat)}</p>
 </li>

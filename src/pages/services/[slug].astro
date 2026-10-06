@@ -83,7 +83,7 @@ const faqLd = faq.length
     <aside class="lg:col-span-5" aria-label="Price and booking">
       <div class="rounded border border-rule bg-white p-5 lg:sticky lg:top-4">
         <p class="m-0 text-[0.9375rem] font-semibold uppercase tracking-wide text-slate-60">Price</p>
-        <p class="m-0 mt-1 text-[1.5rem] font-bold text-ink">{priceLine(d.fromPriceCad, d.priceNote)}</p>
+        <p class="m-0 mt-1 text-[1.5rem] font-bold text-ink">{priceLine(d.fromPriceCad, d.priceNote, d.priceFormat)}</p>
         {!d.fromPriceCad && <p class="m-0 mt-1">We look at your RV first, then tell you the cost.</p>}
         {d.turnaround && <p class="m-0 mt-3"><span class="font-semibold text-ink">Usually takes:</span> {d.turnaround}</p>}
         <div class="mt-5 grid gap-3">

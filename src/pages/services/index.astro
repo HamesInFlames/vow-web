@@ -4,11 +4,13 @@ import Base from '../../layouts/Base.astro';
 import PageIntro from '../../components/astro/PageIntro.astro';
 import ServiceTile from '../../components/astro/ServiceTile.astro';
 import business from '../../data/business.json';
-import { telHref } from '../../lib/format';
+import { formatCad, telHref } from '../../lib/format';
+import Confirm from '../../components/astro/Confirm.astro';
 import { breadcrumbJsonLd } from '../../lib/seo';
 import { visibleServices } from '../../lib/services';
 
 const services = await visibleServices();
+const r = business.rates;
 const crumbs = [{ name: 'Home', path: '/' }, { name: 'Services', path: '/services' }];
 ---
 <Base title="RV services" current="/services"
@@ -21,7 +23,14 @@ const crumbs = [{ name: 'Home', path: '/' }, { name: 'Services', path: '/service
     <ul class="m-0 grid list-none gap-4 p-0 sm:grid-cols-2 lg:grid-cols-3">
       {services.map((s) => <ServiceTile service={s} headingLevel="h2" />)}
     </ul>
-    <div class="mt-10 flex flex-wrap items-center gap-x-6 gap-y-3 rounded border border-rule bg-white p-5">
+    <section aria-labelledby="rates-h" class="mt-10 rounded border border-rule bg-white p-5">
+      <h2 id="rates-h" class="m-0 text-[1.5rem]">Shop rates</h2>
+      <p class="mb-0 mt-2 text-lead font-semibold text-ink">
+        {formatCad(r.labourTrailersPerHourCad)} an hour for trailers, {formatCad(r.labourMotorhomesPerHourCad)} an hour for motorhomes, plus parts and HST.
+      </p>
+      <p class="mb-0 mt-2">You get a written estimate before we start any work.<Confirm note="Is there a fee for a written estimate? (Ontario CPA s. 57: it must be disclosed first)" /></p>
+    </section>
+    <div class="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3 rounded border border-rule bg-white p-5">
       <p class="m-0 text-lead font-semibold text-ink">Not sure what it needs?</p>
       <p class="m-0">Call <a href={telHref(business.phones.main)} class="font-semibold tabular">{business.phones.main}</a> and describe the problem, or book and tell us in your own words.</p>
       <a href="/book" class="btn btn-primary">Book service</a>

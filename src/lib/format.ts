@@ -20,9 +20,11 @@ export function telHref(phone: string): string {
 export const addressLine = (a: { street: string; city: string; region: string; postal: string }) =>
   `${a.street}, ${a.city}, ${a.region} ${a.postal}`;
 
-/** Service price line (AGENTS.md): "From $129 + HST" only once Paul confirms a price; otherwise the note. */
-export function priceLine(fromPriceCad: number | undefined, note = 'Quote after inspection'): string {
-  return fromPriceCad ? `From ${formatCad(fromPriceCad)} + HST` : note;
+/** Service price line (AGENTS.md): only once Paul confirms a price; otherwise the note.
+ *  'from' → "From $129 + HST"; 'plus-parts' → "$199 plus parts and HST" (a fixed labour price, parts extra). */
+export function priceLine(fromPriceCad: number | undefined, note = 'Quote after inspection', format: 'from' | 'plus-parts' = 'from'): string {
+  if (!fromPriceCad) return note;
+  return format === 'plus-parts' ? `${formatCad(fromPriceCad)} plus parts and HST` : `From ${formatCad(fromPriceCad)} + HST`;
 }
 
 /** "905-605-7056" → "sms:+19056057056" */

@@ -45,3 +45,14 @@
 - **URL:** https://vow-web-production.up.railway.app (Railway domain; no custom domain).
 - **Variables:** `PUBLIC_REVIEW=1` (yellow [confirm] chips), `PUBLIC_SITE_ORIGIN` = the Railway URL. No `PUBLIC_WEB3FORMS_KEY` yet (forms show the call block). No `PUBLIC_ALLOW_INDEX`, so `robots.txt` disallows everything.
 - **Every push to `dev` redeploys the review site.** Production (`main`, launch) is a separate decision.
+
+### 2026-10-06 — VOW Phase 4: consignment, removal, power sports, financing (vault `20` 2026-10-06; `prompts/build-vow-phase4-consign.md`)
+- **V15 consignment (`/consign`):** VOW sells park models, mobile homes, trailers, snowmobiles, boats and watercraft for their owners. Motorhomes, motorcycles and ATVs/UTVs are in `src/data/consign.json` with `lawyer: true`: review builds show them with a "[lawyer to review]" chip; production hides them; `lawyer: false` publishes one (no code change). Terms (20% commission, payout timing) stay `[confirm]`. "No upfront cost" appears only beside the cost sentence (content check enforces it).
+- **Park home removal (`/park-home-removal`):** the PDF's five services in plain words. "Fully insured", "MTO oversize permits", "8 to 80 feet" and "every park" are unverified claims in `claims.json`.
+- **V16 power sports (`/power-sports`):** service and parts for motorcycles, ATVs/UTVs, snowmobiles, boats; the job list is review-only `[confirm]`. The booking and part forms gain these four vehicle types (`?vehicle=`); the claim form doesn't.
+- **V17 financing (`/financing`):** contact-only form kind `financing`; no lender, rates or payment examples; the lender line and what-can-be-financed list are review-only.
+- **V18 rates:** Paul's Oct 5 list is final (vault `20`): `business.json` `rates` ($199/h trailers, $249/h motorhomes, $6.50/km), winterizing `fromPriceCad: 199` with `priceFormat: "plus-parts"`. "Written estimate before any work" beside the rates (CPA Part VI); any estimate fee is `[confirm]`. "Vacations Global Warranty $2,495" is review-only on `/warranty`.
+- **Header:** dropdown panels (`<details>`, close on Escape or outside click). Warranty moved into the Services panel. Below 1536 px the desktop Call button shows "Call" only (the number is in the utility row). Tested at 320/375/1024/1280/1440.
+- **Tests:** a `review` Playwright project builds `dist-review` (PUBLIC_REVIEW=1) on port 4324 to check lawyer and confirm chips. Parallel test builds each get their own Astro `cacheDir`.
+- **Lawyer list:** `docs/confirm-report.md` has a "For the lawyer" section (lawyer-gated types plus `<Confirm lawyer>` flags in the terms and financing pages).
+- **RV Farm (step 6, separate repo):** `fees.json` PDI $1,995 (was $2,995), admin $599 confirmed; the "$599 vs $499" notes removed (`buro-rvfarm-web` commit `deb78ca`).

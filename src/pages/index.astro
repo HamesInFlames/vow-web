@@ -10,7 +10,7 @@ import ReviewQuote from '../components/astro/ReviewQuote.astro';
 import claims from '../data/claims.json';
 import reviews from '../data/reviews.json';
 import business from '../data/business.json';
-import { telHref } from '../lib/format';
+import { priceLine, telHref } from '../lib/format';
 import { REVIEW, routeExists } from '../lib/site';
 import { visibleServices, bookHref, serviceHref } from '../lib/services';
 
@@ -100,6 +100,7 @@ const showStrip = REVIEW || d.google.confirmed || claims.items.some((c) => c.id 
         <p class="eyebrow m-0 text-red">This fall</p>
         <h2 id="winter-h" class="m-0 mt-2 text-[2rem] lg:text-[2.5rem]">Winterize before the first hard frost</h2>
         <p class="mt-4 max-w-[38rem] text-lead">{winter.data.summary}</p>
+        <p class="mb-0 mt-3 text-lead font-semibold text-ink">{priceLine(winter.data.fromPriceCad, winter.data.priceNote, winter.data.priceFormat)}</p>
         <ul class="m-0 mt-4 list-disc space-y-1 pl-6">
           {winter.data.includes.map((i) => <li>{i}</li>)}
         </ul>

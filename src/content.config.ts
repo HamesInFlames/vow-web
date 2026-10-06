@@ -21,6 +21,8 @@ const service = z
     /** Only once Paul confirms a price: shown as "From $X + HST". */
     fromPriceCad: z.number().int().positive().optional(),
     priceNote: z.string().default('Quote after inspection'),
+    /** How a confirmed price reads: "From $X + HST", or "$X plus parts and HST" for a fixed labour price. */
+    priceFormat: z.enum(['from', 'plus-parts']).default('from'),
     /** Usual time in the shop, only once confirmed. */
     turnaround: z.string().optional(),
     includes: z.array(z.string()).min(1),
