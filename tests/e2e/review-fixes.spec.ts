@@ -88,3 +88,16 @@ test('every form page shows the call block when there is no form key', async ({ 
     await expect(page.getByText('Our online form isn’t switched on yet.'), path).toBeVisible();
   }
 });
+
+test('print: a service page prints its FAQ answers and the shop phone, without buttons or chrome', async ({ page }) => {
+  await page.goto('/services/winterizing');
+  await page.emulateMedia({ media: 'print' });
+  await page.evaluate(() => window.dispatchEvent(new Event('beforeprint')));
+  await expect(page.getByText('Before overnight temperatures start dropping below freezing.', { exact: false })).toBeVisible();
+  await expect(page.locator('.print-only')).toContainText('905-738-1253');
+  await expect(page.getByRole('link', { name: 'Book this service' })).toBeHidden();
+  await expect(page.getByRole('navigation', { name: 'Quick actions' })).toBeHidden();
+  await expect(page.locator('footer')).toBeHidden();
+  await page.emulateMedia({ media: 'screen' });
+  await expect(page.locator('.print-only')).toBeHidden();
+});

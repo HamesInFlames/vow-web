@@ -166,24 +166,25 @@ html[data-motion='reduce'] *::after {
 html[data-motion='reduce'] { view-transition-name: none; }
 html[data-motion='reduce']::view-transition-group(*) { animation: none !important; }
 
-/* Hero Ken Burns (plan §3f): one slow pass on desktop only; off under reduced motion via the rules above. */
-@media (min-width: 64rem) and (prefers-reduced-motion: no-preference) {
-  .hero-kb { animation: hero-kb 16s ease-out 1 both; transform-origin: 60% 50%; }
-}
-@keyframes hero-kb { from { transform: scale(1); } to { transform: scale(1.06); } }
-
-/* Unit pages print as a spec sheet (plan §3g Phase 3): no chrome, black on white, price and specs kept. */
+/* Print (plan §3g Phase 3): a service page or the contact page prints as a plain sheet, black on white.
+   Navigation, buttons, forms and photo placeholders drop out; the shop's phone and address print at the end
+   (.print-only in Base.astro), and FAQ answers are opened before printing (Base.astro). */
+.print-only { display: none; }
 @media print {
-  @page { margin: 12mm; }
-  html, body { background: #fff; font-size: 11pt; }
+  @page { margin: 14mm; }
+  html, body { background: #fff; color: #000; font-size: 11pt; }
+  h1, h2, h3, h4 { color: #000; break-after: avoid; }
   a { color: inherit; text-decoration: none; }
   .wrap { max-width: none; padding-inline: 0; }
   .lg\:sticky { position: static !important; }
-  img { break-inside: avoid; }
+  .btn, form, [role='img'], .confirm-chip { display: none !important; }
+  section, aside > div, li { break-inside: avoid; }
   table { break-inside: avoid; }
-  aside, main .lg:col-span-8, main .lg:col-span-4 { grid-column: auto !important; }
-  .print-photo img { max-height: 90mm; width: 100%; object-fit: cover; }
+  .bg-slate, .bg-ink, .bg-paper, .bg-white, .bg-mist { background: #fff !important; color: #000 !important; }
+  .bg-accent { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  summary [aria-hidden='true'] { display: none; }
+  .print-only { display: block; margin-top: 8mm; padding-top: 3mm; border-top: 1px solid #000; }
   h1 { font-size: 22pt; }
   h2 { font-size: 15pt; }
-  .mt-10, .mt-12, .mt-14, .mt-16 { margin-top: 6mm !important; }
+  .py-14, .py-12, .py-10, .pb-14 { padding-block: 3mm !important; }
 }

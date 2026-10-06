@@ -5,13 +5,13 @@ const { readFileSync } = require('node:fs');
 const paths = [...readFileSync('dist/sitemap-0.xml', 'utf8').matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => new URL(m[1]).pathname);
 const kind = (p) => (/^\/services\/[^/]+$/.test(p) ? 'service' : p);
 const picked = process.env.LH_ALL ? paths : paths.filter((p, i) => paths.findIndex((q) => kind(q) === kind(p)) === i);
-const urls = picked.map((p) => `http://localhost:4322${p}`);
+const urls = picked.map((p) => `http://localhost:4323${p}`);
 
 module.exports = {
   ci: {
     collect: {
-      startServerCommand: 'npx astro preview --port 4322',
-      startServerReadyPattern: 'localhost:4322',
+      startServerCommand: 'npx astro preview --port 4323',
+      startServerReadyPattern: 'localhost:4323',
       url: urls,
       numberOfRuns: 3, // assertions use the median run
       // Mobile is Lighthouse's default form factor (Moto G Power emulation, slow 4G, 4× CPU).

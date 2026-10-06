@@ -14,11 +14,12 @@
     "test:unit": "node --experimental-strip-types --no-warnings --test tests/unit/*.test.ts",
     "contrast": "node scripts/contrast.mjs",
     "content-check": "node scripts/content-check.mjs",
-    "test:e2e": "playwright test --grep-invert shots",
+    "test:e2e": "playwright test --grep-invert \"shots|android\"",
     "shots": "playwright test screenshots",
     "lighthouse": "lhci autorun",
     "verify": "npm run contrast && npm run test:unit && npm run check && npm run build && npm run content-check && npm run confirm-report && npm run test:e2e",
-    "confirm-report": "node scripts/confirm-report.mjs"
+    "confirm-report": "node scripts/confirm-report.mjs",
+    "test:android": "playwright test android --project=site"
   },
   "dependencies": {
     "@astrojs/react": "^7.0.0",

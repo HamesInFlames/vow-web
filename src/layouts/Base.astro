@@ -56,6 +56,8 @@ const ld = [localBusinessJsonLd(), ...jsonLd];
       // Mark JS as available (shows JS-only controls), and apply the footer "Reduce motion" choice before first paint.
       document.documentElement.classList.add('js');
       try { if (localStorage.getItem('vow-motion') === 'reduce') document.documentElement.dataset.motion = 'reduce'; } catch (e) {}
+      // Printed FAQs show their answers.
+      addEventListener('beforeprint', function () { document.querySelectorAll('main details').forEach(function (d) { d.open = true; }); });
     </script>
     {preloadImage && (
       <link rel="preload" as="image" href={preloadImage.src} imagesrcset={preloadImage.srcset} imagesizes={preloadImage.sizes} fetchpriority="high" />
@@ -70,6 +72,7 @@ const ld = [localBusinessJsonLd(), ...jsonLd];
     <Header variant={variant} current={current} />
     <main id="main" class="flex-1">
       <slot />
+      <p class="print-only wrap">{business.brandName} · {business.address.street}, {business.address.city}, {business.address.region} {business.address.postal} · {business.phones.main} · {business.siteUrl.replace(/^https:\/\//, '')}</p>
     </main>
     <Footer variant={variant} />
     <StickyBar />

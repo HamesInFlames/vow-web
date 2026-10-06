@@ -6,7 +6,7 @@ Plan: `docs/plan.md` (§3g phases). Approved Oct 5, 2026.
 - [ ] Header dropdown panels (plan §3b: Services / Parts / About). The nav is flat for now; Contact and Reviews are reached via About and the footer
 - [ ] Photo pipeline (RV Farm scripts/photos.mjs + VOW watermark): only once Rae confirms a photo (V11)
 - [ ] Reviews: James picks 3–6 Google reviews into src/data/reviews.json; Rae OKs quoting them
-- [ ] Phase 3 — Lighthouse on every page type, emulated Android pass, print, `/code-review high` in a fresh session
+- [ ] Phase 3 — `/code-review high` in a fresh session, then fix its findings (Lighthouse, Android emulation and print are done)
 - [ ] Phase 4 — walkthrough with Paul and Rae (James), alongside RV Farm's (`../buro-rvfarm-web/docs/walkthrough-paul-rae.md` Part 5 has the VOW questions)
 
 ## Blocked / waiting on James
@@ -17,6 +17,7 @@ Plan: `docs/plan.md` (§3g phases). Approved Oct 5, 2026.
 - [ ] A vector VOW logo (the badge is a 392 px raster)
 
 ## Completed
+- [x] Phase 3 (part) — Lighthouse mobile 99–100 on 16 page types, emulated Android 4/4, print styles (Oct 5)
 - [x] Phase 2 — /insurance-claims, /warranty, /pick-up-and-delivery, /parts, /parts/request, /about, /reviews, /contact, privacy/terms/accessibility drafts, home sections 5–8, part and claim forms, confirm report (65 items) (Oct 5)
 - [x] Phase 1 — services collection (12; 4 hidden in production), `/services`, 8 service pages, `/book`, `/thanks`, home tiles + winterizing band + rating line; form tests with a test-key build (Oct 5)
 - [x] Phase 0 — seeded from `buro-rvfarm-web` at `8a90ab7`, inventory removed, VOW tokens from the logo, `business.json`, header/footer/utility row/sticky bar, favicons, home shell, AGENTS/CLAUDE/tasks, guardrails (Oct 5)
