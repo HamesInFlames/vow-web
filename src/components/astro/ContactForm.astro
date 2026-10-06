@@ -1,6 +1,6 @@
 ---
 // LeadForm with the site-wide settings filled in (key, redirect, phone, email, privacy link).
-import LeadForm, { type FormKind, type ServiceOption } from '../islands/LeadForm';
+import LeadForm, { type ConsignTypeOption, type FormKind, type ServiceOption } from '../islands/LeadForm';
 import business from '../../data/business.json';
 import { routeExists } from '../../lib/site';
 
@@ -8,6 +8,8 @@ interface Props {
   kind: FormKind;
   subject: string;
   services?: ServiceOption[];
+  consignTypes?: ConsignTypeOption[];
+  preset?: { type?: string; removal?: boolean };
   submitLabel?: string;
 }
 const p = Astro.props;

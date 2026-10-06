@@ -10,7 +10,7 @@ import ReviewQuote from '../components/astro/ReviewQuote.astro';
 import claims from '../data/claims.json';
 import reviews from '../data/reviews.json';
 import business from '../data/business.json';
-import { telHref } from '../lib/format';
+import { priceLine, telHref } from '../lib/format';
 import { REVIEW, routeExists } from '../lib/site';
 import { visibleServices, bookHref, serviceHref } from '../lib/services';
 
@@ -77,6 +77,22 @@ const showStrip = REVIEW || d.google.confirmed || claims.items.some((c) => c.id 
     </div>
   </section>
 
+  <!-- 3b Consignment (VOW Phase 4): Paul's Facebook push lands on /consign; this band sends home visitors there too. -->
+  {routeExists('/consign') && (
+    <section aria-labelledby="consign-h" class="bg-slate text-mist">
+      <div class="wrap flex flex-wrap items-center justify-between gap-6 py-10">
+        <div class="max-w-[44rem]">
+          <h2 id="consign-h" class="m-0 text-[1.75rem] text-white lg:text-[2rem]">Selling a park home, trailer, boat or snowmobile?</h2>
+          <p class="mt-2">We sell it for you. Our commission and any costs you agree to come out of the sale price, all in writing before anything is listed.</p>
+        </div>
+        <div class="flex flex-wrap gap-3">
+          <a href="/consign" class="btn bg-white text-ink hover:bg-paper hover:text-ink">Sell it with us</a>
+          {routeExists('/park-home-removal') && <a href="/park-home-removal" class="btn border-2 border-white text-white hover:bg-white/10 hover:text-white">Park home removal</a>}
+        </div>
+      </div>
+    </section>
+  )}
+
   <!-- 4 Winterizing band, in season (Sept–Nov at build time; spring swaps in once spring packages exist, plan V7). -->
   {winter && (
     <section aria-labelledby="winter-h" class="wrap grid items-center gap-8 py-14 lg:grid-cols-12">
@@ -84,6 +100,7 @@ const showStrip = REVIEW || d.google.confirmed || claims.items.some((c) => c.id 
         <p class="eyebrow m-0 text-red">This fall</p>
         <h2 id="winter-h" class="m-0 mt-2 text-[2rem] lg:text-[2.5rem]">Winterize before the first hard frost</h2>
         <p class="mt-4 max-w-[38rem] text-lead">{winter.data.summary}</p>
+        <p class="mb-0 mt-3 text-lead font-semibold text-ink">{priceLine(winter.data.fromPriceCad, winter.data.priceNote, winter.data.priceFormat)}</p>
         <ul class="m-0 mt-4 list-disc space-y-1 pl-6">
           {winter.data.includes.map((i) => <li>{i}</li>)}
         </ul>

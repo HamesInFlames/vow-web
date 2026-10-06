@@ -1,0 +1,112 @@
+---
+// Park and mobile home removal (VOW Phase 4 step 2). The five services come from Paul's "Premier Consignment &
+// Removal Program" PDF draft, in plain words. Insurance, MTO, size-range and "every park" wording goes through
+// claims.json (vault 95 §3, §5). Delivery rate: Paul's Oct 5 fee list (business.json rates).
+import Base from '../layouts/Base.astro';
+import PageIntro from '../components/astro/PageIntro.astro';
+import ContactForm from '../components/astro/ContactForm.astro';
+import Claim from '../components/astro/Claim.astro';
+import Confirm from '../components/astro/Confirm.astro';
+import Placeholder from '../components/astro/Placeholder.astro';
+import business from '../data/business.json';
+import { formatCadCents, telHref } from '../lib/format';
+import { breadcrumbJsonLd } from '../lib/seo';
+import { REVIEW, routeExists } from '../lib/site';
+import claims from '../data/claims.json';
+import { consignTypes } from '../lib/consign';
+
+const d = business;
+const crumbs = [{ name: 'Home', path: '/' }, { name: 'Park home removal', path: '/park-home-removal' }];
+const services = [
+  { title: 'Breakdown and removal', text: 'We take the home out of the park, including hardtops and structural additions.' },
+  { title: 'Site clean-up', text: 'We clear the site and dispose of what’s left, if you want us to.' },
+  { title: 'Transport', text: 'With equipment sized to the home, to its new spot or to be sold.' },
+  { title: 'Paperwork for the move', text: 'Lien searches (PPSA), permits and inspections.' },
+  { title: 'The park’s rules', text: 'Parks have their own rules for removal. We check them with the park before the move.' },
+];
+const reasons = [
+  'You’re selling the home and the buyer doesn’t want it where it is',
+  'You’re moving it to another park or onto land',
+  'The park has asked for it to be removed',
+];
+const quote = [
+  'Photos of the home and of the site around it',
+  'The park’s name or the town, and where you’d like it to go',
+  'Any park fees or liens still owing on it',
+  'Whether the park allows it to be removed',
+  'If you’re selling: your asking price',
+];
+const parkHome = consignTypes.find((t) => t.id === 'park-home');
+const claimIds = ['length-range', 'mto-permits', 'mto-repairs', 'insured', 'park-coordination'];
+const claimShown = (id: string) => REVIEW || claims.items.some((c) => c.id === id && c.confirmed);
+---
+<Base title="Park and mobile home removal" current="/park-home-removal" jsonLd={[breadcrumbJsonLd(crumbs)]}
+  description="Vacations on Wheels removes and moves park models and mobile homes: breakdown, site clean-up, permits, lien search and transport. Concord, Ontario.">
+  <PageIntro title="Park and mobile home removal" crumbs={crumbs}
+    lead="Moving a park model or mobile home out of a park takes more than a truck. We take it down, clear the site, sort the permits and paperwork, and move it.">
+    <div class="mt-6 flex flex-wrap gap-3">
+      <a href="#removal-form" class="btn btn-primary min-h-14 px-6 text-lg">Get a removal quote</a>
+      <a href={telHref(d.phones.main)} class="btn btn-secondary min-h-14 px-6 text-lg tabular">Call {d.phones.main}</a>
+    </div>
+  </PageIntro>
+
+  <div class="wrap grid gap-10 py-10 lg:grid-cols-12">
+    <section aria-labelledby="what-h" class="lg:col-span-7">
+      <h2 id="what-h" class="m-0 text-[1.75rem] lg:text-[2rem]">What we do</h2>
+      <ul class="m-0 mt-4 grid list-none gap-4 p-0">
+        {services.map((s) => (
+          <li class="flex gap-3">
+            <span aria-hidden="true" class="mt-2.5 block size-2 shrink-0 bg-accent"></span>
+            <span><strong class="text-ink">{s.title}.</strong> {s.text}</span>
+          </li>
+        ))}
+      </ul>
+      {claimIds.some(claimShown) && (
+        <ul class="m-0 mt-4 list-none space-y-1 p-0">
+          {claimIds.map((id) => <Claim id={id} as="li" />)}
+        </ul>
+      )}
+    </section>
+    <aside class="space-y-6 lg:col-span-5" aria-label="Transport rate">
+      <div class="rounded border border-rule bg-white p-5">
+        <p class="m-0 text-[0.9375rem] font-semibold uppercase tracking-wide text-slate-60">Transport</p>
+        <p class="m-0 mt-1 text-[1.5rem] font-bold text-ink">{formatCadCents(d.rates.deliveryPerKmCad)} per km, plus HST<Confirm note="How delivery distance is counted (one way or both, from the shop?)" /></p>
+        <p class="m-0 mt-2">Breakdown, permits and clean-up depend on the home and the site, so we quote them after we’ve seen your photos.</p>
+      </div>
+      <Placeholder what="a park home being moved out of a park" />
+    </aside>
+  </div>
+
+  <section aria-labelledby="who-h" class="border-y border-rule bg-white">
+    <div class="wrap grid gap-10 py-12 lg:grid-cols-2">
+      <div>
+        <h2 id="who-h" class="m-0 text-[1.75rem] lg:text-[2rem]">Who it’s for</h2>
+        <ul class="m-0 mt-4 list-disc space-y-1 pl-6">{reasons.map((r) => <li>{r}</li>)}</ul>
+        {routeExists('/consign') && (
+          <p class="mb-0 mt-4">Selling? We can sell it for you too: see <a href="/consign">Sell it with us</a>.</p>
+        )}
+      </div>
+      <div>
+        <h2 class="m-0 text-[1.75rem] lg:text-[2rem]">For a quote, we’ll need</h2>
+        <ul class="m-0 mt-4 list-disc space-y-1 pl-6">{quote.map((q) => <li>{q}</li>)}</ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="removal-form" aria-labelledby="form-h" class="scroll-mt-4 bg-paper">
+    <div class="wrap grid gap-8 py-12 lg:grid-cols-12">
+      <div class="lg:col-span-4">
+        <h2 id="form-h" class="m-0 text-[2rem]">Get a removal quote</h2>
+        <span class="rule-accent mb-4 mt-2" aria-hidden="true"></span>
+        <p class="m-0">Tell us about the home and where it is. We’ll call you and ask for photos.</p>
+      </div>
+      <div class="lg:col-span-8">
+        <div class="rounded border border-rule bg-white p-5 lg:p-8">
+          <ContactForm kind="consign" subject="Park home removal quote" submitLabel="Send for a quote"
+            consignTypes={consignTypes.map((t) => ({ id: t.id, label: t.label, lawyer: t.lawyer }))}
+            preset={{ type: parkHome?.id, removal: true }} />
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>

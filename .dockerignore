@@ -1,5 +1,6 @@
 node_modules
 dist
+dist-*
 .astro
 test-results
 .lighthouseci
@@ -7,3 +8,5 @@ test-results
 .claude
 docs
 tasks
+.env
+.env.*

@@ -6,7 +6,7 @@ RUN npm ci
 COPY . .
 # Railway passes service variables to a Dockerfile build only when they are declared as ARGs.
 #   PUBLIC_WEB3FORMS_KEY  form delivery (forms show "call us" without it)
-#   PUBLIC_SITE_ORIGIN    where no-JS form submits return to (defaults to siteUrl in dealership.json)
+#   PUBLIC_SITE_ORIGIN    where no-JS form submits return to (defaults to siteUrl in business.json)
 #   PUBLIC_REVIEW=1       review build: shows the yellow [confirm] chips
 #   PUBLIC_ALLOW_INDEX=1  production launch only: lets search engines index, and refuses to build
 #                         while any [confirm] item is still open

@@ -57,6 +57,13 @@ const ld = [localBusinessJsonLd(), ...jsonLd];
       // Mark JS as available (shows JS-only controls), and apply the footer "Reduce motion" choice before first paint.
       document.documentElement.classList.add('js');
       try { if (localStorage.getItem('vow-motion') === 'reduce') document.documentElement.dataset.motion = 'reduce'; } catch (e) {}
+      // Ad parameters (utm_*) from the landing URL are kept for the visit, so the consign form can send them even
+      // after a tap to another page or a tile link that drops the query (LeadForm reads 'vow-utm').
+      try {
+        var q = new URLSearchParams(location.search);
+        if (q.get('utm_source') || q.get('utm_campaign')) sessionStorage.setItem('vow-utm', JSON.stringify({
+          source: q.get('utm_source') || '', medium: q.get('utm_medium') || '', campaign: q.get('utm_campaign') || '' }));
+      } catch (e) {}
       // Printed FAQs show their answers; afterwards each one goes back to how the visitor left it.
       addEventListener('beforeprint', function () {
         document.querySelectorAll('details[data-print-open]:not([open])').forEach(function (d) { d.dataset.printOpened = ''; d.open = true; });

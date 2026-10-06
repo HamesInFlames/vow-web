@@ -16,7 +16,15 @@ const BANNED = [
   /hold with deposit/i, /\bbuy now\b/i, /4\.3\s*\/\s*5/, /thousands of happy/i, /100 years/i, /\bdealership\b/i,
   // Prices (AGENTS.md): "From $X + HST" or "Quote after inspection", never these
   /call for price/i, /contact for price/i,
+  // VOW Phase 4: the consignment flyer's claims, and dealer wording before VOW's OMVIC status is known (vault 95)
+  /AI-powered/i, /AI-optimi[sz]ed/i, /smart-insured/i, /\bpredictive\b/i, /zero upfront/i, /curbsid/i,
+  /licensed dealer/i, /registered dealer/i, /\bbrokerage\b/i,
 ];
+
+// "No upfront cost" is only honest beside what does come out of the sale (vault 95 §3): any page that says it must
+// also render the cost sentence from src/data/consign.json.
+const COST_SENTENCE = JSON.parse(readFileSync('src/data/consign.json', 'utf8')).costSentence;
+const NO_UPFRONT = /no up-?front cost/i;
 
 // Exact phrases where a banned word is used correctly: promises NOT to collect sensitive data.
 // Removed before scanning; anything else still fails.
@@ -39,9 +47,14 @@ let hits = 0;
 for (const file of files) {
   // Visible text and attribute values only; drop scripts/styles so library code can't trip the list.
   const html = readFileSync(file, 'utf8')
-    .replace(/<script[\s\S]*?<\/script>/gi, '')
+    // Keep JSON-LD (structured data is public copy too); drop other scripts so library code can't trip the list.
+    .replace(/<script(?![^>]*application\/ld\+json)[\s\S]*?<\/script>/gi, '')
     .replace(/<style[\s\S]*?<\/style>/gi, '')
     .replace(new RegExp(ALLOWED.map((r) => r.source).join('|'), 'g'), '');
+  if (NO_UPFRONT.test(html) && !html.replaceAll('&#39;', "'").includes(COST_SENTENCE.replace(/^No upfront cost\. /, ''))) {
+    hits++;
+    console.log(`${file}: says "no upfront cost" without the cost sentence beside it`);
+  }
   for (const re of BANNED) {
     const m = html.match(re);
     if (m) {

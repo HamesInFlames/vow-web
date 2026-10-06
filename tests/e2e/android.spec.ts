@@ -51,7 +51,7 @@ test('android: every page loads fast enough, fits the screen and keeps the phone
 test('android: the phone menu opens by tap and every link in it is reachable', async ({ page }) => {
   await throttle(page);
   await page.goto('/');
-  await page.locator('header summary').tap();
+  await page.locator('header details[data-phone-menu] > summary').tap();
   const menu = page.getByRole('navigation', { name: 'Main menu' });
   await expect(menu).toBeVisible();
   for (const link of await menu.getByRole('link').all()) {
@@ -87,4 +87,27 @@ test('android: the booking form can be filled and sent by touch (test-key build,
   await page.getByRole('button', { name: 'Send booking request' }).tap();
   await expect(page.getByRole('status')).toContainText('We’ll call you to confirm.');
   expect(sent).toBe(true);
+});
+
+test('android: the consignment form can be filled and sent by touch (ad landing page)', async ({ page }) => {
+  test.setTimeout(120_000);
+  await throttle(page);
+  let sent = '';
+  await page.route('https://api.web3forms.com/submit', (route) => {
+    sent = route.request().postDataBuffer()?.toString('utf8') ?? '';
+    return route.fulfill({ status: 200, contentType: 'application/json', body: '{"success":true}' });
+  });
+  await page.goto(`${FORMS_ORIGIN}/consign?type=park-home&utm_source=facebook`);
+  await page.getByRole('link', { name: 'Get a quote' }).tap();
+  await expect(page.locator('#consign-form form[novalidate]')).toBeAttached();
+  await expect(page.getByLabel(/What is it\?/)).toHaveValue('park-home');
+  await page.getByRole('textbox', { name: 'Your name' }).tap();
+  await page.keyboard.type('Touch Seller');
+  await page.getByRole('textbox', { name: 'Phone', exact: true }).tap();
+  await page.keyboard.type('9055550100');
+  await page.getByText('Onsite (sell it where it is)').tap();
+  await page.getByText(/OK to contact me/).tap();
+  await page.getByRole('button', { name: 'Send for a quote' }).tap();
+  await expect(page.getByRole('status')).toContainText('This is a request for a quote, not an agreement.');
+  for (const v of ['Touch Seller', 'park-home', 'Onsite', 'facebook']) expect(sent).toContain(v);
 });

@@ -5,7 +5,7 @@ import Base from '../layouts/Base.astro';
 import PageIntro from '../components/astro/PageIntro.astro';
 import Confirm from '../components/astro/Confirm.astro';
 import business from '../data/business.json';
-import { telHref } from '../lib/format';
+import { formatCad, telHref } from '../lib/format';
 import { breadcrumbJsonLd } from '../lib/seo';
 import { REVIEW, routeExists } from '../lib/site';
 
@@ -50,6 +50,9 @@ const trailerPlans = ['Platinum cargo and utility trailer coverage', 'Gold cargo
       <ul class="m-0 mt-2 list-disc space-y-1 pl-6">
         {trailerPlans.map((p) => <li>{p}</li>)}
       </ul>
+      {REVIEW && (
+        <p class="mt-4"><strong class="text-ink">Vacations Global Warranty:</strong> {formatCad(2495)} plus HST.<Confirm note="Vacations Global Warranty $2,495 (Paul, Oct 5): what it covers, which units, and the provider" /></p>
+      )}
       <p class="mt-4">What each plan covers, its price and its terms depend on your RV. Call us and we’ll go through the options.</p>
     </section>
   </div>

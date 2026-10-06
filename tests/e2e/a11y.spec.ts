@@ -16,7 +16,7 @@ for (const width of [1440, 375]) {
       expect(results.violations, summarize(results.violations)).toEqual([]);
 
       // Phone menu open state, where the page has one.
-      const menu = page.locator('header details summary');
+      const menu = page.locator('header details[data-phone-menu] > summary');
       if (width === 375 && (await menu.count())) {
         await menu.click();
         const open = await new AxeBuilder({ page }).withTags(TAGS).analyze();

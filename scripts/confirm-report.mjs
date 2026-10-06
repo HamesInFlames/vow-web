@@ -19,16 +19,29 @@ const serviceItems = services.flatMap((s) => [
 ]);
 
 // <Confirm note="…" /> and <Confirm note={'…'} /> in components and pages, with the file they're in.
+// Consignment (VOW Phase 4): [confirm] items, and the lawyer-gated unit types in their own section.
+const consign = json('src/data/consign.json');
+const consignItems = [
+  ...consign.types.filter((t) => !t.confirmed).map((t) => `**${t.label}**: offer consignment of this type?`),
+  ...consign.types.flatMap((t) => (t.confirm ?? []).map((c) => `**${t.label}**: ${c}`)),
+  ...[...consign.steps, ...consign.terms].filter((x) => x.confirm).map((x) => `**${x.label ?? x.title}**: ${x.confirm}`),
+  ...consign.faq.filter((f) => f.confirm).map((f) => `FAQ "${f.q}": ${f.confirm}`),
+];
+const lawyerTypes = consign.types.filter((t) => t.lawyer).map((t) => t.label);
+const lawyerItems = lawyerTypes.length ? [`**Consigning ${lawyerTypes.join(', ')}**: ${consign.lawyerNote}`] : [];
+
 const notes = new Map();
+const lawyerNotes = new Map(); // <Confirm lawyer note="…">
 const walk = (dir) => {
   for (const f of readdirSync(dir)) {
     const p = join(dir, f);
     if (statSync(p).isDirectory()) { walk(p); continue; }
     if (!/\.(astro|tsx)$/.test(p)) continue;
-    for (const m of readFileSync(p, 'utf8').matchAll(/<Confirm note=(?:"([^"]+)"|\{['"]([^'"]+)['"]\})/g)) {
-      const note = m[1] ?? m[2];
-      if (!notes.has(note)) notes.set(note, new Set());
-      notes.get(note).add(p.replaceAll('\\', '/').replace(/^src\//, ''));
+    for (const m of readFileSync(p, 'utf8').matchAll(/<Confirm\b([^>]*?)\bnote=(?:"([^"]+)"|\{['"`]([^'"`]+)['"`]\})([^>]*)>/g)) {
+      const map = /\blawyer\b/.test(m[1] + m[4]) ? lawyerNotes : notes;
+      const note = m[2] ?? m[3];
+      if (!map.has(note)) map.set(note, new Set());
+      map.get(note).add(p.replaceAll('\\', '/').replace(/^src\//, ''));
     }
   }
 };
@@ -45,6 +58,13 @@ const lines = [
   '## Claims from the old site (`src/data/claims.json`, hidden in production until confirmed)',
   ...claims.items.filter((c) => !c.confirmed).map((c) => `- [ ] ${c.text}`),
   '',
+  '## For the lawyer (`src/data/consign.json` types with `lawyer: true`, plus `<Confirm lawyer>` flags below)',
+  ...lawyerItems.map((c) => `- [ ] ${c}`),
+  ...[...lawyerNotes].sort().map(([note, files]) => `- [ ] ${note} (${[...files].join(', ')})`),
+  '',
+  '## Consignment (`src/data/consign.json`)',
+  ...consignItems.map((c) => `- [ ] ${c}`),
+  '',
   '## Services (`src/content/services/`)',
   ...serviceItems.map((c) => `- [ ] ${c}`),
   '',
@@ -54,7 +74,8 @@ const lines = [
 for (const [note, files] of [...notes].sort()) lines.push(`- [ ] ${note} (${[...files].join(', ')})`);
 lines.push('');
 
-const total = business.confirm.length + claims.items.filter((c) => !c.confirmed).length + serviceItems.length + notes.size;
+const total = business.confirm.length + claims.items.filter((c) => !c.confirmed).length + serviceItems.length
+  + consignItems.length + lawyerItems.length + lawyerNotes.size + notes.size;
 writeFileSync('docs/confirm-report.md', lines.join('\n'));
 console.log(`docs/confirm-report.md: ${total} open item(s)`);
 if (process.argv.includes('--strict') && total > 0) process.exit(1);

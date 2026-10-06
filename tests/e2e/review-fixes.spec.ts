@@ -2,6 +2,7 @@
 import { test, expect } from '@playwright/test';
 import { builtPages } from './pages';
 import business from '../../src/data/business.json' with { type: 'json' };
+import consign from '../../src/data/consign.json' with { type: 'json' };
 
 test('canonical and og:url are clean URLs (no .html, no /index)', async ({ page }) => {
   for (const path of builtPages().filter((p) => p !== '/404')) {
@@ -34,7 +35,8 @@ test('production build hides unconfirmed services and FAQ answers', async ({ pag
 test('service pages: price line, pre-filled booking link, FAQPage JSON-LD', async ({ page }) => {
   await page.goto('/services/winterizing');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Winterizing');
-  await expect(page.getByRole('complementary', { name: 'Price and booking' })).toContainText('Quote after inspection');
+  // Winterizing has Paul's Oct 5 price; services without one say "Quote after inspection".
+  await expect(page.getByRole('complementary', { name: 'Price and booking' })).toContainText('$199 plus parts and HST');
   await expect(page.getByRole('link', { name: 'Book this service' })).toHaveAttribute('href', '/book?service=winterizing');
   const ld = await page.locator('script[type="application/ld+json"]').allTextContents();
   const types = ld.map((t) => JSON.parse(t)['@type']);
@@ -47,8 +49,8 @@ test('without a form key the booking form is replaced by a call block (no lead c
   await expect(page.getByText('Our online form isn’t switched on yet.')).toBeVisible();
 });
 
-test('no sideways scroll; header controls stay on screen and on one line (320, 375, 1024, 1280 px)', async ({ page }) => {
-  for (const w of [320, 375, 1024, 1280]) {
+test('no sideways scroll; header controls stay on screen and on one line (320, 375, 1024, 1280, 1440 px)', async ({ page }) => {
+  for (const w of [320, 375, 1024, 1280, 1440]) {
     await page.setViewportSize({ width: w, height: 800 });
     for (const path of builtPages()) {
       await page.goto(path);
@@ -106,4 +108,84 @@ test('print: a service page prints its FAQ answers and the shop phone, without b
   await page.emulateMedia({ media: 'screen' });
   await expect(answer).toBeHidden();
   await expect(page.locator('.print-only')).toBeHidden();
+});
+
+test('consignment in production: no lawyer-gated types, no unconfirmed terms, cost sentence present', async ({ page }) => {
+  await page.goto('/consign');
+  const main = page.locator('main');
+  for (const t of consign.types.filter((x) => x.lawyer)) await expect(main.getByText(t.label)).toHaveCount(0);
+  for (const t of consign.terms.filter((x) => 'confirm' in x)) await expect(main.getByText(t.text)).toHaveCount(0);
+  await expect(main.locator('[data-cost-sentence]')).toHaveText(consign.costSentence);
+  await expect(page.locator('.confirm-chip')).toHaveCount(0);
+  // Production wording never invites a motorhome trade.
+  await expect(main).not.toContainText(/motorhome/i);
+});
+
+test('desktop menu panels open on click, one at a time, and close on Escape or an outside click', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto('/');
+  const nav = page.getByRole('navigation', { name: 'Main' });
+  const warranty = nav.getByRole('link', { name: 'Warranty' });
+  const reviews = nav.getByRole('link', { name: 'Reviews' });
+  await expect(warranty).toBeHidden();
+  await nav.locator('summary', { hasText: 'Services' }).click();
+  await expect(warranty).toBeVisible();
+  await nav.locator('summary', { hasText: 'About' }).click();
+  await expect(warranty).toBeHidden();
+  await expect(reviews).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(reviews).toBeHidden();
+  await nav.locator('summary', { hasText: 'Services' }).click();
+  await page.locator('main h1').click();
+  await expect(warranty).toBeHidden();
+});
+
+test('park home removal in production: rate shown, unproven claims hidden', async ({ page }) => {
+  await page.goto('/park-home-removal');
+  const main = page.locator('main');
+  await expect(main).toContainText('$6.50 per km, plus HST');
+  for (const t of ['Fully insured', 'MTO oversize permits', '80 feet', 'every park']) await expect(main).not.toContainText(t);
+  await expect(page.locator('.confirm-chip')).toHaveCount(0);
+});
+
+test('power sports in production: book links for all four, sell links only where not lawyer-gated', async ({ page }) => {
+  await page.goto('/power-sports');
+  for (const id of ['motorcycle', 'atv', 'snowmobile', 'boat']) {
+    await expect(page.locator(`a[href="/book?vehicle=${id}"]`)).toHaveCount(1);
+  }
+  for (const t of consign.types.filter((x) => ['motorcycle', 'atv', 'snowmobile', 'boat'].includes(x.id))) {
+    await expect(page.locator(`a[href^="/consign?type=${t.id}"]`), t.id).toHaveCount(t.lawyer ? 0 : 1);
+  }
+  await expect(page.locator('.confirm-chip')).toHaveCount(0);
+});
+
+test('financing in production: no lender line, no rates or payment examples', async ({ page }) => {
+  await page.goto('/financing');
+  const main = page.locator('main');
+  await expect(main).not.toContainText(/approved credit|\bOAC\b|\bAPR\b|\b0%|per month|a month|\/mo\b|bi-?weekly/i);
+  await expect(main).toContainText('This isn’t a credit application');
+  await expect(page.locator('.confirm-chip')).toHaveCount(0);
+});
+
+test('services without a confirmed price say "Quote after inspection"; /services shows the shop rates', async ({ page }) => {
+  await page.goto('/services/annual-inspection');
+  await expect(page.getByRole('complementary', { name: 'Price and booking' })).toContainText('Quote after inspection');
+  await page.goto('/services');
+  const rates = page.getByRole('region', { name: 'Shop rates' });
+  await expect(rates).toContainText(`$${business.rates.labourTrailersPerHourCad} an hour for trailers`);
+  await expect(rates).toContainText(`$${business.rates.labourMotorhomesPerHourCad} an hour for motorhomes`);
+  await expect(rates).toContainText('written estimate before we start');
+});
+
+test('consignment raw HTML in production: no lawyer-gated labels or hidden FAQ answers anywhere (props, JSON-LD, meta)', async ({ request }) => {
+  const html = await (await request.get('/consign')).text();
+  for (const t of consign.types.filter((x) => x.lawyer)) expect(html, t.label).not.toContain(t.label);
+  for (const f of consign.faq.filter((x) => 'confirm' in x)) {
+    expect(html, f.q).not.toContain(f.q);
+    expect(html, f.q).not.toContain(f.a);
+  }
+  const ld = [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)].map((m) => JSON.parse(m[1]));
+  const faqPage = ld.find((x) => x['@type'] === 'FAQPage');
+  expect(faqPage.mainEntity.map((q: { name: string }) => q.name)).toEqual(consign.faq.filter((x) => !('confirm' in x)).map((x) => x.q));
+  expect(html).not.toMatch(/OMVIC|licensed dealer|registered dealer|2,495/i);
 });

@@ -1,0 +1,35 @@
+{
+  "note": "Consignment (VOW Phase 4; vault 20-decisions 2026-10-06, prompts/build-vow-phase4-consign.md). Sources: Paul's Oct 5 texts and the 'Premier Consignment & Removal Program' PDF draft (vault raw/texts-2026-10-05). lawyer: true = powered vehicles under (or possibly under) Ontario's Motor Vehicle Dealers Act: shown only in review builds with a 'Lawyer to review' chip until the lawyer or VOW's OMVIC status clears them (vault 95 §1). Setting lawyer to false publishes the type; no code change needed. confirm = a fact Rae or Paul still has to confirm; hidden in production.",
+  "types": [
+    { "id": "park-home", "label": "Park models and mobile homes", "powered": false, "lawyer": false, "confirmed": true, "confirm": [] },
+    { "id": "travel-trailer", "label": "Travel trailers and fifth wheels", "powered": false, "lawyer": false, "confirmed": true, "confirm": [] },
+    { "id": "cargo-trailer", "label": "Cargo and utility trailers", "powered": false, "lawyer": false, "confirmed": true, "confirm": [] },
+    { "id": "snowmobile", "label": "Snowmobiles", "powered": true, "lawyer": false, "confirmed": true, "confirm": [] },
+    { "id": "boat", "label": "Boats and watercraft", "powered": true, "lawyer": false, "confirmed": true, "confirm": [] },
+    { "id": "motorhome", "label": "Motorhomes", "powered": true, "lawyer": true, "confirmed": true, "confirm": [] },
+    { "id": "motorcycle", "label": "Motorcycles", "powered": true, "lawyer": true, "confirmed": true, "confirm": [] },
+    { "id": "atv", "label": "ATVs and UTVs", "powered": true, "lawyer": true, "confirmed": true, "confirm": [] }
+  ],
+  "lawyerNote": "Selling motorhomes, motorcycles (and possibly ATVs and UTVs) for their owners may need OMVIC registration. Hidden on the real site until the lawyer or VOW's OMVIC status clears it (vault 95 §1)",
+  "costSentence": "No upfront cost. Our commission and any costs you agree to (transport, removal, repairs) come out of the sale price, and they’re all written in your consignment agreement before anything is listed.",
+  "steps": [
+    { "title": "Send us photos and details", "text": "Photos of the unit and where it sits, plus a few details. The form below takes two minutes." },
+    { "title": "We check for liens and the park’s rules", "text": "We run a lien search (PPSA) and, for a park home, check what the park allows." },
+    { "title": "You sign a written agreement", "text": "It sets out the price, our commission, any costs you agree to, and when you’re paid, before anything is listed." },
+    { "title": "We prep, photograph and advertise it", "text": "We get it ready to show, take the photos and put it in front of buyers." },
+    { "title": "It sells, and we pay you", "text": "You get the sale price minus our commission and the costs in your agreement." }
+  ],
+  "terms": [
+    { "id": "commission", "label": "Commission", "text": "20% of the sale price", "confirm": "Consignment commission for VOW (the old RV Farm terms say 20%)" },
+    { "id": "payout", "label": "When you’re paid", "text": "Within a set number of days after the buyer’s payment clears, written in your agreement", "confirm": "Payout timing: a fixed number of days after the buyer's funds clear (old terms said 'up to 90 days'; vault 95 §6)" },
+    { "id": "costs", "label": "Other costs", "text": "Only costs you agree to in writing first: transport, removal, repairs" },
+    { "id": "liens", "label": "Lien check", "text": "We run a PPSA lien search before listing" }
+  ],
+  "faq": [
+    { "q": "Do I pay anything upfront?", "a": "No. Our commission and any costs you agree to (transport, removal, repairs) come out of the sale price, and they’re all written in your consignment agreement before anything is listed." },
+    { "q": "How much is your commission?", "a": "20% of the sale price. It’s written in your agreement before anything is listed.", "confirm": "Consignment commission for VOW (the old RV Farm terms say 20%)" },
+    { "q": "When do I get paid?", "a": "After the buyer’s payment clears. The number of days is written in your agreement.", "confirm": "Payout timing for VOW consignments" },
+    { "q": "Can you sell my park home where it sits?", "a": "Yes. You choose: we sell it where it is (onsite), or we remove it and sell it offsite. We check the park’s rules first." },
+    { "q": "What if there’s a loan or lien on it?", "a": "We run a lien search before listing. Any loan or lien is paid out of the sale price before you’re paid.", "confirm": "Is any lien paid out of the sale proceeds before the consignor is paid? (vault 95 §5)" }
+  ]
+}

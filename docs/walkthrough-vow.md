@@ -4,7 +4,8 @@ The new Vacations on Wheels website is built. Before it can go live we need four
 
 **Already answered Part 5 of the RV Farm sheet?** Those 19 questions are repeated here, each marked *(RV Farm sheet 5.n)*. Copy the answer across instead of answering twice.
 
-**Review link:** not online yet. James shows the site from his laptop, or puts it on a private preview link like RV Farm's once you OK it (see "For James" at the end).
+**Review link:** https://vow-web-production.up.railway.app
+(A private preview. Google can't find it, and customers won't see it.)
 
 **Yellow tags on the preview** mark something we haven't confirmed yet: a price, an hour, a claim. On the real site, anything still unconfirmed is hidden, never guessed. Every tag goes away once you answer the matching question below.
 
@@ -141,6 +142,31 @@ Look at it on a phone first; most customers will. Then on a computer.
 26. A vector file of the logo, and any brand colours on file. *(5.17)*
     - Answer:
 
+### H. Selling for customers, removal, power sports, financing (added Oct 6, after Paul's Oct 5 texts)
+
+The preview now has **Sell it with us** (/consign), **Park home removal**, **Power sports** and **Financing**, plus your shop rates ($199/h trailers, $249/h motorhomes, winterizing $199 plus parts, transport $6.50/km).
+
+27. **Commission** on a consignment sale: 20% (the old RV Farm terms), or something else?
+    - Answer:
+28. **When the seller is paid:** how many days after the buyer's payment clears? (The lawyer suggests a fixed number of days, not "up to 90 days".) Is the money kept in a separate account until then?
+    - Answer:
+29. If there's a loan or lien on a consigned unit, is it paid out of the sale price before the seller is paid?
+    - Answer:
+30. **Is VOW registered with OMVIC?** In which class (general dealer or broker)? Motorhomes, motorcycles and ATVs/UTVs stay off the real site until this is answered (Part 3).
+    - Answer:
+31. **Removal:** is every move fully insured (which policies)? Do you move homes under MTO oversize permits, and who holds the permits and the CVOR: VOW or a hauler? Lengths from 8 to 80 feet? Do you work with every park?
+    - Answer:
+32. **Transport rate $6.50/km:** how is the distance counted (one way or both ways, from the shop?), and does it also apply to service pick-ups?
+    - Answer:
+33. **Written estimates:** is there a fee for one? (If so, Ontario law says it must be told to the customer first.)
+    - Answer:
+34. **Power sports:** which jobs for which type (seasonal service, repairs, parts, warranty work)? Anything you won't take?
+    - Answer:
+35. **Financing:** which lender? What can be financed: units from RV Farm, units bought through consignment, larger repairs? Does the lender pay VOW anything for referrals?
+    - Answer:
+36. **"Vacations Global Warranty $2,495":** what does it cover, for which units, and who is the provider? Is it the same as Global Warranty?
+    - Answer:
+
 ---
 
 ## Part 3. For the lawyer
@@ -153,6 +179,11 @@ Look at it on a phone first; most customers will. Then on a computer.
 | "No extra work without your OK" (estimates). Please check it against Ontario's Consumer Protection Act rules for repair estimates | /terms, inspection page | Waiting on Paul (question 13) |
 | Global Warranty plans named on the warranty page (we link to the provider's own documents and don't repeat their terms) | /warranty | Waiting on question 17 |
 | Registered business name, for the footer and the legal pages | every page | Waiting on question 5 |
+| **Consigning motorhomes, motorcycles, ATVs and UTVs** (Motor Vehicle Dealers Act; built in, hidden until cleared). Research: vault `95` §1 | /consign, /power-sports | Waiting on question 30 and the lawyer |
+| Consignment agreement terms: commission, payout days, money held separately, insurance on the lot, unsold units | /consign, /terms | Waiting on questions 27–29 |
+| "No upfront cost", shown only beside the commission-and-costs sentence | /consign | Ready to review |
+| Removal wording: insurance, MTO permits, CVOR (hidden until proven) | /park-home-removal | Waiting on question 31 |
+| Financing: no rates or payment examples; is VOW a "loan broker" if a lender pays it? | /financing, /terms | Waiting on question 35 |
 
 - Who sends these to the lawyer, and by when?
   - Answer:
@@ -185,7 +216,7 @@ vacationsonwheels.ca is registered to **Turnkey's company**, not Paul's (paid un
 ## For James (not for the meeting)
 
 **Before the meeting**
-- A preview link for Paul and Rae means a Railway service for `vow-web` (`dev` branch, `PUBLIC_REVIEW=1`), like RV Farm's. Not approved yet. Without it, run the review build on the laptop (Git Bash, in the repo):
+- The preview link is Railway service `vow-web` in project empowering-wholeness: it deploys every push to `dev`, with `PUBLIC_REVIEW=1`. Offline fallback (Git Bash, in the repo):
   `VOW_OUT_DIR=dist-review PUBLIC_REVIEW=1 npx astro build && VOW_OUT_DIR=dist-review npx astro preview --port 4330`, then open http://localhost:4330.
 - Pick 3–6 Google reviews for question 25 (first name, month, stars, exact words) so Rae can OK them in the room.
 
@@ -209,6 +240,13 @@ vacationsonwheels.ca is registered to **Turnkey's company**, not Paul's (paid un
 | 24 | Photo pipeline (RV Farm's `scripts/photos.mjs` with the VOW watermark); placeholders swap to real photos |
 | 25 | `src/data/reviews.json` (`items`, then `confirmed: true`) |
 | 26 | `src/assets/brand/` (vector logo) |
-| Part 3 | Legal page text; `src/pages/terms.astro` estimate sentence |
+| 27–29 | `src/data/consign.json` (`terms`, `faq`: drop `confirm` once answered) |
+| 30 | `src/data/consign.json` `types[].lawyer` → `false` publishes that type (only after the lawyer) |
+| 31 | `src/data/claims.json` (`insured`, `mto-permits`, `length-range`, `park-coordination`) |
+| 32–33 | `src/data/business.json` `rates` and `confirm` |
+| 34 | `src/pages/power-sports.astro` job list |
+| 35 | `src/pages/financing.astro` (lender line, what can be financed) |
+| 36 | `src/pages/warranty.astro` |
+| Part 3 | Legal page text; `src/pages/terms.astro` estimate, consignment and financing sections |
 
 When everything is answered, `node scripts/confirm-report.mjs --strict` must exit 0 before launch.

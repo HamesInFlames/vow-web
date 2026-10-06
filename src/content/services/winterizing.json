@@ -3,6 +3,8 @@
   "order": 1,
   "season": "fall",
   "summary": "We drain the lines, treat the water system and get your RV ready to sit through the cold, so it’s ready to go in spring.",
+  "fromPriceCad": 199,
+  "priceFormat": "plus-parts",
   "includes": [
     "Draining the water lines and tanks",
     "Treating the water system so nothing freezes and splits",
@@ -13,15 +15,29 @@
     "Tell us if you’ve already drained anything or added antifreeze"
   ],
   "faq": [
-    { "q": "When should I winterize?", "a": "Before overnight temperatures start dropping below freezing. Around Concord that’s usually late October to November. Water left in the lines can freeze and split pipes and fittings." },
-    { "q": "How much does winterizing cost?", "a": "We don’t publish a price yet. Call the shop and we’ll tell you the price for your unit." },
-    { "q": "Should I cover the roof and A/C for the winter?", "a": "A cover keeps snow, ice and debris out of the A/C unit and off the roof. We offer A/C covers and roof covers; ask when you book." }
+    {
+      "q": "When should I winterize?",
+      "a": "Before overnight temperatures start dropping below freezing. Around Concord that’s usually late October to November. Water left in the lines can freeze and split pipes and fittings."
+    },
+    {
+      "q": "How much does winterizing cost?",
+      "a": "$199 plus parts and HST. That covers an hour of shop time; parts, like antifreeze, are extra. We give you a written estimate before we start."
+    },
+    {
+      "q": "Should I cover the roof and A/C for the winter?",
+      "a": "A cover keeps snow, ice and debris out of the A/C unit and off the roof. We offer A/C covers and roof covers; ask when you book."
+    }
   ],
-  "related": ["heating-and-air-conditioning", "water-systems", "preventative-maintenance"],
+  "related": [
+    "heating-and-air-conditioning",
+    "water-systems",
+    "preventative-maintenance"
+  ],
   "photo": "an RV being winterized in the bay",
   "confirmed": true,
   "confirm": [
-    "A winterizing price for the site (\"From $X + HST\"), and what it includes exactly (antifreeze or air blow-out? water heater bypass?)",
+    "Does the $199 winterizing price apply to motorhomes too, or is it one hour at the $249 motorhome rate?",
+    "What winterizing includes exactly (antifreeze or air blow-out? water heater bypass?)",
     "Do you also de-winterize in spring?"
   ]
 }

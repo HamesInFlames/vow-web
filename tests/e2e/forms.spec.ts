@@ -151,3 +151,114 @@ test.describe('part request and insurance claim (with JS)', () => {
     expect(sent).toContain('Insurance claim repair');
   });
 });
+
+test.describe('consignment form', () => {
+  test('?type= and ?removal= pre-fill; Facebook ad parameters ride along; JS send', async ({ page }) => {
+    let sent = '';
+    await page.route(WEB3FORMS, (route) => {
+      sent = body(route.request());
+      return route.fulfill({ status: 200, contentType: 'application/json', body: '{"success":true}' });
+    });
+    await page.goto('/consign?type=park-home&removal=yes&utm_source=facebook&utm_campaign=fall-consign#consign-form');
+    await expect(page.getByLabel(/What is it\?/)).toHaveValue('park-home');
+    await expect(page.getByLabel(/Offsite/)).not.toBeChecked();
+    await page.getByRole('textbox', { name: 'Your name' }).fill('Consign Person');
+    await page.getByRole('textbox', { name: 'Phone', exact: true }).fill('905-555-0100');
+    await page.getByRole('textbox', { name: /Where is it now/ }).fill('Sunny Acres park');
+    await page.getByRole('checkbox', { name: /OK to contact me/ }).check();
+    await page.getByRole('button', { name: 'Send for a quote' }).click();
+    await expect(page.getByRole('status')).toContainText('This is a request for a quote, not an agreement.');
+    for (const v of ['Consign Person', 'park-home', 'Sunny Acres park', 'facebook', 'fall-consign', 'Consignment quote', 'removal_requested']) expect(sent).toContain(v);
+  });
+
+  test('ad parameters survive a tap on a unit-type tile (which reloads without them)', async ({ page }) => {
+    let sent = '';
+    await page.route(WEB3FORMS, (route) => {
+      sent = body(route.request());
+      return route.fulfill({ status: 200, contentType: 'application/json', body: '{"success":true}' });
+    });
+    await page.goto('/consign?utm_source=facebook&utm_campaign=tile-test');
+    await page.getByRole('region', { name: 'What we take' }).getByRole('link', { name: 'Snowmobiles', exact: true }).click();
+    await expect(page).toHaveURL(/type=snowmobile/);
+    await expect(page.getByLabel(/What is it\?/)).toHaveValue('snowmobile');
+    await page.getByRole('textbox', { name: 'Your name' }).fill('Tile Person');
+    await page.getByRole('textbox', { name: 'Phone', exact: true }).fill('905-555-0100');
+    await page.getByRole('checkbox', { name: /OK to contact me/ }).check();
+    await page.getByRole('button', { name: 'Send for a quote' }).click();
+    await expect(page.getByRole('status')).toBeVisible();
+    expect(sent).toContain('tile-test');
+    expect(sent).toContain('facebook');
+  });
+
+  test('production form never offers lawyer-gated types', async ({ page }) => {
+    await page.goto('/consign');
+    const options = await page.getByLabel(/What is it\?/).locator('option').allTextContents();
+    expect(options.join('|')).not.toMatch(/Motorhome|Motorcycle|ATV/);
+    expect(options.length).toBeGreaterThan(3);
+  });
+
+  test('without JS the consign form posts and lands on /thanks', async ({ browser }) => {
+    const ctx = await browser.newContext({ javaScriptEnabled: false });
+    const page = await ctx.newPage();
+    let sent = '';
+    await page.route(WEB3FORMS, (route) => {
+      sent = body(route.request());
+      return route.fulfill({ status: 303, headers: { location: `${FORMS_ORIGIN}/thanks` } });
+    });
+    await page.goto(`${FORMS_ORIGIN}/consign`);
+    await page.getByRole('textbox', { name: 'Your name' }).fill('No Script Seller');
+    await page.getByRole('textbox', { name: 'Phone', exact: true }).fill('905-555-0100');
+    await page.getByLabel(/What is it\?/).selectOption('travel-trailer');
+    await page.getByRole('checkbox', { name: /OK to contact me/ }).check();
+    await page.getByRole('button', { name: 'Send for a quote' }).click();
+    await expect(page).toHaveURL(/\/thanks$/);
+    expect(sent).toContain('No Script Seller');
+    expect(sent).toContain('travel-trailer');
+    await ctx.close();
+  });
+});
+
+test('park home removal: the embedded form starts on park home + move it, and sends its own subject', async ({ page }) => {
+  let sent = '';
+  await page.route(WEB3FORMS, (route) => {
+    sent = body(route.request());
+    return route.fulfill({ status: 200, contentType: 'application/json', body: '{"success":true}' });
+  });
+  await page.goto('/park-home-removal');
+  // The form hydrates when it scrolls into view (client:visible); wait for that before clicking radios.
+  await page.locator('#removal-form').scrollIntoViewIfNeeded();
+  await expect(page.locator('#removal-form form[novalidate]')).toBeAttached();
+  await expect(page.getByLabel(/What is it\?/)).toHaveValue('park-home');
+  // Nothing pre-chosen: a removal-only visitor who skips the question mustn't read as "sell it".
+  for (const label of [/Onsite/, /Offsite/, /Just move it/]) await expect(page.getByLabel(label)).not.toBeChecked();
+  await page.getByLabel(/Just move it/).check();
+  await page.getByRole('textbox', { name: 'Your name' }).fill('Mover Person');
+  await page.getByRole('textbox', { name: 'Phone', exact: true }).fill('905-555-0100');
+  await page.getByRole('checkbox', { name: /OK to contact me/ }).check();
+  await page.getByRole('button', { name: 'Send for a quote' }).click();
+  await expect(page.getByRole('status')).toBeVisible();
+  for (const v of ['Park home removal quote', 'Just move it', 'park-home', 'removal_requested']) expect(sent).toContain(v);
+});
+
+test('?vehicle= pre-selects a power-sports type on the booking form', async ({ page }) => {
+  await page.goto('/book?vehicle=snowmobile');
+  await expect(page.getByLabel('Type (optional)')).toHaveValue('Snowmobile');
+});
+
+test('financing form is contact-only: no SIN, date of birth, income or banking fields; sends', async ({ page }) => {
+  let sent = '';
+  await page.route(WEB3FORMS, (route) => {
+    sent = body(route.request());
+    return route.fulfill({ status: 200, contentType: 'application/json', body: '{"success":true}' });
+  });
+  await page.goto('/financing');
+  const names = await page.locator('form[action*="web3forms"] [name]').evaluateAll((els) => els.map((e) => e.getAttribute('name')));
+  expect(names.join(' ')).not.toMatch(/sin|birth|dob|income|bank|account|salary/i);
+  await page.getByRole('textbox', { name: 'Your name' }).fill('Finance Person');
+  await page.getByRole('textbox', { name: 'Phone', exact: true }).fill('905-555-0100');
+  await page.getByLabel(/What would you like to finance/).fill('A park model');
+  await page.getByRole('checkbox', { name: /OK to contact me/ }).check();
+  await page.getByRole('button', { name: 'Ask us to call' }).click();
+  await expect(page.getByRole('status')).toContainText('This isn’t a credit application.');
+  expect(sent).toContain('Financing question');
+});
