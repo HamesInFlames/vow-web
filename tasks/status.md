@@ -28,6 +28,7 @@
   7. The blanket print padding override is removed (the PDF still fits on two pages).
   8. `--grep-invert "shots|android"` replaced by Playwright projects split by file: `site` + `forms` (verify), `shots`, `android`.
 - **After the fixes:** `npm run verify` 96 tests: 95 passed plus the link crawl, which failed once on a DNS lookup (`ENOTFOUND thervfarm.ca`) and passed on rerun (45 links); `npm run test:android` 4/4; print PDF re-checked.
+- **Branches (Oct 6):** `dev` pushed at `e415dc8`; James created `main` from `dev` (same commit). GitHub's default branch is still `dev` unless James changes it.
 - **What's next:** Phase 4 (Paul and Rae walkthrough). Optionally a whole-branch review (`/code-review high` scoped to `5e5c53d..HEAD`), since this one only covered the Phase 3 diff. Still waiting on: Web3Forms key, Rae's answers (65 items), Railway approval, the domain.
 
 ## Context for next session
