@@ -28,7 +28,9 @@
   7. The blanket print padding override is removed (the PDF still fits on two pages).
   8. `--grep-invert "shots|android"` replaced by Playwright projects split by file: `site` + `forms` (verify), `shots`, `android`.
 - **After the fixes:** `npm run verify` 96 tests: 95 passed plus the link crawl, which failed once on a DNS lookup (`ENOTFOUND thervfarm.ca`) and passed on rerun (45 links); `npm run test:android` 4/4; print PDF re-checked.
-- **What's next:** Phase 4 (Paul and Rae walkthrough). Optionally a whole-branch review (`/code-review high` scoped to `5e5c53d..HEAD`), since this one only covered the Phase 3 diff. Still waiting on: Web3Forms key, Rae's answers (65 items), Railway approval, the domain.
+- **Branches (Oct 6):** `dev` pushed at `e415dc8`; James created `main` from `dev` (same commit). GitHub default branch set to `main` (Oct 6, via `gh`).
+- **Phase 4 prep (Oct 6):** `docs/walkthrough-vow.md`, the meeting sheet for Paul and Rae, modelled on RV Farm's: Part 1 tour (13 page types plus phone checks), Part 2 26 questions covering all 65 confirm-report items (each of RV Farm sheet Part 5's 19 VOW questions marked *(5.n)* so nothing is answered twice), Part 3 lawyer list (legal drafts, the estimate sentence vs Ontario CPA, the Global Warranty naming, the legal name), Part 4 points to RV Farm sheet Part 4 for the domain, and "For James" (the preview options, Google rating at launch, the RV Farm link, and an answer → file table). The laptop preview command in it was tested (`dist-review` on port 4330 serves the unconfirmed pages with tags). `npm run verify` 96/96.
+- **What's next:** the meeting itself (James), then apply the answers using the sheet's table and run `confirm-report --strict` before launch. Optionally a whole-branch review (`/code-review high` scoped to `5e5c53d..HEAD`). Still waiting on: Web3Forms key, the answers, Railway approval for a VOW preview link, the domain. RV Farm's sheet (other repo) still has its own Part 5; James may want to point it at this sheet.
 
 ## Context for next session
 - RV Farm-only habits to drop: no inventory, no fees, no advertised price. Prices only when Paul confirms them.

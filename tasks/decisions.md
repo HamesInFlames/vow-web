@@ -34,3 +34,8 @@
 - **Site facts:** what VOW’s own current site says it does is treated like the 8 services and shown in production: the insurance-claim repair list, Global Warranty extended plans by name (provider PDFs linked, brochure text not reproduced, V6), pick-up with “applicable pick-up fees”, parts in store or ordered in, and the NTP catalogue link. Unsourced claims and processes stay `[confirm]` and review-only: the claim steps, insurers, warranty makers, pick-up radius and return trip, the Onan stock, staff facts, and the estimate-approval sentence in the terms.
 - **Three forms (plan §1):** the island’s `general` kind was removed; `/contact` has no form and links to the three request pages instead.
 - **Header:** flat nav for now (no dropdown panels); at 1024–1279 px the Call button shows “Call” only.
+
+### 2026-10-06 — GitHub CLI installed on the MSI laptop (James asked)
+- **What:** `gh` 2.102.0 via `winget install GitHub.cli` (machine tool, not a project dependency; nothing added to package.json).
+- **Why:** repository settings (default branch) and PR work from Claude Code; the GitHub connector can’t change repo settings.
+- **Limits unchanged:** pushes to `main` stay blocked by the guard hook; James merges.
