@@ -1,0 +1,53 @@
+---
+// Financing (VOW Phase 4 step 4, plan V17), adapted from RV Farm's page. Contact-only: no lender named, no rates,
+// payments or "0%" (O. Reg. 17/05 s. 61 needs APR, term and cost of borrowing beside any example), and never SIN,
+// date of birth, income or banking details (vault 95 §4, §7). What can be financed and the lender are [confirm].
+import Base from '../layouts/Base.astro';
+import PageIntro from '../components/astro/PageIntro.astro';
+import ContactForm from '../components/astro/ContactForm.astro';
+import Confirm from '../components/astro/Confirm.astro';
+import business from '../data/business.json';
+import { telHref } from '../lib/format';
+import { breadcrumbJsonLd } from '../lib/seo';
+import { REVIEW } from '../lib/site';
+
+const d = business;
+const crumbs = [{ name: 'Home', path: '/' }, { name: 'Financing', path: '/financing' }];
+const financeable = [
+  `A trailer or park model from ${d.sibling.name}, next door`,
+  'A unit you buy through our consignment program',
+  'A larger repair',
+];
+---
+<Base title="Financing" current="/financing" jsonLd={[breadcrumbJsonLd(crumbs)]}
+  description="Ask Vacations on Wheels about financing. Tell us what you'd like to finance and we'll call you. No credit details on this website.">
+  <PageIntro title="Ask about financing" crumbs={crumbs}
+    lead="Tell us what you’d like to finance, and we’ll call you to go through the options." />
+
+  <div class="wrap grid gap-10 py-10 lg:grid-cols-12">
+    <section aria-labelledby="how-h" class="space-y-6 lg:col-span-5">
+      <div class="rounded border-l-4 border-accent bg-white p-5">
+        <h2 id="how-h" class="m-0 text-[1.5rem]">This isn’t a credit application</h2>
+        <p class="mt-2">We never ask for your SIN, date of birth or banking details on this website, and we don’t ask about your income. The form only tells us how to reach you and what you’re after.</p>
+      </div>
+      {REVIEW && (
+        <div class="rounded border border-rule bg-white p-5">
+          <p class="m-0">Financing available through a third-party lender, on approved credit.<Confirm note="Which lender? Show this line only once a lender is confirmed (vault 95 §7)" /><Confirm lawyer note="Does a lender referral fee make VOW a loan broker under the CPA (s. 1, ss. 49–51, 78)? Link to the lender's application, or collect nothing? (vault 95 §7)" /></p>
+          <h3 class="m-0 mt-4 text-[1.25rem]">What you can finance</h3>
+          <ul class="m-0 mt-2 list-disc space-y-1 pl-6">{financeable.map((f) => <li>{f}</li>)}</ul>
+          <Confirm note="What can be financed through VOW: RV Farm units, consigned units, larger repairs?" />
+        </div>
+      )}
+      <p class="m-0">Rather talk now? Call <a href={telHref(d.phones.main)} class="font-semibold tabular">{d.phones.main}</a>.</p>
+    </section>
+
+    <section id="ask" aria-labelledby="ask-h" class="scroll-mt-4 lg:col-span-7">
+      <div class="rounded border border-rule bg-white p-5 lg:p-8">
+        <h2 id="ask-h" class="m-0 text-[1.75rem]">Ask us to call</h2>
+        <div class="mt-4">
+          <ContactForm kind="financing" subject="Financing question" submitLabel="Ask us to call" />
+        </div>
+      </div>
+    </section>
+  </div>
+</Base>

@@ -224,3 +224,21 @@ test('?vehicle= pre-selects a power-sports type on the booking form', async ({ p
   await page.goto('/book?vehicle=snowmobile');
   await expect(page.getByLabel('Type (optional)')).toHaveValue('Snowmobile');
 });
+
+test('financing form is contact-only: no SIN, date of birth, income or banking fields; sends', async ({ page }) => {
+  let sent = '';
+  await page.route(WEB3FORMS, (route) => {
+    sent = body(route.request());
+    return route.fulfill({ status: 200, contentType: 'application/json', body: '{"success":true}' });
+  });
+  await page.goto('/financing');
+  const names = await page.locator('form[action*="web3forms"] [name]').evaluateAll((els) => els.map((e) => e.getAttribute('name')));
+  expect(names.join(' ')).not.toMatch(/sin|birth|dob|income|bank|account|salary/i);
+  await page.getByRole('textbox', { name: 'Your name' }).fill('Finance Person');
+  await page.getByRole('textbox', { name: 'Phone', exact: true }).fill('905-555-0100');
+  await page.getByLabel(/What would you like to finance/).fill('A park model');
+  await page.getByRole('checkbox', { name: /OK to contact me/ }).check();
+  await page.getByRole('button', { name: 'Ask us to call' }).click();
+  await expect(page.getByRole('status')).toContainText('This isn’t a credit application.');
+  expect(sent).toContain('Financing question');
+});

@@ -157,3 +157,11 @@ test('power sports in production: book links for all four, sell links only where
   }
   await expect(page.locator('.confirm-chip')).toHaveCount(0);
 });
+
+test('financing in production: no lender line, no rates or payment examples', async ({ page }) => {
+  await page.goto('/financing');
+  const main = page.locator('main');
+  await expect(main).not.toContainText(/approved credit|OAC|APR|0%|per month|a month|\/mo|bi-?weekly/i);
+  await expect(main).toContainText('This isn’t a credit application');
+  await expect(page.locator('.confirm-chip')).toHaveCount(0);
+});
