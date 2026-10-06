@@ -3,6 +3,6 @@
 interface Props { what: string; ratio?: string }
 const { what, ratio = '4 / 3' } = Astro.props;
 ---
-<div class="flex items-center justify-center rounded border border-dashed border-slate/40 bg-sand p-6 text-center" style={`aspect-ratio: ${ratio}`} role="img" aria-label={`Photo coming: ${what}`}>
+<div data-placeholder class="flex items-center justify-center rounded border border-dashed border-slate/40 bg-sand p-6 text-center" style={`aspect-ratio: ${ratio}`} role="img" aria-label={`Photo coming: ${what}`}>
   <p class="m-0 font-semibold text-slate-60" aria-hidden="true">Photo coming: {what}</p>
 </div>

@@ -18,7 +18,17 @@
   - **Emulated Android** (`npm run test:android`, kept out of `verify` because it's slow): Pixel 7 + touch, 4× CPU, 150 ms RTT / 1.6 Mbps. 4/4: every page loads in under 6 s with no sideways scroll; the sticky bar sits at the bottom with Call first and never covers the end of the footer; the phone menu opens by tap with every link reachable; tel links are well formed; the booking form is filled and sent by touch on the test-key build. Not a real phone (no real dialer, Samsung Internet or touch feel).
   - **Print:** RV Farm's unit spec-sheet rules and the unused Ken Burns CSS removed. Pages print black on white without nav, buttons, forms, photo placeholders or confirm chips; FAQ answers open before printing; a contact line (name, address, phone, domain) prints at the end; related-service cards don't print. Checked as PDFs (a service page, contact) and with a regression test.
 - **Verification (Phase 3, actual):** `npm run verify` exit 0 (Playwright 96/96, content grep 0 on 25 pages); `npm run test:android` 4/4; Lighthouse as above.
-- **What's next:** `/code-review high` **in a fresh session** (plan §3g, `/effort high`) and fix what it finds; then Phase 4 (Paul and Rae walkthrough). Still waiting on: Web3Forms key, Rae's answers (65 items), Railway approval, the domain.
+- **Code review (Oct 6):** James ran `/code-review high` in this session (forked reviewer), scoped to the Phase 3 diff. 8 findings, all fixed:
+  1. Print opened every `main details` and never closed them. Now only `details[data-print-open]` (FAQs) open on `beforeprint`, and the ones it opened close on `afterprint`; the test checks both directions.
+  2. Print hid every `[role=img]`; now only `[data-placeholder]` (Placeholder.astro).
+  3. `break-inside: avoid` on whole sections; now list items, aside cards, tables and images. Restored an image height cap (90 mm) for when real photos arrive.
+  4. The Android test hard-coded port 4322; ports now live in `tests/e2e/origins.ts` (used by the config and the tests). Lighthouse stays on 4323 in `lighthouserc.cjs`.
+  5. Tests hard-coded the phone and FAQ text; they now read `business.json` and the page structure.
+  6. The print contact line re-built the address and sat inside `<main>`: `addressLine()` in `lib/format.ts` (also used by the footer); the line now sits after `<main>`, full-variant only, and no longer prints the not-yet-connected domain.
+  7. The blanket print padding override is removed (the PDF still fits on two pages).
+  8. `--grep-invert "shots|android"` replaced by Playwright projects split by file: `site` + `forms` (verify), `shots`, `android`.
+- **After the fixes:** `npm run verify` 96 tests: 95 passed plus the link crawl, which failed once on a DNS lookup (`ENOTFOUND thervfarm.ca`) and passed on rerun (45 links); `npm run test:android` 4/4; print PDF re-checked.
+- **What's next:** Phase 4 (Paul and Rae walkthrough). Optionally a whole-branch review (`/code-review high` scoped to `5e5c53d..HEAD`), since this one only covered the Phase 3 diff. Still waiting on: Web3Forms key, Rae's answers (65 items), Railway approval, the domain.
 
 ## Context for next session
 - RV Farm-only habits to drop: no inventory, no fees, no advertised price. Prices only when Paul confirms them.

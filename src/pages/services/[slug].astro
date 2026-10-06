@@ -67,7 +67,7 @@ const faqLd = faq.length
           <h2 id="faq-h" class="m-0 text-[1.75rem] lg:text-[2rem]">Questions people ask</h2>
           <div class="mt-4 divide-y divide-rule border-y border-rule">
             {faq.map((f) => (
-              <details class="group">
+              <details class="group" data-print-open>
                 <summary class="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 py-3 font-semibold text-ink [&::-webkit-details-marker]:hidden">
                   <span>{f.q}{f.confirm && <Confirm note={f.confirm} />}</span>
                   <span aria-hidden="true" class="text-2xl leading-none text-red transition-transform group-open:rotate-45">+</span>

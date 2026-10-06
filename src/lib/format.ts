@@ -16,6 +16,10 @@ export function telHref(phone: string): string {
   return `tel:+${digits.length === 10 ? '1' + digits : digits}`;
 }
 
+/** "1841 Hwy 7, Concord, ON L4K 1V4" from business.json's address. */
+export const addressLine = (a: { street: string; city: string; region: string; postal: string }) =>
+  `${a.street}, ${a.city}, ${a.region} ${a.postal}`;
+
 /** Service price line (AGENTS.md): "From $129 + HST" only once Paul confirms a price; otherwise the note. */
 export function priceLine(fromPriceCad: number | undefined, note = 'Quote after inspection'): string {
   return fromPriceCad ? `From ${formatCad(fromPriceCad)} + HST` : note;

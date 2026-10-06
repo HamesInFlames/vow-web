@@ -1,8 +1,11 @@
 // Emulated Android pass (plan §3g Phase 3): Pixel 7 viewport and touch, 4× CPU slowdown, slow 4G
 // (150 ms RTT, 1.6 Mbps down). Not a real phone: it doesn't cover the real dialer, Samsung Internet or
-// real touch feel. Run with `npm run test:android` (excluded from `verify`, it's slow).
+// real touch feel. Run with `npm run test:android` (its own project, outside `verify`: it's slow).
 import { test, expect, devices, type Page } from '@playwright/test';
 import { builtPages } from './pages';
+import { FORMS_ORIGIN } from './origins';
+import business from '../../src/data/business.json' with { type: 'json' };
+import { telHref } from '../../src/lib/format';
 
 const { defaultBrowserType: _, ...pixel7 } = devices['Pixel 7'];
 test.use({ ...pixel7 });
@@ -60,7 +63,7 @@ test('android: the phone menu opens by tap and every link in it is reachable', a
 test('android: tel links dial the shop', async ({ page }) => {
   await page.goto('/');
   const tels = await page.$$eval('a[href^="tel:"]', (as) => [...new Set(as.map((a) => a.getAttribute('href')))]);
-  expect(tels).toContain('tel:+19057381253');
+  expect(tels).toContain(telHref(business.phones.main));
   for (const t of tels) expect(t).toMatch(/^tel:\+1\d{10}$/);
 });
 
@@ -72,7 +75,7 @@ test('android: the booking form can be filled and sent by touch (test-key build,
     sent = true;
     return route.fulfill({ status: 200, contentType: 'application/json', body: '{"success":true}' });
   });
-  await page.goto('http://localhost:4322/book?service=winterizing');
+  await page.goto(`${FORMS_ORIGIN}/book?service=winterizing`);
   await expect(page.getByRole('checkbox', { name: 'Winterizing' })).toBeChecked();
   await page.getByRole('textbox', { name: 'Your name' }).tap();
   await page.keyboard.type('Touch Test');

@@ -1,6 +1,7 @@
 // Regression tests carried over from the RV Farm Oct 2 code review (the ones that apply to VOW).
 import { test, expect } from '@playwright/test';
 import { builtPages } from './pages';
+import business from '../../src/data/business.json' with { type: 'json' };
 
 test('canonical and og:url are clean URLs (no .html, no /index)', async ({ page }) => {
   for (const path of builtPages().filter((p) => p !== '/404')) {
@@ -91,13 +92,18 @@ test('every form page shows the call block when there is no form key', async ({ 
 
 test('print: a service page prints its FAQ answers and the shop phone, without buttons or chrome', async ({ page }) => {
   await page.goto('/services/winterizing');
+  const answer = page.locator('main details p').first();
+  await expect(answer).toBeHidden();
   await page.emulateMedia({ media: 'print' });
   await page.evaluate(() => window.dispatchEvent(new Event('beforeprint')));
-  await expect(page.getByText('Before overnight temperatures start dropping below freezing.', { exact: false })).toBeVisible();
-  await expect(page.locator('.print-only')).toContainText('905-738-1253');
+  await expect(answer).toBeVisible();
+  await expect(page.locator('.print-only')).toContainText(business.phones.main);
   await expect(page.getByRole('link', { name: 'Book this service' })).toBeHidden();
   await expect(page.getByRole('navigation', { name: 'Quick actions' })).toBeHidden();
   await expect(page.locator('footer')).toBeHidden();
+  // After printing, the accordions go back to how the visitor left them.
+  await page.evaluate(() => window.dispatchEvent(new Event('afterprint')));
   await page.emulateMedia({ media: 'screen' });
+  await expect(answer).toBeHidden();
   await expect(page.locator('.print-only')).toBeHidden();
 });

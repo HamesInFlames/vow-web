@@ -3,7 +3,7 @@
 import { Image } from 'astro:assets';
 import logo from '../../assets/brand/vow-logo.png';
 import business from '../../data/business.json';
-import { telHref } from '../../lib/format';
+import { addressLine, telHref } from '../../lib/format';
 import { footerNav, legalNav, routeExists } from '../../lib/site';
 import HoursTable from './HoursTable.astro';
 import Confirm from './Confirm.astro';
@@ -29,7 +29,7 @@ const d = business;
       <h2 id="footer-contact" class="text-mist text-2xl mb-3">{d.brandName}</h2>
       <address class="not-italic leading-relaxed">
         <a class="tap text-mist underline decoration-mist/50 hover:text-white" href={d.address.mapsUrl} target="_blank" rel="noopener">
-          {d.address.street}, {d.address.city}, {d.address.region} {d.address.postal}<span class="sr-only"> (opens Google Maps in a new tab)</span>
+          {addressLine(d.address)}<span class="sr-only"> (opens Google Maps in a new tab)</span>
         </a><br />
         <a class="tap mt-1 text-2xl font-semibold text-white no-underline hover:underline tabular font-[family-name:var(--font-display)]" href={telHref(d.phones.main)}>
           {d.phones.main}

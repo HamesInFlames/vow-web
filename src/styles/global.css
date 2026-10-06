@@ -166,9 +166,9 @@ html[data-motion='reduce'] *::after {
 html[data-motion='reduce'] { view-transition-name: none; }
 html[data-motion='reduce']::view-transition-group(*) { animation: none !important; }
 
-/* Print (plan §3g Phase 3): a service page or the contact page prints as a plain sheet, black on white.
-   Navigation, buttons, forms and photo placeholders drop out; the shop's phone and address print at the end
-   (.print-only in Base.astro), and FAQ answers are opened before printing (Base.astro). */
+/* Print (plan §3g Phase 3): pages print as a plain sheet, black on white. Navigation, buttons, forms, photo
+   placeholders and confirm chips drop out; the shop's name, address and phone print at the end (.print-only
+   in Base.astro), and FAQ answers (details[data-print-open]) open for printing and close again afterwards. */
 .print-only { display: none; }
 @media print {
   @page { margin: 14mm; }
@@ -177,14 +177,13 @@ html[data-motion='reduce']::view-transition-group(*) { animation: none !importan
   a { color: inherit; text-decoration: none; }
   .wrap { max-width: none; padding-inline: 0; }
   .lg\:sticky { position: static !important; }
-  .btn, form, [role='img'], .confirm-chip { display: none !important; }
-  section, aside > div, li { break-inside: avoid; }
-  table { break-inside: avoid; }
+  .btn, form, [data-placeholder], .confirm-chip { display: none !important; }
+  li, aside > div, table, img { break-inside: avoid; }
+  img { max-height: 90mm; width: auto; max-width: 100%; object-fit: contain; }
   .bg-slate, .bg-ink, .bg-paper, .bg-white, .bg-mist { background: #fff !important; color: #000 !important; }
   .bg-accent { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   summary [aria-hidden='true'] { display: none; }
   .print-only { display: block; margin-top: 8mm; padding-top: 3mm; border-top: 1px solid #000; }
   h1 { font-size: 22pt; }
   h2 { font-size: 15pt; }
-  .py-14, .py-12, .py-10, .pb-14 { padding-block: 3mm !important; }
 }

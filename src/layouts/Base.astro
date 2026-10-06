@@ -4,6 +4,7 @@ import { Font } from 'astro:assets';
 import '../styles/global.css';
 import business from '../data/business.json';
 import { localBusinessJsonLd } from '../lib/seo';
+import { addressLine } from '../lib/format';
 import UtilityRow from '../components/astro/UtilityRow.astro';
 import Header from '../components/astro/Header.astro';
 import Footer from '../components/astro/Footer.astro';
@@ -56,8 +57,13 @@ const ld = [localBusinessJsonLd(), ...jsonLd];
       // Mark JS as available (shows JS-only controls), and apply the footer "Reduce motion" choice before first paint.
       document.documentElement.classList.add('js');
       try { if (localStorage.getItem('vow-motion') === 'reduce') document.documentElement.dataset.motion = 'reduce'; } catch (e) {}
-      // Printed FAQs show their answers.
-      addEventListener('beforeprint', function () { document.querySelectorAll('main details').forEach(function (d) { d.open = true; }); });
+      // Printed FAQs show their answers; afterwards each one goes back to how the visitor left it.
+      addEventListener('beforeprint', function () {
+        document.querySelectorAll('details[data-print-open]:not([open])').forEach(function (d) { d.dataset.printOpened = ''; d.open = true; });
+      });
+      addEventListener('afterprint', function () {
+        document.querySelectorAll('details[data-print-opened]').forEach(function (d) { delete d.dataset.printOpened; d.open = false; });
+      });
     </script>
     {preloadImage && (
       <link rel="preload" as="image" href={preloadImage.src} imagesrcset={preloadImage.srcset} imagesizes={preloadImage.sizes} fetchpriority="high" />
@@ -72,8 +78,9 @@ const ld = [localBusinessJsonLd(), ...jsonLd];
     <Header variant={variant} current={current} />
     <main id="main" class="flex-1">
       <slot />
-      <p class="print-only wrap">{business.brandName} · {business.address.street}, {business.address.city}, {business.address.region} {business.address.postal} · {business.phones.main} · {business.siteUrl.replace(/^https:\/\//, '')}</p>
     </main>
+    <!-- Footer and sticky bar don't print; this line puts the shop's contact details on every printout. -->
+    {variant === 'full' && <p class="print-only wrap">{business.brandName} · {addressLine(business.address)} · {business.phones.main}</p>}
     <Footer variant={variant} />
     <StickyBar />
   </body>

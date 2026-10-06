@@ -1,6 +1,8 @@
 // The booking form with a (fake) Web3Forms key: JS and no-JS paths, errors, ?service= pre-fill.
 // Runs in the `forms` project against dist-forms. Every POST to Web3Forms is intercepted; nothing is sent.
 import { test, expect, type Request } from '@playwright/test';
+import business from '../../src/data/business.json' with { type: 'json' };
+import { FORMS_ORIGIN } from './origins';
 
 const WEB3FORMS = 'https://api.web3forms.com/submit';
 // Multipart (fetch with FormData) reads as-is; a no-JS POST is URL-encoded, so decode it.
@@ -66,7 +68,7 @@ test.describe('with JS', () => {
     await page.getByRole('textbox', { name: 'Phone', exact: true }).fill('905-555-0100');
     await page.getByRole('checkbox', { name: /OK to contact me/ }).check();
     await page.getByRole('button', { name: 'Send booking request' }).click();
-    await expect(page.getByRole('alert')).toContainText('That didn’t go through. Please call us at 905-738-1253');
+    await expect(page.getByRole('alert')).toContainText(`That didn’t go through. Please call us at ${business.phones.main}`);
   });
 });
 
@@ -77,7 +79,7 @@ test.describe('without JS', () => {
     let sent = '';
     await page.route(WEB3FORMS, (route) => {
       sent = body(route.request());
-      return route.fulfill({ status: 303, headers: { location: 'http://localhost:4322/thanks' } });
+      return route.fulfill({ status: 303, headers: { location: `${FORMS_ORIGIN}/thanks` } });
     });
     await page.goto('/book');
     // Without JS the pick-up address field is always there (it can't be revealed).
@@ -91,7 +93,7 @@ test.describe('without JS', () => {
     await expect(page.getByRole('heading', { level: 1 })).toHaveText('Thanks, we got it.');
     expect(sent).toContain('No Script');
     expect(sent).toContain('Leak detection and repair');
-    expect(sent).toContain('http://localhost:4322/thanks');
+    expect(sent).toContain(`${FORMS_ORIGIN}/thanks`);
   });
 
   test('the browser still requires a name and the contact box', async ({ page }) => {
