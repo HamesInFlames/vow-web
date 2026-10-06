@@ -23,11 +23,12 @@ const serviceItems = services.flatMap((s) => [
 const consign = json('src/data/consign.json');
 const consignItems = [
   ...consign.types.filter((t) => !t.confirmed).map((t) => `**${t.label}**: offer consignment of this type?`),
-  ...consign.types.flatMap((t) => t.confirm.map((c) => `**${t.label}**: ${c}`)),
+  ...consign.types.flatMap((t) => (t.confirm ?? []).map((c) => `**${t.label}**: ${c}`)),
   ...[...consign.steps, ...consign.terms].filter((x) => x.confirm).map((x) => `**${x.label ?? x.title}**: ${x.confirm}`),
   ...consign.faq.filter((f) => f.confirm).map((f) => `FAQ "${f.q}": ${f.confirm}`),
 ];
-const lawyerItems = consign.types.filter((t) => t.lawyer).map((t) => `**${t.label}** (consignment): ${consign.lawyerNote}`);
+const lawyerTypes = consign.types.filter((t) => t.lawyer).map((t) => t.label);
+const lawyerItems = lawyerTypes.length ? [`**Consigning ${lawyerTypes.join(', ')}**: ${consign.lawyerNote}`] : [];
 
 const notes = new Map();
 const lawyerNotes = new Map(); // <Confirm lawyer note="…">
@@ -36,8 +37,8 @@ const walk = (dir) => {
     const p = join(dir, f);
     if (statSync(p).isDirectory()) { walk(p); continue; }
     if (!/\.(astro|tsx)$/.test(p)) continue;
-    for (const m of readFileSync(p, 'utf8').matchAll(/<Confirm( lawyer)? note=(?:"([^"]+)"|\{['"]([^'"]+)['"]\})/g)) {
-      const map = m[1] ? lawyerNotes : notes;
+    for (const m of readFileSync(p, 'utf8').matchAll(/<Confirm\b([^>]*?)\bnote=(?:"([^"]+)"|\{['"`]([^'"`]+)['"`]\})([^>]*)>/g)) {
+      const map = /\blawyer\b/.test(m[1] + m[4]) ? lawyerNotes : notes;
       const note = m[2] ?? m[3];
       if (!map.has(note)) map.set(note, new Set());
       map.get(note).add(p.replaceAll('\\', '/').replace(/^src\//, ''));

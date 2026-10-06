@@ -162,7 +162,7 @@ test('power sports in production: book links for all four, sell links only where
 test('financing in production: no lender line, no rates or payment examples', async ({ page }) => {
   await page.goto('/financing');
   const main = page.locator('main');
-  await expect(main).not.toContainText(/approved credit|OAC|APR|0%|per month|a month|\/mo|bi-?weekly/i);
+  await expect(main).not.toContainText(/approved credit|\bOAC\b|\bAPR\b|\b0%|per month|a month|\/mo\b|bi-?weekly/i);
   await expect(main).toContainText('This isn’t a credit application');
   await expect(page.locator('.confirm-chip')).toHaveCount(0);
 });
@@ -175,4 +175,17 @@ test('services without a confirmed price say "Quote after inspection"; /services
   await expect(rates).toContainText(`$${business.rates.labourTrailersPerHourCad} an hour for trailers`);
   await expect(rates).toContainText(`$${business.rates.labourMotorhomesPerHourCad} an hour for motorhomes`);
   await expect(rates).toContainText('written estimate before we start');
+});
+
+test('consignment raw HTML in production: no lawyer-gated labels or hidden FAQ answers anywhere (props, JSON-LD, meta)', async ({ request }) => {
+  const html = await (await request.get('/consign')).text();
+  for (const t of consign.types.filter((x) => x.lawyer)) expect(html, t.label).not.toContain(t.label);
+  for (const f of consign.faq.filter((x) => 'confirm' in x)) {
+    expect(html, f.q).not.toContain(f.q);
+    expect(html, f.q).not.toContain(f.a);
+  }
+  const ld = [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)].map((m) => JSON.parse(m[1]));
+  const faqPage = ld.find((x) => x['@type'] === 'FAQPage');
+  expect(faqPage.mainEntity.map((q: { name: string }) => q.name)).toEqual(consign.faq.filter((x) => !('confirm' in x)).map((x) => x.q));
+  expect(html).not.toMatch(/OMVIC|licensed dealer|registered dealer|2,495/i);
 });

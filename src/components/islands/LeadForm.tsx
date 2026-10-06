@@ -65,7 +65,8 @@ export default function LeadForm(p: LeadFormProps) {
   const [handover, setHandover] = useState<'drop-off' | 'pick-up'>('drop-off');
   const [vehicleType, setVehicleType] = useState('');
   const [unitType, setUnitType] = useState(p.preset?.type ?? '');
-  const [whereSold, setWhereSold] = useState(p.preset?.removal ? SOLD_WHERE[1] : '');
+  const [whereSold, setWhereSold] = useState('');
+  const [removalAsked, setRemovalAsked] = useState(Boolean(p.preset?.removal));
   const [utm, setUtm] = useState({ source: '', medium: '', campaign: '' });
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -82,8 +83,14 @@ export default function LeadForm(p: LeadFormProps) {
     // Consignment: /consign?type=park-home&removal=yes, plus Facebook ad parameters (utm_*) for Rae.
     const type = q.get('type');
     if (type && p.consignTypes?.some((t) => t.id === type)) setUnitType(type);
-    if (q.get('removal') === 'yes') setWhereSold(SOLD_WHERE[1]);
-    setUtm({ source: q.get('utm_source') ?? '', medium: q.get('utm_medium') ?? '', campaign: q.get('utm_campaign') ?? '' });
+    if (q.get('removal') === 'yes') setRemovalAsked(true);
+    // Ad parameters: from this URL, else the ones Base.astro saved for this visit (the landing page's URL).
+    const fromUrl = { source: q.get('utm_source') ?? '', medium: q.get('utm_medium') ?? '', campaign: q.get('utm_campaign') ?? '' };
+    let saved = fromUrl;
+    if (!fromUrl.source && !fromUrl.campaign) {
+      try { saved = JSON.parse(sessionStorage.getItem('vow-utm') ?? 'null') ?? fromUrl; } catch { /* storage blocked */ }
+    }
+    setUtm(saved);
   }, []);
   // Move focus only after the error text and aria-invalid have rendered, so screen readers announce them.
   useEffect(() => {
@@ -290,6 +297,7 @@ export default function LeadForm(p: LeadFormProps) {
           <input type="hidden" name="utm_source" value={utm.source} />
           <input type="hidden" name="utm_medium" value={utm.medium} />
           <input type="hidden" name="utm_campaign" value={utm.campaign} />
+          {removalAsked && <input type="hidden" name="removal_requested" value="yes" />}
         </>
       )}
 

@@ -161,14 +161,33 @@ test.describe('consignment form', () => {
     });
     await page.goto('/consign?type=park-home&removal=yes&utm_source=facebook&utm_campaign=fall-consign#consign-form');
     await expect(page.getByLabel(/What is it\?/)).toHaveValue('park-home');
-    await expect(page.getByLabel(/Offsite/)).toBeChecked();
+    await expect(page.getByLabel(/Offsite/)).not.toBeChecked();
     await page.getByRole('textbox', { name: 'Your name' }).fill('Consign Person');
     await page.getByRole('textbox', { name: 'Phone', exact: true }).fill('905-555-0100');
     await page.getByRole('textbox', { name: /Where is it now/ }).fill('Sunny Acres park');
     await page.getByRole('checkbox', { name: /OK to contact me/ }).check();
     await page.getByRole('button', { name: 'Send for a quote' }).click();
     await expect(page.getByRole('status')).toContainText('This is a request for a quote, not an agreement.');
-    for (const v of ['Consign Person', 'park-home', 'Sunny Acres park', 'facebook', 'fall-consign', 'Consignment quote']) expect(sent).toContain(v);
+    for (const v of ['Consign Person', 'park-home', 'Sunny Acres park', 'facebook', 'fall-consign', 'Consignment quote', 'removal_requested']) expect(sent).toContain(v);
+  });
+
+  test('ad parameters survive a tap on a unit-type tile (which reloads without them)', async ({ page }) => {
+    let sent = '';
+    await page.route(WEB3FORMS, (route) => {
+      sent = body(route.request());
+      return route.fulfill({ status: 200, contentType: 'application/json', body: '{"success":true}' });
+    });
+    await page.goto('/consign?utm_source=facebook&utm_campaign=tile-test');
+    await page.getByRole('region', { name: 'What we take' }).getByRole('link', { name: 'Snowmobiles', exact: true }).click();
+    await expect(page).toHaveURL(/type=snowmobile/);
+    await expect(page.getByLabel(/What is it\?/)).toHaveValue('snowmobile');
+    await page.getByRole('textbox', { name: 'Your name' }).fill('Tile Person');
+    await page.getByRole('textbox', { name: 'Phone', exact: true }).fill('905-555-0100');
+    await page.getByRole('checkbox', { name: /OK to contact me/ }).check();
+    await page.getByRole('button', { name: 'Send for a quote' }).click();
+    await expect(page.getByRole('status')).toBeVisible();
+    expect(sent).toContain('tile-test');
+    expect(sent).toContain('facebook');
   });
 
   test('production form never offers lawyer-gated types', async ({ page }) => {
@@ -210,14 +229,15 @@ test('park home removal: the embedded form starts on park home + move it, and se
   await page.locator('#removal-form').scrollIntoViewIfNeeded();
   await expect(page.locator('#removal-form form[novalidate]')).toBeAttached();
   await expect(page.getByLabel(/What is it\?/)).toHaveValue('park-home');
-  await expect(page.getByLabel(/Offsite/)).toBeChecked();
+  // Nothing pre-chosen: a removal-only visitor who skips the question mustn't read as "sell it".
+  for (const label of [/Onsite/, /Offsite/, /Just move it/]) await expect(page.getByLabel(label)).not.toBeChecked();
   await page.getByLabel(/Just move it/).check();
   await page.getByRole('textbox', { name: 'Your name' }).fill('Mover Person');
   await page.getByRole('textbox', { name: 'Phone', exact: true }).fill('905-555-0100');
   await page.getByRole('checkbox', { name: /OK to contact me/ }).check();
   await page.getByRole('button', { name: 'Send for a quote' }).click();
   await expect(page.getByRole('status')).toBeVisible();
-  for (const v of ['Park home removal quote', 'Just move it', 'park-home']) expect(sent).toContain(v);
+  for (const v of ['Park home removal quote', 'Just move it', 'park-home', 'removal_requested']) expect(sent).toContain(v);
 });
 
 test('?vehicle= pre-selects a power-sports type on the booking form', async ({ page }) => {

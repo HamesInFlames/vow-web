@@ -3,10 +3,10 @@
 Plan: `docs/plan.md` (§3g phases). Approved Oct 5, 2026.
 
 ## In progress
-- [ ] Header dropdown panels (plan §3b: Services / Parts / About). The nav is flat for now; Contact and Reviews are reached via About and the footer
 - [ ] Photo pipeline (RV Farm scripts/photos.mjs + VOW watermark): only once Rae confirms a photo (V11)
 - [ ] Reviews: James picks 3–6 Google reviews into src/data/reviews.json; Rae OKs quoting them
-- [ ] Phase 4 — walkthrough with Paul and Rae (James): the sheet is ready at `docs/walkthrough-vow.md` (26 questions covering all 65 confirm items, cross-referenced to RV Farm sheet Part 5); then apply the answers (the sheet has an answer → file table)
+- [ ] Walkthrough with Paul and Rae (James): `docs/walkthrough-vow.md` (36 questions, Part 3 lawyer list incl. OMVIC and consignment terms); then apply the answers (the sheet has an answer → file table)
+- [ ] Lawyer: OMVIC status for consigning motorhomes, motorcycles, ATVs/UTVs (`consign.json` `lawyer` → `false` publishes a type), consignment agreement terms, financing/loan-broker question (vault `95`)
 - [ ] Optional: whole-branch `/code-review high` on `5e5c53d..HEAD` (the Oct 6 review only covered Phase 3)
 
 ## Blocked / waiting on James
@@ -16,6 +16,7 @@ Plan: `docs/plan.md` (§3g phases). Approved Oct 5, 2026.
 - [ ] A vector VOW logo (the badge is a 392 px raster)
 
 ## Completed
+- [x] VOW Phase 4 — `/consign`, `/park-home-removal`, `/power-sports`, `/financing`, Paul's rates, header dropdown panels, RV Farm fees ($1,995 PDI, $599 admin), review (11 findings fixed) (Oct 6)
 - [x] Railway review service `vow-web` from `dev`: https://vow-web-production.up.railway.app (Oct 6)
 - [x] Phase 3 — `/code-review high` findings (8) fixed; `main` created from `dev` and made the default branch (Oct 6)
 - [x] Phase 4 prep — `docs/walkthrough-vow.md` (Oct 6)

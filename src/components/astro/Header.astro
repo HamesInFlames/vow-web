@@ -35,7 +35,7 @@ const showBook = variant === 'full' && routeExists('/book');
             <li class="relative">
               {item.children && item.children.length > 1 ? (
                 <details class="nav-panel group/panel">
-                  <summary class:list={['flex min-h-12 cursor-pointer list-none items-center gap-1 whitespace-nowrap rounded px-1.5 font-semibold xl:px-3 text-ink hover:bg-paper hover:text-red [&::-webkit-details-marker]:hidden',
+                  <summary aria-current={isCurrent(item) ? 'true' : undefined} class:list={['flex min-h-12 cursor-pointer list-none items-center gap-1 whitespace-nowrap rounded px-1.5 font-semibold xl:px-3 text-ink hover:bg-paper hover:text-red [&::-webkit-details-marker]:hidden',
                     { 'text-red underline decoration-2 underline-offset-8': isCurrent(item) }]}>
                     {item.label}<span aria-hidden="true" class="hidden text-sm transition-transform group-open/panel:rotate-180 xl:inline">▾</span>
                   </summary>
@@ -90,7 +90,8 @@ const showBook = variant === 'full' && routeExists('/book');
                   {item.children && item.children.length > 1 && (
                     <ul class="m-0 list-none pb-2 pl-0">
                       {item.children.filter((c) => c.href !== (item.children?.[0]?.href)).map((c) => (
-                        <li><a href={c.href} class="wrap flex min-h-12 items-center pl-8 text-ink no-underline">{c.label}</a></li>
+                        <li><a href={c.href} class="wrap flex min-h-12 items-center pl-8 text-ink no-underline"
+                          aria-current={current === c.href ? 'page' : undefined}>{c.label}</a></li>
                       ))}
                     </ul>
                   )}
@@ -112,7 +113,11 @@ const showBook = variant === 'full' && routeExists('/book');
   // Desktop menu panels: only one open at a time; Escape or a click outside closes them.
   const panels = [...document.querySelectorAll<HTMLDetailsElement>('details.nav-panel')];
   const closeAll = (except?: HTMLDetailsElement) => panels.forEach((d) => { if (d !== except) d.open = false; });
-  panels.forEach((d) => d.addEventListener('toggle', () => { if (d.open) closeAll(d); }));
+  panels.forEach((d) => {
+    d.addEventListener('toggle', () => { if (d.open) closeAll(d); });
+    // Tabbing out of an open panel closes it, so it doesn't sit over the page.
+    d.addEventListener('focusout', (e) => { if (!d.contains(e.relatedTarget as Node | null)) d.open = false; });
+  });
   document.addEventListener('click', (e) => { if (!(e.target as Element).closest('details.nav-panel')) closeAll(); });
   document.addEventListener('keydown', (e) => {
     if (e.key !== 'Escape') return;

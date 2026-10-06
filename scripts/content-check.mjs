@@ -24,7 +24,7 @@ const BANNED = [
 // "No upfront cost" is only honest beside what does come out of the sale (vault 95 §3): any page that says it must
 // also render the cost sentence from src/data/consign.json.
 const COST_SENTENCE = JSON.parse(readFileSync('src/data/consign.json', 'utf8')).costSentence;
-const NO_UPFRONT = /no upfront cost/i;
+const NO_UPFRONT = /no up-?front cost/i;
 
 // Exact phrases where a banned word is used correctly: promises NOT to collect sensitive data.
 // Removed before scanning; anything else still fails.
@@ -47,7 +47,8 @@ let hits = 0;
 for (const file of files) {
   // Visible text and attribute values only; drop scripts/styles so library code can't trip the list.
   const html = readFileSync(file, 'utf8')
-    .replace(/<script[\s\S]*?<\/script>/gi, '')
+    // Keep JSON-LD (structured data is public copy too); drop other scripts so library code can't trip the list.
+    .replace(/<script(?![^>]*application\/ld\+json)[\s\S]*?<\/script>/gi, '')
     .replace(/<style[\s\S]*?<\/style>/gi, '')
     .replace(new RegExp(ALLOWED.map((r) => r.source).join('|'), 'g'), '');
   if (NO_UPFRONT.test(html) && !html.replaceAll('&#39;', "'").includes(COST_SENTENCE.replace(/^No upfront cost\. /, ''))) {
