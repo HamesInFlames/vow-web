@@ -219,3 +219,8 @@ test('park home removal: the embedded form starts on park home + move it, and se
   await expect(page.getByRole('status')).toBeVisible();
   for (const v of ['Park home removal quote', 'Just move it', 'park-home']) expect(sent).toContain(v);
 });
+
+test('?vehicle= pre-selects a power-sports type on the booking form', async ({ page }) => {
+  await page.goto('/book?vehicle=snowmobile');
+  await expect(page.getByLabel('Type (optional)')).toHaveValue('Snowmobile');
+});

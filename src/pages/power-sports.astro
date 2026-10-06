@@ -1,0 +1,79 @@
+---
+// Power sports (VOW Phase 4 step 3, plan V16): service and parts for motorcycles, ATVs/UTVs, snowmobiles, boats and
+// watercraft (Paul's PDF: "Comprehensive service parts and warranties offered"). Which jobs for which type is
+// [confirm]. Consignment of the same types follows src/data/consign.json (motorcycles and ATVs lawyer-gated).
+import Base from '../layouts/Base.astro';
+import PageIntro from '../components/astro/PageIntro.astro';
+import Confirm from '../components/astro/Confirm.astro';
+import Placeholder from '../components/astro/Placeholder.astro';
+import business from '../data/business.json';
+import { telHref } from '../lib/format';
+import { breadcrumbJsonLd } from '../lib/seo';
+import { REVIEW, routeExists } from '../lib/site';
+import { consign, consignTypes } from '../lib/consign';
+
+const d = business;
+const crumbs = [{ name: 'Home', path: '/' }, { name: 'Services', path: '/services' }, { name: 'Power sports', path: '/power-sports' }];
+// `id` matches the booking form's ?vehicle= values and the consignment type ids.
+const vehicles = [
+  { id: 'motorcycle', label: 'Motorcycles' },
+  { id: 'atv', label: 'ATVs and UTVs' },
+  { id: 'snowmobile', label: 'Snowmobiles' },
+  { id: 'boat', label: 'Boats and watercraft' },
+];
+const jobs = ['Seasonal service: getting it ready for the season, and putting it away after', 'Repairs', 'Parts, in stock or ordered in', 'Warranty work'];
+const sellable = (id: string) => consignTypes.find((t) => t.id === id);
+---
+<Base title="Power sports service" current="/power-sports" jsonLd={[breadcrumbJsonLd(crumbs)]}
+  description="Service and parts for motorcycles, ATVs and UTVs, snowmobiles, boats and watercraft at Vacations on Wheels in Concord.">
+  <PageIntro title="Power sports service" crumbs={crumbs} eyebrow="Service"
+    lead="Service and parts for motorcycles, ATVs and UTVs, snowmobiles, and boats and watercraft, at the same shop that looks after your RV." />
+
+  <section aria-labelledby="types-h" class="wrap py-10">
+    <h2 id="types-h" class="sr-only">What we work on</h2>
+    <ul class="m-0 grid list-none gap-4 p-0 sm:grid-cols-2 lg:grid-cols-4">
+      {vehicles.map((v) => {
+        const sell = sellable(v.id);
+        return (
+          <li class="flex flex-col rounded border border-rule bg-white p-5">
+            <h3 class="m-0 text-[1.5rem]">{v.label}</h3>
+            <div class="mt-4 grid gap-2">
+              {routeExists('/book') && <a href={`/book?vehicle=${v.id}`} class="btn btn-primary">Book service</a>}
+              {sell && routeExists('/consign') && (
+                <a href={`/consign?type=${v.id}#consign-form`} class="btn btn-secondary">
+                  Sell it with us
+                </a>
+              )}
+              {sell?.lawyer && <p class="m-0"><Confirm lawyer note={consign.lawyerNote} /></p>}
+            </div>
+          </li>
+        );
+      })}
+    </ul>
+  </section>
+
+  <div class="wrap grid gap-10 pb-14 lg:grid-cols-12">
+    <section aria-labelledby="jobs-h" class="lg:col-span-7">
+      <h2 id="jobs-h" class="m-0 text-[1.75rem] lg:text-[2rem]">What we do</h2>
+      {REVIEW ? (
+        <>
+          <ul class="m-0 mt-4 list-disc space-y-1 pl-6">{jobs.map((j) => <li>{j}</li>)}</ul>
+          <p class="mt-2"><Confirm note="Power sports: which jobs for which type (seasonal service, repairs, parts, warranty work)? Paul's PDF says 'Comprehensive service parts and warranties offered'" /></p>
+        </>
+      ) : (
+        <p class="mt-4">Tell us what it needs when you book, or call and ask. We’ll tell you if it’s a job we take on.</p>
+      )}
+      <p class="mt-4">Need a part? {routeExists('/parts/request')
+        ? <><a href="/parts/request">Request a part</a> with the make, model and year.</>
+        : <>Call us with the make, model and year.</>}</p>
+    </section>
+    <aside class="space-y-6 lg:col-span-5" aria-label="Call us">
+      <div class="rounded border border-rule bg-white p-5">
+        <h2 class="m-0 text-[1.5rem]">Not sure we do it?</h2>
+        <p class="mt-2">Call the shop and describe the job.</p>
+        <a href={telHref(d.phones.main)} class="btn btn-primary mt-1 w-full text-lg tabular">Call {d.phones.main}</a>
+      </div>
+      <Placeholder what="a snowmobile or ATV in the service bay" />
+    </aside>
+  </div>
+</Base>

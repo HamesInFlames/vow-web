@@ -146,3 +146,14 @@ test('park home removal in production: rate shown, unproven claims hidden', asyn
   for (const t of ['Fully insured', 'MTO oversize permits', '80 feet', 'every park']) await expect(main).not.toContainText(t);
   await expect(page.locator('.confirm-chip')).toHaveCount(0);
 });
+
+test('power sports in production: book links for all four, sell links only where not lawyer-gated', async ({ page }) => {
+  await page.goto('/power-sports');
+  for (const id of ['motorcycle', 'atv', 'snowmobile', 'boat']) {
+    await expect(page.locator(`a[href="/book?vehicle=${id}"]`)).toHaveCount(1);
+  }
+  for (const t of consign.types.filter((x) => ['motorcycle', 'atv', 'snowmobile', 'boat'].includes(x.id))) {
+    await expect(page.locator(`a[href^="/consign?type=${t.id}"]`), t.id).toHaveCount(t.lawyer ? 0 : 1);
+  }
+  await expect(page.locator('.confirm-chip')).toHaveCount(0);
+});
