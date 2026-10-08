@@ -1,5 +1,10 @@
 # Session Status — Vacations on Wheels website
 
+## Oct 8 (from the vault session; no code changed)
+- `main` fast-forwarded to `dev` (`e31fb79`, the winterizing todo line).
+- **Winterizing flyer and plan sent to Rae (Oct 8):** trailers and fifth wheels \$199, motorhomes \$249, "all-in: antifreeze and shop supplies included, plus HST", oil change add-on \$90, book by Nov 15, no specials (vault `98`, `98b`, `marketing/winterizing-flyer/`). **The site still says "\$199 plus parts and HST"** on /services (`priceFormat`) and flags the motorhome price `[confirm]`. Once Rae approves the prices, change the site to the all-in wording and \$249 for motorhomes so the site and flyer match (drip-pricing rule, `98b` §7).
+- Domain: vacationsonwheels.ca is not in Paul's GoDaddy account; Turnkey is the registrant (vault `92`). No notice to Turnkey until the registrant change and auth code are sorted.
+
 ## Last session
 - **Date:** 2026-10-06 (early morning), Phase 4: consignment, park home removal, power sports, financing (vault `20` 2026-10-06; `prompts/build-vow-phase4-consign.md`)
 - **Tool used:** Claude Code (Opus 5.5). Step 6 (RV Farm fees) by a Sonnet subagent; step 7 review by an Opus reviewer subagent in a fresh context
