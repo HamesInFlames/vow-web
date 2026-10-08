@@ -3,6 +3,7 @@
 Plan: `docs/plan.md` (§3g phases). Approved Oct 5, 2026.
 
 ## In progress
+- [ ] **ASAP (James, Oct 6): winterizing ad.** Season is now. Price is settled: $199 (1 h) plus parts (Paul, Oct 5). Runs from the VOW Facebook Page (and staff profiles, per Paul's Oct 6 text). Still needed: motorhome price ($199 or 1 h at $249?), what's included, ad budget, a real shop photo (no AI imagery), and where it links (the review site's winterizing page or a phone/booking link until the domain is live). Questions are in vault `96` §3.2 #4, §3.4 #11, §5 #3, §3.8 #33
 - [ ] Photo pipeline (RV Farm scripts/photos.mjs + VOW watermark): only once Rae confirms a photo (V11)
 - [ ] Reviews: James picks 3–6 Google reviews into src/data/reviews.json; Rae OKs quoting them
 - [ ] Walkthrough with Paul and Rae (James): `docs/walkthrough-vow.md` (36 questions, Part 3 lawyer list incl. OMVIC and consignment terms); then apply the answers (the sheet has an answer → file table)
