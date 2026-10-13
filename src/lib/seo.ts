@@ -1,4 +1,5 @@
-// JSON-LD builders. NAP comes only from business.json.
+// JSON-LD builders. NAP comes only from business.json. No aggregateRating or review: the site shows no Google
+// rating while VOW works on its reviews (Oct 13; a regression test checks every page).
 import business from '../data/business.json';
 import type { Hours, DayKey } from './hours';
 
@@ -28,6 +29,8 @@ export function localBusinessJsonLd() {
       postalCode: d.address.postal,
       addressCountry: d.address.country,
     },
+    geo: { '@type': 'GeoCoordinates', latitude: d.address.geo.lat, longitude: d.address.geo.lng },
+    hasMap: d.google.url,
     openingHoursSpecification: (Object.keys(hours) as DayKey[])
       .filter((k) => hours[k])
       .map((k) => ({

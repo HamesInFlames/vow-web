@@ -1,5 +1,5 @@
 ---
-// Contact (plan §3b): phone, address, hours, email, map link, the three ways to send a request, and RV Farm.
+// Contact (plan §3b): phone, address, hours, email, directions and the Google listing (no Maps embed), the three ways to send a request, and RV Farm.
 // No general contact form (plan §1: three forms only).
 import Base from '../layouts/Base.astro';
 import PageIntro from '../components/astro/PageIntro.astro';
@@ -36,6 +36,7 @@ const requests = [
       <h2 class="m-0 mt-6 text-[1.5rem]">Visit</h2>
       <address class="mt-2 not-italic text-lead">{d.address.street}<br />{d.address.city}, {d.address.region} {d.address.postal}</address>
       <a href={d.address.mapsUrl} target="_blank" rel="noopener" class="btn btn-primary mt-4">Get directions<span class="sr-only"> (opens Google Maps in a new tab)</span></a>
+      <p class="m-0 mt-3"><a href={d.google.url} target="_blank" rel="noopener" class="tap font-semibold">Find us on Google Maps<span class="sr-only"> (opens in a new tab)</span></a></p>
       {social.length > 0 && (
         <>
           <h2 class="m-0 mt-6 text-[1.5rem]">Follow us</h2>

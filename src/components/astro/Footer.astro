@@ -6,7 +6,6 @@ import business from '../../data/business.json';
 import { addressLine, telHref, socialLinks } from '../../lib/format';
 import { footerNav, legalNav, routeExists } from '../../lib/site';
 import HoursTable from './HoursTable.astro';
-import Confirm from './Confirm.astro';
 
 interface Props { variant?: 'full' | 'interim' }
 const { variant = 'full' } = Astro.props;
@@ -35,12 +34,11 @@ const social = socialLinks(d.social);
         <a class="tap mt-1 text-2xl font-semibold text-white no-underline hover:underline tabular font-[family-name:var(--font-display)]" href={telHref(d.phones.main)}>
           {d.phones.main}
         </a>
-        {d.email
-          ? <><br /><a class="tap text-mist underline decoration-mist/50 hover:text-white" href={`mailto:${d.email}`}>{d.email}</a></>
-          : <Confirm note="Which email address to publish" />}
+        {d.email && <><br /><a class="tap text-mist underline decoration-mist/50 hover:text-white" href={`mailto:${d.email}`}>{d.email}</a></>}
       </address>
+      <p class="m-0 mt-2"><a class="inline-flex min-h-11 items-center text-mist underline decoration-mist/50 hover:text-white" href={d.google.reviewUrl} target="_blank" rel="noopener">Review us on Google<span class="sr-only"> (opens in a new tab)</span></a></p>
       {social.length > 0 && (
-        <ul class="m-0 mt-3 flex list-none flex-wrap gap-x-5 p-0" aria-label="Follow us">
+        <ul class="m-0 mt-1 flex list-none flex-wrap gap-x-5 p-0" aria-label="Follow us">
           {social.map((s) => (
             <li><a class="inline-flex min-h-11 items-center text-mist underline decoration-mist/50 hover:text-white" href={s.href} target="_blank" rel="noopener">{s.label}<span class="sr-only"> (opens in a new tab)</span></a></li>
           ))}

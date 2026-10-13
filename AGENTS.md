@@ -14,13 +14,13 @@
 - Astro components for static UI; React islands only where state is needed (the booking, part-request and claim forms)
 - CSS for hover/accordion; everything off under `prefers-reduced-motion` or `html[data-motion="reduce"]`
 - Tailwind 4 with tokens in `src/styles/global.css` `@theme` (colours from the VOW logo); no raw hex in components
-- NAP, hours, phones, email and the Google rating come only from `src/data/business.json`; services only from `src/content/services/`; unverified claims only through `src/data/claims.json` and `<Claim>`
+- NAP, hours, phones, email and the Google listing/directions/review links come only from `src/data/business.json`; services only from `src/content/services/`; unverified claims only through `src/data/claims.json` and `<Claim>`
 
 ## Content rules (non-negotiable)
 - Real client facts only (vault `research/existing-sites-audit.md`, `docs/site-capture/`); unverified facts carry `[confirm]` and are hidden in production builds
 - No price unless Paul confirmed it: "From $X + HST" when confirmed, otherwise "Quote after inspection". Never "Call for price"
 - No OMVIC or dealer-act wording; no motorhome-brokerage copy until a lawyer has looked. Never "new owner"
-- Google rating as a plain linked line from `business.json`, never a badge widget. No invented reviews, staff, numbers, awards, certifications or insurer names
+- No Google rating or review count anywhere, and no `aggregateRating`/`review` in JSON-LD (Oct 13: 3.4★ while VOW works on its reviews); invite every customer to review (no gating, no incentives). No invented reviews, staff, numbers, awards, certifications or insurer names
 - Real photos only (watermarked derivatives from `scripts/photos.mjs`, listed in `src/data/photos.json`); otherwise a sand "Photo coming: [what]" block. No AI or stock imagery. Rae confirmed `015-vow.jpg` and `018-image-7.png` as VOW's own (Oct 8); `018` stays out until James checks it isn't a stock or manufacturer photo
 - No customer PII in the repo. Forms never ask for SIN, DOB or banking
 - Banned copy: unlock, elevate, seamless, empower, effortless, leverage, streamline, journey, robust, cutting-edge, next-level, "it's not just X", "look no further"

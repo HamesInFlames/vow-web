@@ -7,7 +7,7 @@ import photos from '../data/photos.json';
 import HoursTable from '../components/astro/HoursTable.astro';
 import Placeholder from '../components/astro/Placeholder.astro';
 import Claim from '../components/astro/Claim.astro';
-import RatingLine from '../components/astro/RatingLine.astro';
+import ReviewInvite from '../components/astro/ReviewInvite.astro';
 import ServiceTile from '../components/astro/ServiceTile.astro';
 import ReviewQuote from '../components/astro/ReviewQuote.astro';
 import claims from '../data/claims.json';
@@ -30,7 +30,8 @@ const hasWarranty = routeExists('/warranty');
 const hasParts = routeExists('/parts');
 const hasPickup = routeExists('/pick-up-and-delivery');
 const showReviews = reviews.items.length > 0 && (reviews.confirmed || REVIEW);
-const showStrip = REVIEW || d.google.confirmed || claims.items.some((c) => c.id === 'pickup' && c.confirmed);
+// No Google rating on the site (Oct 13), so the strip only carries the pick-up claim.
+const showStrip = REVIEW || claims.items.some((c) => c.id === 'pickup' && c.confirmed);
 ---
 <Base title={d.brandName}>
   <!-- 1 Hero. The one shop photo Rae confirmed as VOW's own (Oct 8; src/data/photos.json), shown uncropped. Replace on photo day. -->
@@ -56,11 +57,10 @@ const showStrip = REVIEW || d.google.confirmed || claims.items.some((c) => c.id 
     </div>
   </section>
 
-  <!-- 2 Rating line and the pick-up claim (each shown only once confirmed). -->
+  <!-- 2 The pick-up claim (shown only once confirmed). No Google rating line (Oct 13). -->
   {showStrip && (
     <section aria-label="At a glance" class="border-t border-rule bg-white">
       <div class="wrap flex flex-wrap items-center gap-x-8 gap-y-1 py-3">
-        <RatingLine />
         <Claim id="pickup" />
       </div>
     </section>
@@ -177,15 +177,15 @@ const showStrip = REVIEW || d.google.confirmed || claims.items.some((c) => c.id 
     </section>
   )}
 
-  <!-- 8 Real Google reviews, once picked and OK'd (reviews.json). -->
+  <!-- 8 Real Google reviews, once picked and OK'd (reviews.json), with the invitation to leave one. No rating or count. -->
   {showReviews && (
     <section aria-labelledby="rev-h" class="border-t border-rule bg-paper">
       <div class="wrap py-14">
         <h2 id="rev-h" class="m-0 text-[2rem] lg:text-[2.5rem]">What customers say</h2>
-        <div class="mt-2"><RatingLine /></div>
         <ul class="m-0 mt-6 grid list-none gap-6 p-0 md:grid-cols-3">
           {reviews.items.slice(0, 3).map((r) => <ReviewQuote review={r} />)}
         </ul>
+        <ReviewInvite headingId="rev-invite-h" class="mt-8 bg-white" />
       </div>
     </section>
   )}
@@ -204,7 +204,7 @@ const showStrip = REVIEW || d.google.confirmed || claims.items.some((c) => c.id 
     </div>
   </section>
 
-  <!-- 10 Visit: address, hours, map link. -->
+  <!-- 10 Visit: address, hours, directions and the Google listing (no Maps embed). -->
   <section aria-labelledby="visit-h" class="wrap grid gap-10 py-14 lg:grid-cols-12">
     <div class="lg:col-span-5">
       <h2 id="visit-h" class="m-0 text-[2rem]">Find the shop</h2>
@@ -214,6 +214,7 @@ const showStrip = REVIEW || d.google.confirmed || claims.items.some((c) => c.id 
         <a href={d.address.mapsUrl} target="_blank" rel="noopener" class="btn btn-primary">Get directions<span class="sr-only"> (opens Google Maps in a new tab)</span></a>
         <a href={telHref(d.phones.main)} class="btn btn-secondary tabular">Call {d.phones.main}</a>
       </div>
+      <p class="mb-0 mt-4"><a href={d.google.url} target="_blank" rel="noopener" class="tap font-semibold">Find us on Google Maps<span class="sr-only"> (opens in a new tab)</span></a></p>
     </div>
     <div class="lg:col-span-3"><HoursTable /></div>
     <div class="lg:col-span-4"><Placeholder what="the shop from Hwy 7" /></div>
