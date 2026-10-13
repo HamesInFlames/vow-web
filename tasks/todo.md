@@ -5,8 +5,8 @@ Plan: `docs/plan.md` (§3g phases). Approved Oct 5, 2026.
 ## In progress
 - [ ] Winterizing ad: on hold (Rae, Oct 8: Paul isn't interested in a winterizing deal). The site says trailers $199, motorhomes $249, plus parts and HST
 - [ ] Photo `018-image-7.png` (motorhome on red lifts): Rae says it's VOW's (Oct 8), but it isn't the shop in `015` and looks like stock; James checks before adding it to `src/data/photos.json`
-- [ ] Reviews: James picks 3–6 Google reviews into src/data/reviews.json; Rae OKs quoting them
-- [ ] Open answers from Rae/Paul: the HOLD list in `tasks/status.md` (Oct 12) and `docs/confirm-report.md` (48 items)
+- [ ] Reviews: James picks and pastes quotes into src/data/reviews.json himself with Rae's OK (no star counts; the site shows no Google rating, Oct 13: 3.4★ from 45)
+- [ ] Open answers from Rae/Paul: the HOLD list in `tasks/status.md` (Oct 12) and `docs/confirm-report.md` (45 items)
 - [ ] Lawyer: OMVIC status for consigning motorhomes, motorcycles, ATVs/UTVs (`consign.json` `lawyer` → `false` publishes a type), consignment agreement terms, financing/loan-broker question (vault `95`)
 - [ ] Optional: whole-branch `/code-review high` on `5e5c53d..HEAD` (the Oct 6 review only covered Phase 3)
 
@@ -16,6 +16,7 @@ Plan: `docs/plan.md` (§3g phases). Approved Oct 5, 2026.
 - [ ] A vector VOW logo (the badge is a 392 px raster)
 
 ## Completed
+- [x] Exact Google listing, place-ID directions and write-review links; rating line and any rating/aggregateRating removed; review invite on /reviews and footer; confirm report 48 → 45 (Oct 13)
 - [x] Rae's Oct 8 answers applied (vault `96a`): hours, email, socials, prices, estimate fee, services, claims, consignment, removal, warranty, financing; photo pipeline and the hero photo; confirm report 88 → 48 (Oct 12)
 - [x] VOW Phase 4 — `/consign`, `/park-home-removal`, `/power-sports`, `/financing`, Paul's rates, header dropdown panels, RV Farm fees ($1,995 PDI, $599 admin), review (11 findings fixed) (Oct 6)
 - [x] Railway review service `vow-web` from `dev`: https://vow-web-production.up.railway.app (Oct 6)

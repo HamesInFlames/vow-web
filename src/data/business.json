@@ -10,7 +10,12 @@
     "region": "ON",
     "postal": "L4K 1V4",
     "country": "CA",
-    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=1841+Highway+7%2C+Concord%2C+ON+L4K+1V4"
+    "mapsUrl": "https://www.google.com/maps/dir/?api=1&destination=Vacations%20On%20Wheels%2C%201841%20Hwy%207%2C%20Concord%2C%20ON&destination_place_id=ChIJXWpVoIkuK4gRa4b9WfV5JZI",
+    "geo": {
+      "lat": 43.8030407,
+      "lng": -79.4857099
+    },
+    "plusCode": "RG37+6P Vaughan"
   },
   "phones": {
     "main": "905-738-1253",
@@ -53,11 +58,13 @@
     "tiktok": "https://www.tiktok.com/@vacations_on_wheels"
   },
   "google": {
-    "rating": 4.4,
-    "count": 140,
-    "url": "https://www.google.com/maps/search/?api=1&query=Vacations+on+Wheels+1841+Highway+7+Concord+ON",
-    "asOf": "2026-09-17",
-    "confirmed": false
+    "listingName": "Vacations On Wheels",
+    "placeId": "ChIJXWpVoIkuK4gRa4b9WfV5JZI",
+    "cid": "10530957398359508587",
+    "url": "https://www.google.com/maps/place/?q=place_id:ChIJXWpVoIkuK4gRa4b9WfV5JZI",
+    "reviewUrl": "https://search.google.com/local/writereview?placeid=ChIJXWpVoIkuK4gRa4b9WfV5JZI",
+    "asOf": "2026-10-13",
+    "note": "Listing read from Google Maps / Places API on Oct 13, 2026 (listed as 1841 Hwy 7 W; the site shows 1841 Hwy 7 as Rae asked). The site shows no Google rating or review count while VOW works on its reviews (James, Oct 13): no rating fields here and no aggregateRating in JSON-LD."
   },
   "rates": {
     "note": "Paul's Oct 5 fee list, final per vault 20-decisions 2026-10-06; Rae's Oct 8 answers (vault 96a §1.11, §3.1.2). Plus HST.",
@@ -77,7 +84,6 @@
   },
   "confirm": [
     "hours: holiday hours (not answered Oct 8). Sunday closed is implied; Saturday 10–3 by appointment only (Rae, Oct 8)",
-    "google: rating and review count (4.4★, ~140 on Sept 17) are re-read at launch; the profile URL should be the exact listing",
     "sibling.url: links to RV Farm's current site (thervfarm.ca); switch when the new RV Farm site launches on its domain (rvfarm.ca vs thervfarm.ca)"
   ],
   "appointmentNote": "Saturdays 10 AM to 3 PM are by appointment only. No walk-ins: call ahead to book a time."

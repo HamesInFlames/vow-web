@@ -1,0 +1,18 @@
+---
+// "Leave us a Google review" block (Oct 13). The site shows no Google rating or review count while VOW works on
+// its reviews: this invites every customer (no gating, no incentive) and links to the listing to read them.
+// Links come only from business.json `google`.
+import business from '../../data/business.json';
+
+interface Props { headingId?: string; class?: string }
+const { headingId = 'review-invite-h', class: className } = Astro.props;
+const g = business.google;
+---
+<div class:list={['rounded border border-rule bg-paper p-6', className]}>
+  <h2 id={headingId} class="m-0 text-[1.75rem]">Had work done with us?</h2>
+  <p class="mt-2">Leave us a Google review. Whatever your experience, it helps other RV owners decide, and it tells us what to keep doing and what to fix.</p>
+  <div class="mt-4 flex flex-wrap items-center gap-x-6 gap-y-3">
+    <a href={g.reviewUrl} target="_blank" rel="noopener" class="btn btn-primary">Leave us a Google review<span class="sr-only"> (opens Google in a new tab)</span></a>
+    <a href={g.url} target="_blank" rel="noopener" class="tap font-semibold">Read our reviews on Google<span class="sr-only"> (opens Google Maps in a new tab)</span></a>
+  </div>
+</div>

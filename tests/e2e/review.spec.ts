@@ -24,3 +24,14 @@ test('unconfirmed consignment terms show with a [confirm] chip', async ({ page }
     await expect(row.locator('.confirm-chip')).toBeVisible();
   }
 });
+
+test('review build shows no Google rating either (Oct 13)', async ({ page }) => {
+  for (const path of ['/', '/reviews']) {
+    await page.goto(path);
+    await expect(page.locator('body'), path).not.toContainText(/\b[34]\.4\b|★|out of 5|Rated \d/);
+    for (const raw of await page.locator('script[type="application/ld+json"]').allTextContents()) {
+      expect(raw, path).not.toMatch(/aggregateRating|ratingValue|reviewCount/);
+    }
+  }
+  await expect(page.getByRole('link', { name: /Leave us a Google review/ }).first()).toBeVisible();
+});
