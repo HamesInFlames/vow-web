@@ -4,7 +4,6 @@
 // so it sits on /services, /book and every service page. Amounts come from business.json rates.
 import business from '../../data/business.json';
 import { formatCad } from '../../lib/format';
-import Confirm from './Confirm.astro';
 
 interface Props { compact?: boolean }
 const { compact = false } = Astro.props;
@@ -15,5 +14,5 @@ const motorhome = formatCad(r.estimateFeeHours * r.labourMotorhomesPerHourCad);
 <div class:list={['estimate-fee', compact ? 'text-[0.9375rem]' : '']} data-estimate-fee>
   <p class="m-0 font-semibold text-ink">A written estimate has a fee: {r.estimateFeeHours} hours of labour at your unit’s hourly rate ({trailer} for a trailer, {motorhome} for a motorhome, plus HST).</p>
   {!compact && <p class="mb-0 mt-2">That covers 2 hours of inspection and 2 hours of computer diagnostics. You get a full written report with photos.</p>}
-  <p class="mb-0 mt-2">We tell you the fee before we book you in, and we do no work beyond the estimate without your OK.<Confirm lawyer note="Estimate fee and consent wording: check against Ontario's Consumer Protection Act repair-estimate rules (s. 56–57, O. Reg. 17/05); does the 4-hour fee apply to every estimate, including fixed-price jobs like winterizing? (vault 96a §3.1.2)" /></p>
+  <p class="mb-0 mt-2">We tell you the fee before we book you in, and we do no work beyond the estimate without your OK.</p>
 </div>
