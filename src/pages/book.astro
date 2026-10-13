@@ -4,6 +4,7 @@ import Base from '../layouts/Base.astro';
 import PageIntro from '../components/astro/PageIntro.astro';
 import ContactForm from '../components/astro/ContactForm.astro';
 import HoursTable from '../components/astro/HoursTable.astro';
+import EstimateFee from '../components/astro/EstimateFee.astro';
 import business from '../data/business.json';
 import { telHref } from '../lib/format';
 import { breadcrumbJsonLd } from '../lib/seo';
@@ -20,6 +21,7 @@ const crumbs = [{ name: 'Home', path: '/' }, { name: 'Book service', path: '/boo
 
   <div class="wrap grid gap-10 pb-14 pt-6 lg:grid-cols-12">
     <section aria-label="Booking request form" class="lg:col-span-8">
+      <div class="mb-6 rounded border-l-4 border-accent bg-white p-5"><EstimateFee /></div>
       <div class="rounded border border-rule bg-white p-5 lg:p-8">
         <ContactForm kind="book" subject="Service booking request" services={services} submitLabel="Send booking request" />
       </div>

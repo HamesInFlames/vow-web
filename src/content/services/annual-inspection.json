@@ -15,12 +15,27 @@
     "Your last inspection or service paperwork, if you have it"
   ],
   "faq": [
-    { "q": "How much does an inspection cost?", "a": "Call the shop for the current price for your unit." },
-    { "q": "What happens if you find a problem?", "a": "We call you, tell you what we found and quote the repair. You decide what we fix.", "confirm": "Is this how the shop works: no work beyond the estimate without the customer’s OK? (plan §2 #6)" },
-    { "q": "Can you do an Ontario safety standards certificate?", "a": "Call us to check for your unit.", "confirm": "Is VOW a licensed Motor Vehicle Inspection Station? Can it certify trailers and motorhomes?" }
+    {
+      "q": "How much does an inspection cost?",
+      "a": "Call the shop for the current price for your unit."
+    },
+    {
+      "q": "What happens if you find a problem?",
+      "a": "We call you, tell you what we found and quote the repair. You decide what we fix. No extra work without your OK."
+    },
+    {
+      "q": "Can you do an Ontario safety standards certificate?",
+      "a": "Call us to check for your unit.",
+      "confirm": "Ontario safety standards certificate: not answered Oct 8. Is VOW a licensed Motor Vehicle Inspection Station?"
+    }
   ],
-  "related": ["preventative-maintenance", "winterizing"],
+  "related": [
+    "preventative-maintenance",
+    "winterizing"
+  ],
   "photo": "a technician checking an RV’s brakes",
   "confirmed": true,
-  "confirm": ["An inspection price, and how long it usually takes"]
+  "confirm": [
+    "Inspection price: Rae wrote \"safety is $1495\" (Oct 8). That looks wrong for an annual inspection (or is it the safety certificate?). Confirm before any price shows; how long it usually takes"
+  ]
 }

@@ -13,15 +13,29 @@
     "The year, make and model of the unit"
   ],
   "faq": [
-    { "q": "How far do you go?", "a": "Call us with the address and we’ll tell you.", "confirm": "Pick-up radius" },
-    { "q": "What does pick-up cost?", "a": "A pick-up fee applies. We tell you the cost when we call to confirm." },
-    { "q": "Can you do the repair at my place?", "a": "For some jobs, yes. Tell us what’s wrong and we’ll tell you if it can be done on site.", "confirm": "Does VOW do mobile (on-site) repairs?" }
+    {
+      "q": "How far do you go?",
+      "a": "Call us with the address and we’ll tell you.",
+      "confirm": "Pick-up radius"
+    },
+    {
+      "q": "What does pick-up cost?",
+      "a": "A pick-up fee applies. We tell you the cost when we call to confirm."
+    },
+    {
+      "q": "Can you do the repair at my place?",
+      "a": "For some jobs, yes. Tell us what’s wrong and we’ll tell you if it can be done on site.",
+      "confirm": "Does VOW do mobile (on-site) repairs?"
+    }
   ],
-  "related": ["winterizing", "annual-inspection"],
+  "related": [
+    "winterizing",
+    "annual-inspection"
+  ],
   "photo": "the VOW truck picking up a trailer",
   "confirmed": false,
   "confirm": [
-    "Pick-up: radius, fee, and is the return trip included?",
-    "Mobile on-site service: offered at all? Which jobs?"
+    "Pick-up and mobile service: off until there's a set labour cost (Rae, Oct 8)",
+    "Mobile on-site service: which jobs?"
   ]
 }

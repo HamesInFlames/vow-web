@@ -1,8 +1,7 @@
 ---
 // One service as a card: name, summary, price line. The whole card is the link (stretched ::after).
 import type { Service } from '../../lib/services';
-import { serviceHref } from '../../lib/services';
-import { priceLine } from '../../lib/format';
+import { serviceHref, servicePrice } from '../../lib/services';
 import Confirm from './Confirm.astro';
 
 interface Props { service: Service; headingLevel?: 'h2' | 'h3' }
@@ -14,5 +13,5 @@ const { service: s, headingLevel: H = 'h3' } = Astro.props;
     {!s.data.confirmed && <Confirm note="Service not on the current site; hidden in production until Paul confirms it" />}
   </H>
   <p class="mb-0 mt-2 flex-1">{s.data.summary}</p>
-  <p class="mb-0 mt-4 font-semibold text-ink">{priceLine(s.data.fromPriceCad, s.data.priceNote, s.data.priceFormat)}</p>
+  <p class="mb-0 mt-4 font-semibold text-ink">{servicePrice(s)}</p>
 </li>

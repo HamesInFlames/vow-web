@@ -5,7 +5,7 @@ import PageIntro from '../../components/astro/PageIntro.astro';
 import ServiceTile from '../../components/astro/ServiceTile.astro';
 import business from '../../data/business.json';
 import { formatCad, telHref } from '../../lib/format';
-import Confirm from '../../components/astro/Confirm.astro';
+import EstimateFee from '../../components/astro/EstimateFee.astro';
 import { breadcrumbJsonLd } from '../../lib/seo';
 import { visibleServices } from '../../lib/services';
 
@@ -17,18 +17,22 @@ const crumbs = [{ name: 'Home', path: '/' }, { name: 'Services', path: '/service
   description="RV repair and maintenance in Concord: winterizing, inspections, appliances, heating and A/C, water systems, leaks and awnings."
   jsonLd={[breadcrumbJsonLd(crumbs)]}>
   <PageIntro title="RV services" crumbs={crumbs}
-    lead="Repairs and maintenance for RVs and trailers at our shop on Hwy 7 in Concord. Pick a service to see what’s included, or book and tell us what’s wrong." />
+    lead="Repairs and maintenance for RVs, trailers and more at our shop on Hwy 7 in Concord. Pick a service to see what’s included, or book and tell us what’s wrong." />
 
   <section aria-label="Services" class="wrap pb-14 pt-6">
     <ul class="m-0 grid list-none gap-4 p-0 sm:grid-cols-2 lg:grid-cols-3">
       {services.map((s) => <ServiceTile service={s} headingLevel="h2" />)}
     </ul>
+    <section aria-labelledby="vehicles-h" class="mt-10">
+      <h2 id="vehicles-h" class="m-0 text-[1.5rem]">What we work on</h2>
+      <p class="mb-0 mt-2">Trailers, motorhomes, boats, ATVs, motorcycles, cars and trucks. We also do wrapping, hauling and storage: call and ask.</p>
+    </section>
     <section aria-labelledby="rates-h" class="mt-10 rounded border border-rule bg-white p-5">
       <h2 id="rates-h" class="m-0 text-[1.5rem]">Shop rates</h2>
       <p class="mb-0 mt-2 text-lead font-semibold text-ink">
         {formatCad(r.labourTrailersPerHourCad)} an hour for trailers, {formatCad(r.labourMotorhomesPerHourCad)} an hour for motorhomes, plus parts and HST.
       </p>
-      <p class="mb-0 mt-2">You get a written estimate before we start any work.<Confirm note="Is there a fee for a written estimate? (Ontario CPA s. 57: it must be disclosed first)" /></p>
+      <div class="mt-4"><EstimateFee /></div>
     </section>
     <div class="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3 rounded border border-rule bg-white p-5">
       <p class="m-0 text-lead font-semibold text-ink">Not sure what it needs?</p>
