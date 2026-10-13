@@ -9,16 +9,21 @@ const { tone = 'light', caption = 'Opening hours' } = Astro.props;
 const rows = hoursRows(business.hours as Hours, business.closedDayNote);
 ---
 <table class="hours-table w-full max-w-sm border-collapse tabular" data-tz={business.timeZone}>
-  <caption class="text-left font-semibold pb-1">{caption}<Confirm note="Hours: four versions conflict" /></caption>
+  <caption class="text-left font-semibold pb-1">{caption}<Confirm note="Holiday hours: not answered yet (Rae answered weekday and Saturday hours Oct 8)" /></caption>
   <tbody>
     {rows.map((r) => (
       <tr data-days={r.days.join(' ')} class:list={['border-b', tone === 'dark' ? 'border-white/20' : 'border-rule']}>
-        <th scope="row" class="py-1.5 pr-4 text-left font-normal">{r.dayLabel}</th>
-        <td class="py-1.5 whitespace-nowrap">{r.text}</td>
+        <th scope="row" class="py-1.5 pr-4 text-left font-normal"><span class="whitespace-nowrap">{r.dayLabel}</span></th>
+        <td class:list={['py-1.5', { 'whitespace-nowrap': r.text.length <= 20 }]}>{r.text}</td>
       </tr>
     ))}
   </tbody>
 </table>
+{business.appointmentNote && (
+  <p class:list={['mb-0 mt-3 max-w-sm border-l-4 pl-3 font-semibold', tone === 'dark' ? 'border-white text-white' : 'border-accent text-ink']} data-appointment-note>
+    {business.appointmentNote}
+  </p>
+)}
 {business.holidayNote && <p class="mt-2">{business.holidayNote}</p>}
 
 <script>
