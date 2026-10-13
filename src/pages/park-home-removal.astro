@@ -1,12 +1,12 @@
 ---
 // Park and mobile home removal (VOW Phase 4 step 2). The five services come from Paul's "Premier Consignment &
 // Removal Program" PDF draft, in plain words. Insurance, MTO, size-range and "every park" wording goes through
-// claims.json (vault 95 §3, §5). Delivery rate: Paul's Oct 5 fee list (business.json rates).
+// claims.json (vault 95 §3, §5); Rae confirmed "anywhere" and the size range on Oct 8, insurance and MTO wording stay
+// review-only. Delivery rate: Paul's Oct 5 fee list, how it's counted from Rae's Oct 8 answer (business.json rates).
 import Base from '../layouts/Base.astro';
 import PageIntro from '../components/astro/PageIntro.astro';
 import ContactForm from '../components/astro/ContactForm.astro';
 import Claim from '../components/astro/Claim.astro';
-import Confirm from '../components/astro/Confirm.astro';
 import Placeholder from '../components/astro/Placeholder.astro';
 import business from '../data/business.json';
 import { formatCadCents, telHref } from '../lib/format';
@@ -37,7 +37,7 @@ const quote = [
   'If you’re selling: your asking price',
 ];
 const parkHome = consignTypes.find((t) => t.id === 'park-home');
-const claimIds = ['length-range', 'mto-permits', 'mto-repairs', 'insured', 'park-coordination'];
+const claimIds = ['anywhere', 'length-range', 'mto-permits', 'mto-repairs', 'insured', 'park-coordination'];
 const claimShown = (id: string) => REVIEW || claims.items.some((c) => c.id === id && c.confirmed);
 ---
 <Base title="Park and mobile home removal" current="/park-home-removal" jsonLd={[breadcrumbJsonLd(crumbs)]}
@@ -70,7 +70,8 @@ const claimShown = (id: string) => REVIEW || claims.items.some((c) => c.id === i
     <aside class="space-y-6 lg:col-span-5" aria-label="Transport rate">
       <div class="rounded border border-rule bg-white p-5">
         <p class="m-0 text-[0.9375rem] font-semibold uppercase tracking-wide text-slate-60">Transport</p>
-        <p class="m-0 mt-1 text-[1.5rem] font-bold text-ink">{formatCadCents(d.rates.deliveryPerKmCad)} per km, plus HST<Confirm note="How delivery distance is counted (one way or both, from the shop?)" /></p>
+        <p class="m-0 mt-1 text-[1.5rem] font-bold text-ink">{formatCadCents(d.rates.deliveryPerKmCad)} per km, plus HST</p>
+        <p class="m-0 mt-2">One way, measured from where the home is picked up to where it’s going. The rate covers units up to {d.rates.deliveryMaxWidthFt} ft wide and {d.rates.deliveryMaxLengthFt} ft long; wider or longer homes are quoted.</p>
         <p class="m-0 mt-2">Breakdown, permits and clean-up depend on the home and the site, so we quote them after we’ve seen your photos.</p>
       </div>
       <Placeholder what="a park home being moved out of a park" />

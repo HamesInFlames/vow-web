@@ -1,6 +1,6 @@
 ---
 // Insurance claims (plan §2 #2, §3b). What we repair comes from the current site's Insurance Claim page; the
-// step-by-step process and the insurers are [confirm] (plan §5 #8) and render only in review builds.
+// step-by-step process and "any insurance company" were confirmed by Rae on Oct 8 (vault 96a §3.5).
 import Base from '../layouts/Base.astro';
 import PageIntro from '../components/astro/PageIntro.astro';
 import ContactForm from '../components/astro/ContactForm.astro';
@@ -26,10 +26,10 @@ const repairs = [
   'Appliance and accessory replacement',
 ];
 const steps = [
-  { title: 'Open a claim with your insurer', text: 'Call your insurance company, tell them what happened and write down the claim number.' },
+  { title: 'Call your insurer first', text: 'Open a claim with your insurance company, tell them what happened and write down the claim number.' },
   { title: 'Book an inspection with us', text: 'Send the form below or call us. Bring the RV in, or ask us to pick it up.' },
   { title: 'We write the estimate', text: 'We inspect the damage and send your insurer a written estimate with photos and a parts list.' },
-  { title: 'Your insurer approves it', text: 'The adjuster reviews the estimate. Some insurers send an adjuster to see the RV first.' },
+  { title: 'Your insurer approves it', text: 'The adjuster reviews the estimate, and your insurer tells us your deductible. Some insurers send an adjuster to see the RV first.' },
   { title: 'We repair it and call you', text: 'We order the parts, do the repair and call you when it’s ready. You pay your deductible when you pick it up.' },
 ];
 const photograph = [
@@ -60,7 +60,7 @@ const photograph = [
       <section aria-labelledby="steps-h">
         <h2 id="steps-h" class="m-0 text-[1.75rem] lg:text-[2rem]">From damage to repair</h2>
         <p class="mt-3">Every insurer works a little differently. Call us and we’ll tell you what to expect with yours.</p>
-        <div class="mt-4"><StepList steps={steps} confirm="Insurance claim steps: who calls the insurer, adjuster visits, deductible paid at pick-up? (plan §5 #8)" /></div>
+        <div class="mt-4"><StepList steps={steps} /></div>
       </section>
 
       <section aria-labelledby="photo-h">

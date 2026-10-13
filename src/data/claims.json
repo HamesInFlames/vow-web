@@ -1,25 +1,29 @@
 {
-  "note": "Claims from the current VOW site that nobody has verified yet (plan override V14). They render only in review builds (PUBLIC_REVIEW=1) with a [confirm] chip, and never in production until \"confirmed\" is true.",
+  "note": "Claims from the current VOW site that nobody has verified yet (plan override V14). They render only in review builds (PUBLIC_REVIEW=1) with a [confirm] chip, and never in production until \"confirmed\" is true. Answers from Rae (Oct 8, vault 96a) set confirmed: true and record the source.",
   "items": [
     {
       "id": "experience",
-      "text": "100 years of combined experience.",
-      "confirmed": false
+      "text": "45 years of combined experience.",
+      "confirmed": true,
+      "source": "Rae, Oct 8 (vault 96a §1.10)"
     },
     {
-      "id": "certified",
-      "text": "Certified technicians.",
-      "confirmed": false
+      "id": "team-skills",
+      "text": "Our team: RV technicians, plus AZ and DZ drivers and people with experience in heavy diesel machinery, construction, working at heights and forklifts.",
+      "confirmed": true,
+      "source": "Rae, Oct 8 (vault 96a §3.7.24), replaces \"Certified technicians\""
     },
     {
       "id": "guarantee",
-      "text": "We guarantee all our workmanship.",
-      "confirmed": false
+      "text": "We guarantee our parts and labour.",
+      "confirmed": false,
+      "source": "Rae, Oct 8: \"parts & labour\", no terms given. HOLD until the terms are written"
     },
     {
       "id": "insurers",
-      "text": "We work with all major insurance companies.",
-      "confirmed": false
+      "text": "We work with any insurance company.",
+      "confirmed": true,
+      "source": "Rae, Oct 8 (vault 96a §3.5.20)"
     },
     {
       "id": "transport",
@@ -27,9 +31,10 @@
       "confirmed": false
     },
     {
-      "id": "spanish",
-      "text": "Spanish-speaking technicians.",
-      "confirmed": false
+      "id": "multicultural",
+      "text": "A multicultural team with international experience.",
+      "confirmed": true,
+      "source": "Rae, Oct 8 (vault 96a §1.17), replaces the Spanish-speaking claim"
     },
     {
       "id": "pickup",
@@ -48,8 +53,9 @@
     },
     {
       "id": "in-store-parts",
-      "text": "We keep common parts in stock at the shop.",
-      "confirmed": false
+      "text": "We keep common parts in stock, and we can order from wholesale and ship to you.",
+      "confirmed": true,
+      "source": "Rae, Oct 8 (vault 96a §3.6.22)"
     },
     {
       "id": "insured",
@@ -68,13 +74,32 @@
     },
     {
       "id": "length-range",
-      "text": "Units from 8 feet up to 80 feet long.",
-      "confirmed": false
+      "text": "Homes 8 to 16 feet wide and up to 80 feet long.",
+      "confirmed": true,
+      "source": "Rae, Oct 8 (vault 96a §3.7.24)"
     },
     {
       "id": "park-coordination",
       "text": "We work with every park’s own rules for removal.",
       "confirmed": false
+    },
+    {
+      "id": "years",
+      "text": "30 years in business.",
+      "confirmed": true,
+      "source": "Rae, Oct 8 (vault 96a §3.7.24)"
+    },
+    {
+      "id": "shop",
+      "text": "A team of 4 and 7 service bays.",
+      "confirmed": true,
+      "source": "Rae, Oct 8 (vault 96a §3.7.25)"
+    },
+    {
+      "id": "anywhere",
+      "text": "We go anywhere: tell us where the home is.",
+      "confirmed": true,
+      "source": "Rae, Oct 8 (vault 96a §3.8.34)"
     }
   ]
 }
