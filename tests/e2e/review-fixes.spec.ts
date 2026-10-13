@@ -22,11 +22,17 @@ test('production build hides unverified claims', async ({ page }) => {
 });
 
 test('production build hides unconfirmed services and FAQ answers', async ({ page, request }) => {
-  expect((await request.get('/services/engine-and-electrical')).status()).toBe(404);
-  expect((await request.get('/services/insurance-claim-repairs')).status()).toBe(404);
+  // Rae, Oct 8: warranty repair and pick-up/mobile service stay off; engine/electrical and insurance claims are on.
+  expect((await request.get('/services/warranty-repair')).status()).toBe(404);
+  expect((await request.get('/services/mobile-service-and-transport')).status()).toBe(404);
+  expect((await request.get('/services/engine-and-electrical')).status()).toBe(200);
+  expect((await request.get('/services/insurance-claim-repairs')).status()).toBe(200);
   await page.goto('/services');
-  await expect(page.getByRole('region', { name: 'Services' }).getByRole('link', { name: 'Winterizing' })).toBeVisible();
-  await expect(page.getByText('Engine and electrical')).toHaveCount(0);
+  const list = page.getByRole('region', { name: 'Services' });
+  await expect(list.getByRole('link', { name: 'Winterizing' })).toBeVisible();
+  await expect(list.getByRole('link', { name: 'Engine and electrical' })).toBeVisible();
+  await expect(list.getByRole('link', { name: 'Warranty repair' })).toHaveCount(0);
+  await expect(list.getByRole('link', { name: 'Pick-up and mobile service' })).toHaveCount(0);
   await page.goto('/services/annual-inspection');
   await expect(page.getByText('safety standards certificate')).toHaveCount(0);
   await expect(page.locator('.confirm-chip')).toHaveCount(0);
@@ -35,8 +41,9 @@ test('production build hides unconfirmed services and FAQ answers', async ({ pag
 test('service pages: price line, pre-filled booking link, FAQPage JSON-LD', async ({ page }) => {
   await page.goto('/services/winterizing');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Winterizing');
-  // Winterizing has Paul's Oct 5 price; services without one say "Quote after inspection".
-  await expect(page.getByRole('complementary', { name: 'Price and booking' })).toContainText('$199 plus parts and HST');
+  // Winterizing: trailers $199, motorhomes $249, plus parts and HST (Paul Oct 5, Rae Oct 8). Not "all-in": Rae didn't approve it.
+  await expect(page.getByRole('complementary', { name: 'Price and booking' })).toContainText('Trailers $199, motorhomes $249, plus parts and HST');
+  await expect(page.locator('main')).not.toContainText(/all-in/i);
   await expect(page.getByRole('link', { name: 'Book this service' })).toHaveAttribute('href', '/book?service=winterizing');
   const ld = await page.locator('script[type="application/ld+json"]').allTextContents();
   const types = ld.map((t) => JSON.parse(t)['@type']);
@@ -70,14 +77,21 @@ test('no sideways scroll; header controls stay on screen and on one line (320, 3
 
 test('production build hides unconfirmed steps, plans lists and review placeholders', async ({ page }) => {
   await page.goto('/insurance-claims');
-  await expect(page.getByText('You pay your deductible when you pick it up')).toHaveCount(0);
+  // The claim steps were confirmed on Oct 8 and now show in production.
+  await expect(page.getByText('You pay your deductible when you pick it up')).toBeVisible();
   await expect(page.getByRole('heading', { name: 'What we repair' })).toBeVisible();
+  await expect(page.locator('main')).toContainText('We work with any insurance company.');
   await page.goto('/parts');
   await expect(page.getByRole('heading', { name: 'Onan generators' })).toHaveCount(0);
+  await expect(page.locator('a[href*="rvflipbook"]')).toHaveCount(0); // NTP link removed (Rae, Oct 8)
+  await expect(page.getByRole('heading', { name: 'Browse the catalogue' })).toHaveCount(0); // Atlas: no URL yet
   await page.goto('/reviews');
   await expect(page.getByText('3–6 real Google reviews go here.')).toHaveCount(0);
   await page.goto('/terms');
-  await expect(page.getByText('We will tell you before we do extra work.')).toHaveCount(0);
+  await expect(page.locator('main')).toContainText('we do no work beyond the estimate without your OK');
+  await page.goto('/warranty');
+  await expect(page.getByRole('heading', { name: 'Warranty repairs' })).toHaveCount(0);
+  await expect(page.getByText('Platinum cargo and utility trailer coverage')).toHaveCount(0);
   for (const path of ['/insurance-claims', '/parts', '/reviews', '/about', '/warranty', '/terms']) {
     await page.goto(path);
     await expect(page.locator('.confirm-chip'), path).toHaveCount(0);
@@ -144,7 +158,9 @@ test('park home removal in production: rate shown, unproven claims hidden', asyn
   await page.goto('/park-home-removal');
   const main = page.locator('main');
   await expect(main).toContainText('$6.50 per km, plus HST');
-  for (const t of ['Fully insured', 'MTO oversize permits', '80 feet', 'every park']) await expect(main).not.toContainText(t);
+  await expect(main).toContainText('One way, measured from where the home is picked up');
+  await expect(main).toContainText('8 to 16 feet wide and up to 80 feet long');
+  for (const t of ['Fully insured', 'MTO oversize permits', 'every park']) await expect(main).not.toContainText(t);
   await expect(page.locator('.confirm-chip')).toHaveCount(0);
 });
 
@@ -174,7 +190,13 @@ test('services without a confirmed price say "Quote after inspection"; /services
   const rates = page.getByRole('region', { name: 'Shop rates' });
   await expect(rates).toContainText(`$${business.rates.labourTrailersPerHourCad} an hour for trailers`);
   await expect(rates).toContainText(`$${business.rates.labourMotorhomesPerHourCad} an hour for motorhomes`);
-  await expect(rates).toContainText('written estimate before we start');
+  // Estimate fee told before booking (Ontario CPA): 4 h at the unit's rate.
+  await expect(rates).toContainText(`A written estimate has a fee: ${business.rates.estimateFeeHours} hours of labour`);
+  await expect(rates).toContainText('$796 for a trailer, $996 for a motorhome');
+  await page.goto('/book');
+  await expect(page.locator('[data-estimate-fee]')).toContainText('A written estimate has a fee');
+  await page.goto('/services/preventative-maintenance');
+  await expect(page.getByRole('complementary', { name: 'Price and booking' })).toContainText('$199 an hour for trailers, $249 for motorhomes');
 });
 
 test('consignment raw HTML in production: no lawyer-gated labels or hidden FAQ answers anywhere (props, JSON-LD, meta)', async ({ request }) => {
@@ -188,4 +210,36 @@ test('consignment raw HTML in production: no lawyer-gated labels or hidden FAQ a
   const faqPage = ld.find((x) => x['@type'] === 'FAQPage');
   expect(faqPage.mainEntity.map((q: { name: string }) => q.name)).toEqual(consign.faq.filter((x) => !('confirm' in x)).map((x) => x.q));
   expect(html).not.toMatch(/OMVIC|licensed dealer|registered dealer|2,495/i);
+});
+
+test('business details from Rae (Oct 8): email, socials, Saturday by appointment, no Text button', async ({ page }) => {
+  await page.goto('/contact');
+  const main = page.locator('main');
+  await expect(main.locator('a[href="mailto:vacationsonwheels@gmail.com"]')).toHaveCount(1);
+  await expect(main.locator('a[href="https://www.instagram.com/vacations__on__wheels"]')).toHaveCount(1);
+  await expect(main.locator('a[href="https://www.tiktok.com/@vacations_on_wheels"]')).toHaveCount(1);
+  await expect(main.locator('[data-appointment-note]')).toContainText('No walk-ins');
+  const html = await page.content();
+  expect(html).not.toMatch(/facebook\.com|vacationsonwheelsinc|vacationsonwheel@/i);
+  const ld = (await page.locator('script[type="application/ld+json"]').allTextContents()).map((t) => JSON.parse(t));
+  const biz = ld.find((x) => x['@type'] === 'AutoRepair');
+  expect(biz.legalName).toBe('Vacations on Wheels Inc.');
+  expect(biz.address.streetAddress).toBe('1841 Hwy 7');
+  expect(biz.address.postalCode).toBe('L4K 1V4');
+  expect(biz.sameAs).toEqual(['https://www.instagram.com/vacations__on__wheels', 'https://www.tiktok.com/@vacations_on_wheels']);
+  expect(biz.openingHoursSpecification.map((d: { dayOfWeek: string }) => d.dayOfWeek)).not.toContain('Saturday');
+  await page.setViewportSize({ width: 375, height: 800 });
+  await expect(page.getByRole('navigation', { name: 'Quick actions' }).getByRole('link', { name: 'Text' })).toHaveCount(0);
+});
+
+test('team facts (Rae, Oct 8) show; Spanish and "certified" wording is gone', async ({ page }) => {
+  await page.goto('/about');
+  const main = page.locator('main');
+  for (const t of ['30 years in business.', '45 years of combined experience.', 'A team of 4 and 7 service bays.', 'A multicultural team with international experience.']) {
+    await expect(main).toContainText(t);
+  }
+  await expect(main).not.toContainText(/spanish|certified/i);
+  await page.goto('/warranty');
+  await expect(page.locator('[data-warranty-price]')).toHaveText('$2,495 plus HST, for up to 3 years');
+  await expect(page.locator('main')).toContainText('Tires are not covered');
 });
