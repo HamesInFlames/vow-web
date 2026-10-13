@@ -19,12 +19,26 @@
     "Your last service paperwork, if you have it"
   ],
   "faq": [
-    { "q": "How often should I bring it in?", "a": "Once a year, and before a long trip. Sealant, seals and bearings wear out whether or not the RV moves." },
-    { "q": "How is this different from the annual inspection?", "a": "The inspection checks the unit and tells you what needs work. Preventative maintenance also does the work: resealing, adjusting and servicing parts so small problems don’t become big ones." },
-    { "q": "How much does it cost?", "a": "It depends on the size of the unit and what we find, so we quote after we’ve looked at it." }
+    {
+      "q": "How often should I bring it in?",
+      "a": "Once a year, and before a long trip. Sealant, seals and bearings wear out whether or not the RV moves."
+    },
+    {
+      "q": "How is this different from the annual inspection?",
+      "a": "The inspection checks the unit and tells you what needs work. Preventative maintenance also does the work: resealing, adjusting and servicing parts so small problems don’t become big ones."
+    },
+    {
+      "q": "How much does it cost?",
+      "a": "It's charged at our hourly shop rate for your type of unit, plus parts and HST. How long it takes depends on the size of the unit and what we find."
+    }
   ],
-  "related": ["annual-inspection", "leak-detection", "winterizing"],
+  "related": [
+    "annual-inspection",
+    "leak-detection",
+    "winterizing"
+  ],
   "photo": "a technician resealing an RV roof",
   "confirmed": true,
-  "confirm": ["A price or price range for preventative maintenance, if Paul wants one shown"]
+  "confirm": [],
+  "priceFormat": "hourly"
 }

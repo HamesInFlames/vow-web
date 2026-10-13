@@ -1,7 +1,8 @@
 ---
 // Financing (VOW Phase 4 step 4, plan V17), adapted from RV Farm's page. Contact-only: no lender named, no rates,
 // payments or "0%" (O. Reg. 17/05 s. 61 needs APR, term and cost of borrowing beside any example), and never SIN,
-// date of birth, income or banking details (vault 95 §4, §7). What can be financed and the lender are [confirm].
+// date of birth, income or banking details (vault 95 §4, §7). Rae, Oct 8: lenders don't pay VOW; requests go to RV
+// Farm's finance team and a finance manager calls. Rates and what can be financed stay review-only.
 import Base from '../layouts/Base.astro';
 import PageIntro from '../components/astro/PageIntro.astro';
 import ContactForm from '../components/astro/ContactForm.astro';
@@ -30,14 +31,18 @@ const financeable = [
         <h2 id="how-h" class="m-0 text-[1.5rem]">This isn’t a credit application</h2>
         <p class="mt-2">We never ask for your SIN, date of birth or banking details on this website, and we don’t ask about your income. The form only tells us how to reach you and what you’re after.</p>
       </div>
-      {REVIEW && (
-        <div class="rounded border border-rule bg-white p-5">
-          <p class="m-0">Financing available through a third-party lender, on approved credit.<Confirm note="Which lender? Show this line only once a lender is confirmed (vault 95 §7)" /><Confirm lawyer note="Does a lender referral fee make VOW a loan broker under the CPA (s. 1, ss. 49–51, 78)? Link to the lender's application, or collect nothing? (vault 95 §7)" /></p>
-          <h3 class="m-0 mt-4 text-[1.25rem]">What you can finance</h3>
-          <ul class="m-0 mt-2 list-disc space-y-1 pl-6">{financeable.map((f) => <li>{f}</li>)}</ul>
-          <Confirm note="What can be financed through VOW: RV Farm units, consigned units, larger repairs?" />
-        </div>
-      )}
+      <div class="rounded border border-rule bg-white p-5">
+        <h2 class="m-0 text-[1.5rem]">How it works</h2>
+        <p class="mt-2">Financing is arranged by the finance team at {d.sibling.name}, next door, which works with several lenders. Send the form and a finance manager contacts you. Any loan is between you and the lender, on the lender’s terms.</p>
+        {REVIEW && (
+          <>
+            <h3 class="m-0 mt-4 text-[1.25rem]">What you can finance</h3>
+            <ul class="m-0 mt-2 list-disc space-y-1 pl-6">{financeable.map((f) => <li>{f}</li>)}</ul>
+            <Confirm note="What can be financed through VOW: RV Farm units, consigned units, larger repairs? Not answered Oct 8" />
+            <p class="mt-3">Rates and terms.<Confirm lawyer note="Rates (7.9%–29.9%) and terms (4–15 years) from Rae, Oct 8: not published until the lawyer checks Ontario's credit advertising rules (O. Reg. 17/05 s. 61: APR, term and cost of borrowing beside any example). RV Farm, not VOW, gets the lender payment: the loan-broker question is RV Farm's (vault 95 §4, §7)" /></p>
+          </>
+        )}
+      </div>
       <p class="m-0">Rather talk now? Call <a href={telHref(d.phones.main)} class="font-semibold tabular">{d.phones.main}</a>.</p>
     </section>
 

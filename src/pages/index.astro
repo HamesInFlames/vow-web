@@ -1,6 +1,9 @@
 ---
 // Home (plan §3b). Each section renders only once its page exists (routeExists) or its facts are confirmed.
 import Base from '../layouts/Base.astro';
+import { Image } from 'astro:assets';
+import heroPhoto from '../assets/photos/shop-slide-rebuild.jpg';
+import photos from '../data/photos.json';
 import HoursTable from '../components/astro/HoursTable.astro';
 import Placeholder from '../components/astro/Placeholder.astro';
 import Claim from '../components/astro/Claim.astro';
@@ -10,11 +13,13 @@ import ReviewQuote from '../components/astro/ReviewQuote.astro';
 import claims from '../data/claims.json';
 import reviews from '../data/reviews.json';
 import business from '../data/business.json';
-import { priceLine, telHref } from '../lib/format';
+import { formatCad, telHref } from '../lib/format';
+import { warranty } from '../lib/warranty';
 import { REVIEW, routeExists } from '../lib/site';
-import { visibleServices, bookHref, serviceHref } from '../lib/services';
+import { visibleServices, bookHref, serviceHref, servicePrice } from '../lib/services';
 
 const d = business;
+const heroMeta = photos.photos.find((p) => p.out === 'shop-slide-rebuild.jpg')!;
 const services = await visibleServices();
 const canBook = routeExists('/book');
 const month = new Date().getMonth(); // 0 = January
@@ -28,7 +33,7 @@ const showReviews = reviews.items.length > 0 && (reviews.confirmed || REVIEW);
 const showStrip = REVIEW || d.google.confirmed || claims.items.some((c) => c.id === 'pickup' && c.confirmed);
 ---
 <Base title={d.brandName}>
-  <!-- 1 Hero. No confirmed shop photo yet (plan V11), so the photo slot is an honest placeholder. -->
+  <!-- 1 Hero. The one shop photo Rae confirmed as VOW's own (Oct 8; src/data/photos.json), shown uncropped. Replace on photo day. -->
   <section aria-labelledby="hero-h" class="wrap grid items-center gap-10 py-10 lg:grid-cols-12 lg:py-16">
     <div class="lg:col-span-6">
       <p class="eyebrow m-0 text-red">Service · Parts · Warranty · Insurance claims</p>
@@ -43,7 +48,11 @@ const showStrip = REVIEW || d.google.confirmed || claims.items.some((c) => c.id 
       </div>
     </div>
     <div class="lg:col-span-6">
-      <Placeholder what="a service bay with an RV inside" ratio="16 / 10" />
+      <figure class="m-0">
+        <Image src={heroPhoto} alt={heroMeta.alt} widths={[640, 960, 1280, 1600]} sizes="(min-width: 1024px) 50vw, 100vw"
+          loading="eager" fetchpriority="high" class="h-auto w-full rounded border border-rule" />
+        <figcaption class="mt-2 text-[0.9375rem] text-slate-60">A slide-out rebuild in our shop.</figcaption>
+      </figure>
     </div>
   </section>
 
@@ -70,8 +79,11 @@ const showStrip = REVIEW || d.google.confirmed || claims.items.some((c) => c.id 
       <ul class="m-0 mt-6 grid list-none gap-4 p-0 sm:grid-cols-2 lg:grid-cols-4">
         {services.map((s) => <ServiceTile service={s} />)}
       </ul>
-      <ul class="m-0 mt-6 list-none space-y-1 p-0">
-        <Claim id="spanish" as="li" />
+      <p class="mb-0 mt-6">We work on trailers, motorhomes, boats, ATVs, motorcycles, cars and trucks, and we do wrapping, hauling and storage too.</p>
+      <ul class="m-0 mt-3 list-none space-y-1 p-0">
+        <Claim id="years" as="li" />
+        <Claim id="experience" as="li" />
+        <Claim id="multicultural" as="li" />
       </ul>
       <p class="mb-0 mt-6">Not on the list? Call <a href={telHref(d.phones.main)} class="font-semibold tabular">{d.phones.main}</a> and ask.</p>
     </div>
@@ -100,7 +112,7 @@ const showStrip = REVIEW || d.google.confirmed || claims.items.some((c) => c.id 
         <p class="eyebrow m-0 text-red">This fall</p>
         <h2 id="winter-h" class="m-0 mt-2 text-[2rem] lg:text-[2.5rem]">Winterize before the first hard frost</h2>
         <p class="mt-4 max-w-[38rem] text-lead">{winter.data.summary}</p>
-        <p class="mb-0 mt-3 text-lead font-semibold text-ink">{priceLine(winter.data.fromPriceCad, winter.data.priceNote, winter.data.priceFormat)}</p>
+        <p class="mb-0 mt-3 text-lead font-semibold text-ink">{servicePrice(winter)}</p>
         <ul class="m-0 mt-4 list-disc space-y-1 pl-6">
           {winter.data.includes.map((i) => <li>{i}</li>)}
         </ul>
@@ -129,9 +141,9 @@ const showStrip = REVIEW || d.google.confirmed || claims.items.some((c) => c.id 
         )}
         {hasWarranty && (
           <div class="flex flex-col rounded border border-rule bg-paper p-6">
-            <h2 class="m-0 text-[1.75rem] lg:text-[2rem]">Under warranty?</h2>
-            <p class="mt-3 flex-1">Bring your warranty paperwork when you book. We also offer Global Warranty extended plans.</p>
-            <div class="mt-4"><a href="/warranty" class="btn btn-secondary">Warranty repairs and plans</a></div>
+            <h2 class="m-0 text-[1.75rem] lg:text-[2rem]">Extended warranty</h2>
+            <p class="mt-3 flex-1">Global Warranty plans for your RV: {formatCad(warranty.priceCad)} plus HST for up to {warranty.years} years, {formatCad(warranty.deductibleCad)} deductible.</p>
+            <div class="mt-4"><a href="/warranty" class="btn btn-secondary">Warranty plans</a></div>
           </div>
         )}
       </div>

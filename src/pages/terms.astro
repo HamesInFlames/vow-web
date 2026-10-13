@@ -3,28 +3,27 @@ import LegalPage from '../components/astro/LegalPage.astro';
 import Confirm from '../components/astro/Confirm.astro';
 import business from '../data/business.json';
 import { telHref } from '../lib/format';
-import { REVIEW } from '../lib/site';
 const b = business;
 ---
-<LegalPage title="Terms" path="/terms" updated="2026-10-05"
+<LegalPage title="Terms" path="/terms" updated="2026-10-12"
   description="Terms for using the Vacations on Wheels website: estimates, booking requests, parts, links and Ontario law.">
-  <p>These terms cover your use of this website, run by {b.brandName} ({b.legalName}<Confirm note="Confirm the registered legal name" />). By using the site you agree to them.</p>
+  <p>These terms cover your use of this website, run by {b.brandName} ({b.legalName}). By using the site you agree to them.</p>
   <h2>Information on this site</h2>
   <p>What we say about our services and parts is general. Every RV is different, so what your RV needs is decided after we look at it. We work to keep the site correct, but it may be out of date.</p>
   <h2>Prices and estimates</h2>
-  <p>Our shop rates, our winterizing price and our transport rate are shown on this site, plus HST. Other work is quoted after inspection, and you get a written estimate before we start. An estimate may change if we find more work is needed.{REVIEW && <> We will tell you before we do extra work.<Confirm note="Estimate approval: is this how the shop works (plan §2 #6)? Lawyer: check Ontario Consumer Protection Act repair-estimate rules" /></>}</p>
+  <p>Our shop rates, our winterizing prices and our transport rate are shown on this site, plus HST. Other work is quoted after inspection. A written estimate costs {b.rates.estimateFeeHours} hours of labour at your unit’s hourly rate, and we tell you this before we book you in. An estimate may change if we find more work is needed; we will tell you before we do extra work, and we do no work beyond the estimate without your OK.<Confirm lawyer note="Estimate fee and consent wording: check against Ontario's Consumer Protection Act repair-estimate rules (s. 56–57, O. Reg. 17/05); does the 4-hour fee apply to every estimate, including fixed-price jobs like winterizing? (vault 96a §3.1.2)" /></p>
   <h2>Booking and pick-up requests</h2>
   <p>A booking or pick-up request is not a confirmed appointment. It is confirmed only when we call or write to you and agree on a date. Pick-up fees are quoted when we confirm.</p>
   <h2>Parts</h2>
   <p>A part request is a question, not an order. A part is not guaranteed to be available, and its price is not set, until we confirm both with you.</p>
   <h2>Consignment</h2>
-  <p>A consignment request is a request for a quote, not an agreement. We sell a unit for you only under a written consignment agreement that you sign first. It sets out the asking price, our commission, any costs you agree to (transport, removal, repairs), how long it runs, and when and how you are paid. If anything on this site differs from your signed agreement, the agreement applies.<Confirm lawyer note="Consignment terms: commission, payout days after funds clear, proceeds held separately, who insures the unit on the lot, unsold units and storage (vault 95 §6). Powered vehicles: OMVIC (vault 95 §1)" /></p>
+  <p>A consignment request is a request for a quote, not an agreement. We sell a unit for you only under a written consignment agreement that you sign first. It sets out the asking price, our commission (20%), any costs you agree to (transport, removal, and repairs to get the unit ready for sale, which come out of your payout), how long it runs (8 months), and when and how you are paid. You clear any loan or lien on the unit before it is listed. If anything on this site differs from your signed agreement, the agreement applies.<Confirm lawyer note="Consignment terms: payout days after funds clear (Rae: 90 days, unclear), proceeds held separately (Rae: not kept separate), who insures the unit on the lot, unsold units after the 8-month term, storage (vault 95 §6, 96a §1.15). Powered vehicles: OMVIC (vault 95 §1)" /></p>
   <h2>Financing</h2>
-  <p>A financing question on this site is not a credit application, and we don’t decide credit. Any financing is between you and the lender, on the lender’s terms.<Confirm lawyer note="Financing: loan-broker status if a lender pays VOW a referral fee; credit advertising rules (vault 95 §4, §7)" /></p>
+  <p>A financing question on this site is not a credit application, and we don’t decide credit. We pass financing requests to the finance team at {b.sibling.name}. Any financing is between you and the lender, on the lender’s terms.<Confirm lawyer note="Financing: VOW gets no lender payment (Rae, Oct 8); requests go to RV Farm, which does. Credit advertising rules before any rate is shown (vault 95 §4, §7)" /></p>
   <h2>Insurance claims</h2>
   <p>Sending a claim form does not mean your insurer has approved the repair. Your insurer decides what its policy covers.</p>
   <h2>Links to other sites</h2>
-  <p>This site links to other sites, such as Global Warranty, the NTP parts catalogue and <a href={b.sibling.url} rel="noopener">{b.sibling.name}</a>. We don’t run those sites and are not responsible for what they say or do. Their terms and privacy practices apply there.</p>
+  <p>This site links to other sites, such as Global Warranty and <a href={b.sibling.url} rel="noopener">{b.sibling.name}</a>. We don’t run those sites and are not responsible for what they say or do. Their terms and privacy practices apply there.</p>
   <h2>Photos and content</h2>
   <p>Photos and text on this site belong to {b.brandName} and may not be reused without permission.</p>
   <h2>Governing law</h2>

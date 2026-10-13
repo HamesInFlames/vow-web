@@ -1,13 +1,12 @@
 ---
 import LegalPage from '../components/astro/LegalPage.astro';
-import Confirm from '../components/astro/Confirm.astro';
 import business from '../data/business.json';
 import { telHref } from '../lib/format';
 const b = business;
 ---
 <LegalPage title="Privacy" path="/privacy" updated="2026-10-05"
   description="What the Vacations on Wheels website collects through its forms, why, and how to ask about your information.">
-  <p>This page explains what {b.brandName} ({b.legalName}<Confirm note="Confirm the registered legal name" />) collects when you use this website, in plain language. We are at {b.address.street}, {b.address.city}, {b.address.region}.</p>
+  <p>This page explains what {b.brandName} ({b.legalName}) collects when you use this website, in plain language. We are at {b.address.street}, {b.address.city}, {b.address.region}.</p>
   <h2>What we collect</h2>
   <p>Only what you type into a form on this site. We never ask for your SIN, date of birth or banking details on this website. Please do not put them in a notes box.</p>
   <ul>

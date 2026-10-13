@@ -21,8 +21,11 @@ const service = z
     /** Only once Paul confirms a price: shown as "From $X + HST". */
     fromPriceCad: z.number().int().positive().optional(),
     priceNote: z.string().default('Quote after inspection'),
-    /** How a confirmed price reads: "From $X + HST", or "$X plus parts and HST" for a fixed labour price. */
-    priceFormat: z.enum(['from', 'plus-parts']).default('from'),
+    /** How a confirmed price reads: "From $X + HST", "$X plus parts and HST" for a fixed labour price,
+     *  or 'hourly' = the shop rates from business.json (no fromPriceCad needed). */
+    priceFormat: z.enum(['from', 'plus-parts', 'hourly']).default('from'),
+    /** A separate motorhome price for a 'plus-parts' service (winterizing: $199 trailers, $249 motorhomes). */
+    motorhomePriceCad: z.number().int().positive().optional(),
     /** Usual time in the shop, only once confirmed. */
     turnaround: z.string().optional(),
     includes: z.array(z.string()).min(1),

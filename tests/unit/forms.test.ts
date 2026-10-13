@@ -41,4 +41,6 @@ test('priceLine: a confirmed price, otherwise the note (never "Call for price")'
   assert.equal(priceLine(undefined, 'Quote by phone'), 'Quote by phone');
   assert.equal(priceLine(199, undefined, 'plus-parts'), '$199 plus parts and HST');
   assert.equal(priceLine(undefined, undefined, 'plus-parts'), 'Quote after inspection');
+  assert.equal(priceLine(199, undefined, 'plus-parts', 249), 'Trailers $199, motorhomes $249, plus parts and HST');
+  assert.equal(priceLine(199, undefined, 'hourly', 249), '$199 an hour for trailers, $249 for motorhomes, plus parts and HST');
 });

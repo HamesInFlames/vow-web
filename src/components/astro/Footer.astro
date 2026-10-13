@@ -3,7 +3,7 @@
 import { Image } from 'astro:assets';
 import logo from '../../assets/brand/vow-logo.png';
 import business from '../../data/business.json';
-import { addressLine, telHref } from '../../lib/format';
+import { addressLine, telHref, socialLinks } from '../../lib/format';
 import { footerNav, legalNav, routeExists } from '../../lib/site';
 import HoursTable from './HoursTable.astro';
 import Confirm from './Confirm.astro';
@@ -18,6 +18,7 @@ const columns = variant === 'full'
   : [];
 const legal = legalNav.filter((i) => routeExists(i.href));
 const d = business;
+const social = socialLinks(d.social);
 ---
 <footer class="bg-slate text-mist pb-24 lg:pb-0 print:hidden">
   {variant === 'full' && (
@@ -38,6 +39,13 @@ const d = business;
           ? <><br /><a class="tap text-mist underline decoration-mist/50 hover:text-white" href={`mailto:${d.email}`}>{d.email}</a></>
           : <Confirm note="Which email address to publish" />}
       </address>
+      {social.length > 0 && (
+        <ul class="m-0 mt-3 flex list-none flex-wrap gap-x-5 p-0" aria-label="Follow us">
+          {social.map((s) => (
+            <li><a class="inline-flex min-h-11 items-center text-mist underline decoration-mist/50 hover:text-white" href={s.href} target="_blank" rel="noopener">{s.label}<span class="sr-only"> (opens in a new tab)</span></a></li>
+          ))}
+        </ul>
+      )}
     </section>
 
     <section aria-label="Hours" class="lg:col-span-3 text-mist">
@@ -71,7 +79,7 @@ const d = business;
 
   <div class:list={[{ 'border-t border-white/15': variant === 'full' }]}>
     <div class="wrap flex flex-wrap items-center gap-x-6 gap-y-2 py-5 text-[0.9375rem]">
-      <p class="m-0">© {year} {d.legalName}<Confirm note="Registered name: Vacations on Wheels Inc.?" /></p>
+      <p class="m-0">© {year} {d.legalName}</p>
       {legal.length > 0 && (
         <ul class="flex flex-wrap gap-x-4 list-none m-0 p-0">
           {legal.map((i) => <li><a class="inline-flex min-h-11 items-center text-mist underline decoration-mist/40 hover:text-white" href={i.href}>{i.label}</a></li>)}

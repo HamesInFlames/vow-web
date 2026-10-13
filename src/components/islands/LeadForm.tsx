@@ -226,7 +226,7 @@ export default function LeadForm(p: LeadFormProps) {
           <select id={`${id}-type`} name="vehicle_type" className={field} value={vehicleType}
             onChange={(e) => setVehicleType(e.target.value)}>
             <option value="">Choose one</option>
-            {[...RV_TYPES, ...(kind === 'claim' ? [] : Object.values(POWER_SPORTS)), 'Other'].map((t) => <option key={t} value={t}>{t}</option>)}
+            {[...RV_TYPES, ...(kind === 'claim' ? [] : [...Object.values(POWER_SPORTS), 'Car or truck']), 'Other'].map((t) => <option key={t} value={t}>{t}</option>)}
           </select>
         </div>
         <div>

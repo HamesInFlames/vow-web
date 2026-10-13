@@ -3,20 +3,20 @@
 Plan: `docs/plan.md` (§3g phases). Approved Oct 5, 2026.
 
 ## In progress
-- [ ] **ASAP (James, Oct 6): winterizing ad.** Season is now. Price is settled: $199 (1 h) plus parts (Paul, Oct 5). Runs from the VOW Facebook Page (and staff profiles, per Paul's Oct 6 text). Still needed: motorhome price ($199 or 1 h at $249?), what's included, ad budget, a real shop photo (no AI imagery), and where it links (the review site's winterizing page or a phone/booking link until the domain is live). Questions are in vault `96` §3.2 #4, §3.4 #11, §5 #3, §3.8 #33
-- [ ] Photo pipeline (RV Farm scripts/photos.mjs + VOW watermark): only once Rae confirms a photo (V11)
+- [ ] Winterizing ad: on hold (Rae, Oct 8: Paul isn't interested in a winterizing deal). The site says trailers $199, motorhomes $249, plus parts and HST
+- [ ] Photo `018-image-7.png` (motorhome on red lifts): Rae says it's VOW's (Oct 8), but it isn't the shop in `015` and looks like stock; James checks before adding it to `src/data/photos.json`
 - [ ] Reviews: James picks 3–6 Google reviews into src/data/reviews.json; Rae OKs quoting them
-- [ ] Walkthrough with Paul and Rae (James): `docs/walkthrough-vow.md` (36 questions, Part 3 lawyer list incl. OMVIC and consignment terms); then apply the answers (the sheet has an answer → file table)
+- [ ] Open answers from Rae/Paul: the HOLD list in `tasks/status.md` (Oct 12) and `docs/confirm-report.md` (48 items)
 - [ ] Lawyer: OMVIC status for consigning motorhomes, motorcycles, ATVs/UTVs (`consign.json` `lawyer` → `false` publishes a type), consignment agreement terms, financing/loan-broker question (vault `95`)
 - [ ] Optional: whole-branch `/code-review high` on `5e5c53d..HEAD` (the Oct 6 review only covered Phase 3)
 
 ## Blocked / waiting on James
-- [ ] Paul and Rae's answers (`docs/walkthrough-vow.md`; plan §5)
 - [ ] Web3Forms access key for VOW forms (`PUBLIC_WEB3FORMS_KEY`); until then forms show a call block
 - [ ] vacationsonwheels.ca is registered to Turnkey; nothing launches on it until the registrant is Paul's company (vault `92`)
 - [ ] A vector VOW logo (the badge is a 392 px raster)
 
 ## Completed
+- [x] Rae's Oct 8 answers applied (vault `96a`): hours, email, socials, prices, estimate fee, services, claims, consignment, removal, warranty, financing; photo pipeline and the hero photo; confirm report 88 → 48 (Oct 12)
 - [x] VOW Phase 4 — `/consign`, `/park-home-removal`, `/power-sports`, `/financing`, Paul's rates, header dropdown panels, RV Farm fees ($1,995 PDI, $599 admin), review (11 findings fixed) (Oct 6)
 - [x] Railway review service `vow-web` from `dev`: https://vow-web-production.up.railway.app (Oct 6)
 - [x] Phase 3 — `/code-review high` findings (8) fixed; `main` created from `dev` and made the default branch (Oct 6)

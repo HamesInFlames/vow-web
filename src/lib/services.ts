@@ -2,6 +2,8 @@
 // review builds (PUBLIC_REVIEW=1), the same rule as claims.json.
 import { getCollection, type CollectionEntry } from 'astro:content';
 import { REVIEW } from './site';
+import business from '../data/business.json';
+import { priceLine } from './format';
 
 export type Service = CollectionEntry<'services'>;
 
@@ -16,3 +18,12 @@ export const bookHref = (s?: Service) => (s ? `/book?service=${s.id}` : '/book')
 
 /** FAQ entries this build shows. */
 export const visibleFaq = (s: Service) => s.data.faq.filter((f) => !f.confirm || REVIEW);
+
+/** The price line for a service. 'hourly' services take the shop rates from business.json. */
+export function servicePrice(s: Service): string {
+  const d = s.data;
+  if (d.priceFormat === 'hourly') {
+    return priceLine(business.rates.labourTrailersPerHourCad, d.priceNote, 'hourly', business.rates.labourMotorhomesPerHourCad);
+  }
+  return priceLine(d.fromPriceCad, d.priceNote, d.priceFormat, d.motorhomePriceCad);
+}

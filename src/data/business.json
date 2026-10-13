@@ -17,7 +17,7 @@
     "tollFree": null,
     "sms": null
   },
-  "email": "vacationsonwheel@gmail.com",
+  "email": "vacationsonwheels@gmail.com",
   "timeZone": "America/Toronto",
   "hours": {
     "mon": [
@@ -40,16 +40,18 @@
       "09:00",
       "17:00"
     ],
-    "sat": [
-      "09:00",
-      "17:00"
-    ],
+    "sat": null,
     "sun": null
   },
-  "closedDayNote": {},
+  "closedDayNote": {
+    "sat": "10:00 AM–3:00 PM, by appointment only"
+  },
   "holidayNote": "",
   "memberships": [],
-  "social": {},
+  "social": {
+    "instagram": "https://www.instagram.com/vacations__on__wheels",
+    "tiktok": "https://www.tiktok.com/@vacations_on_wheels"
+  },
   "google": {
     "rating": 4.4,
     "count": 140,
@@ -58,10 +60,14 @@
     "confirmed": false
   },
   "rates": {
-    "note": "Paul's Oct 5 fee list, final per vault 20-decisions 2026-10-06. Plus HST. Shown on /services, /services/winterizing and /park-home-removal.",
+    "note": "Paul's Oct 5 fee list, final per vault 20-decisions 2026-10-06; Rae's Oct 8 answers (vault 96a §1.11, §3.1.2). Plus HST.",
     "labourTrailersPerHourCad": 199,
     "labourMotorhomesPerHourCad": 249,
-    "deliveryPerKmCad": 6.5
+    "estimateFeeHours": 4,
+    "estimateFeeNote": "2 hours of inspection plus 2 hours of computer diagnostics, at the unit's hourly rate (Rae, Oct 8)",
+    "deliveryPerKmCad": 6.5,
+    "deliveryMaxWidthFt": 8,
+    "deliveryMaxLengthFt": 42
   },
   "sibling": {
     "name": "RV Farm",
@@ -70,15 +76,9 @@
     "phone": "905-605-7056"
   },
   "confirm": [
-    "legalName: is \"Vacations on Wheels Inc.\" the registered name? (current site footer and JSON-LD)",
-    "address: \"1841 Hwy 7\" (header) or \"1841 Hwy 7 W\" (JSON-LD, Google)?",
-    "email: vacationsonwheel@gmail.com is the only address on the current site (About page). Keep it, or publish one on the domain?",
-    "phones.sms: is there a text-capable line? The sticky bar shows Text only when set",
-    "hours: current site says Mon–Sat 9–5, Sun closed; Google says Mon–Fri 9–6, weekends closed. Holidays?",
-    "social: the current site's links are empty; facebook.com/vacationsonwheels and instagram.com/vacationsonwheelsinc exist (audit). Are they VOW's and used?",
+    "hours: holiday hours (not answered Oct 8). Sunday closed is implied; Saturday 10–3 by appointment only (Rae, Oct 8)",
     "google: rating and review count (4.4★, ~140 on Sept 17) are re-read at launch; the profile URL should be the exact listing",
-    "sibling.url: links to RV Farm's current site (thervfarm.ca); switch when the new RV Farm site launches on its domain (rvfarm.ca vs thervfarm.ca)",
-    "rates.deliveryPerKmCad: $6.50/km. How is distance counted (one way or both, from the shop?), and does it also apply to service pick-ups?",
-    "rates: is there a fee for a written estimate? (Ontario CPA s. 57: it must be disclosed first)"
-  ]
+    "sibling.url: links to RV Farm's current site (thervfarm.ca); switch when the new RV Farm site launches on its domain (rvfarm.ca vs thervfarm.ca)"
+  ],
+  "appointmentNote": "Saturdays 10 AM to 3 PM are by appointment only. No walk-ins: call ahead to book a time."
 }

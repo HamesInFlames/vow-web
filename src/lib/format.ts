@@ -21,11 +21,35 @@ export const addressLine = (a: { street: string; city: string; region: string; p
   `${a.street}, ${a.city}, ${a.region} ${a.postal}`;
 
 /** Service price line (AGENTS.md): only once Paul confirms a price; otherwise the note.
- *  'from' → "From $129 + HST"; 'plus-parts' → "$199 plus parts and HST" (a fixed labour price, parts extra). */
-export function priceLine(fromPriceCad: number | undefined, note = 'Quote after inspection', format: 'from' | 'plus-parts' = 'from'): string {
+ *  'from' → "From $129 + HST"; 'plus-parts' → "$199 plus parts and HST" (a fixed labour price, parts extra),
+ *  or with a motorhome price "Trailers $199, motorhomes $249, plus parts and HST";
+ *  'hourly' (with both rates) → "$199 an hour for trailers, $249 for motorhomes, plus parts and HST". */
+export function priceLine(
+  fromPriceCad: number | undefined,
+  note = 'Quote after inspection',
+  format: 'from' | 'plus-parts' | 'hourly' = 'from',
+  motorhomeCad?: number,
+): string {
   if (!fromPriceCad) return note;
-  return format === 'plus-parts' ? `${formatCad(fromPriceCad)} plus parts and HST` : `From ${formatCad(fromPriceCad)} + HST`;
+  if (format === 'hourly') {
+    return motorhomeCad
+      ? `${formatCad(fromPriceCad)} an hour for trailers, ${formatCad(motorhomeCad)} for motorhomes, plus parts and HST`
+      : `${formatCad(fromPriceCad)} an hour, plus parts and HST`;
+  }
+  if (format === 'plus-parts') {
+    return motorhomeCad
+      ? `Trailers ${formatCad(fromPriceCad)}, motorhomes ${formatCad(motorhomeCad)}, plus parts and HST`
+      : `${formatCad(fromPriceCad)} plus parts and HST`;
+  }
+  return `From ${formatCad(fromPriceCad)} + HST`;
 }
 
 /** "905-605-7056" → "sms:+19056057056" */
 export const smsHref = (phone: string) => telHref(phone).replace(/^tel:/, 'sms:');
+
+/** business.json `social` → labelled links in a fixed order (Instagram, TikTok, Facebook, YouTube). */
+const SOCIAL_LABELS: Record<string, string> = { instagram: 'Instagram', tiktok: 'TikTok', facebook: 'Facebook', youtube: 'YouTube' };
+export const socialLinks = (social: Record<string, string | undefined>) =>
+  Object.keys(SOCIAL_LABELS)
+    .filter((k) => social[k])
+    .map((k) => ({ label: SOCIAL_LABELS[k], href: social[k] as string }));

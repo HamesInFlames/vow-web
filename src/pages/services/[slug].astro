@@ -6,11 +6,11 @@ import PageIntro from '../../components/astro/PageIntro.astro';
 import Placeholder from '../../components/astro/Placeholder.astro';
 import Confirm from '../../components/astro/Confirm.astro';
 import ServiceTile from '../../components/astro/ServiceTile.astro';
-import Claim from '../../components/astro/Claim.astro';
+import EstimateFee from '../../components/astro/EstimateFee.astro';
 import business from '../../data/business.json';
-import { priceLine, telHref } from '../../lib/format';
+import { telHref } from '../../lib/format';
 import { breadcrumbJsonLd } from '../../lib/seo';
-import { visibleServices, visibleFaq, bookHref, type Service } from '../../lib/services';
+import { visibleServices, visibleFaq, bookHref, servicePrice, type Service } from '../../lib/services';
 
 export const getStaticPaths = (async () => {
   const services = await visibleServices();
@@ -83,16 +83,14 @@ const faqLd = faq.length
     <aside class="lg:col-span-5" aria-label="Price and booking">
       <div class="rounded border border-rule bg-white p-5 lg:sticky lg:top-4">
         <p class="m-0 text-[0.9375rem] font-semibold uppercase tracking-wide text-slate-60">Price</p>
-        <p class="m-0 mt-1 text-[1.5rem] font-bold text-ink">{priceLine(d.fromPriceCad, d.priceNote, d.priceFormat)}</p>
-        {!d.fromPriceCad && <p class="m-0 mt-1">We look at your RV first, then tell you the cost.</p>}
+        <p class="m-0 mt-1 text-[1.5rem] font-bold text-ink">{servicePrice(s)}</p>
+        {!d.fromPriceCad && d.priceFormat !== 'hourly' && <p class="m-0 mt-1">We look at your RV first, then tell you the cost.</p>}
         {d.turnaround && <p class="m-0 mt-3"><span class="font-semibold text-ink">Usually takes:</span> {d.turnaround}</p>}
         <div class="mt-5 grid gap-3">
           <a href={bookHref(s)} class="btn btn-primary text-lg">Book this service</a>
           <a href={telHref(business.phones.main)} class="btn btn-secondary tabular">Call {business.phones.main}</a>
         </div>
-        <ul class="m-0 mt-4 list-none space-y-1 p-0 text-[0.9375rem]">
-          <Claim id="spanish" as="li" />
-        </ul>
+        {!d.fromPriceCad && <div class="mt-4 border-t border-rule pt-4"><EstimateFee compact /></div>}
       </div>
       <div class="mt-6"><Placeholder what={d.photo} /></div>
     </aside>

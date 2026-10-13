@@ -5,13 +5,13 @@ import Base from '../layouts/Base.astro';
 import PageIntro from '../components/astro/PageIntro.astro';
 import HoursTable from '../components/astro/HoursTable.astro';
 import Placeholder from '../components/astro/Placeholder.astro';
-import Confirm from '../components/astro/Confirm.astro';
 import business from '../data/business.json';
-import { telHref } from '../lib/format';
+import { telHref, socialLinks } from '../lib/format';
 import { breadcrumbJsonLd } from '../lib/seo';
 import { routeExists } from '../lib/site';
 
 const d = business;
+const social = socialLinks(d.social);
 const crumbs = [{ name: 'Home', path: '/' }, { name: 'About us', path: '/about' }, { name: 'Contact', path: '/contact' }];
 const requests = [
   { label: 'Book service', href: '/book', text: 'Repairs, maintenance, winterizing, pick-up.' },
@@ -30,12 +30,20 @@ const requests = [
       {d.email && (
         <>
           <h2 class="m-0 mt-6 text-[1.5rem]">Email</h2>
-          <p class="m-0"><a href={`mailto:${d.email}`} class="tap">{d.email}</a><Confirm note="Keep vacationsonwheel@gmail.com, or publish an address on the domain? (plan §5 #3)" /></p>
+          <p class="m-0"><a href={`mailto:${d.email}`} class="tap">{d.email}</a></p>
         </>
       )}
       <h2 class="m-0 mt-6 text-[1.5rem]">Visit</h2>
       <address class="mt-2 not-italic text-lead">{d.address.street}<br />{d.address.city}, {d.address.region} {d.address.postal}</address>
       <a href={d.address.mapsUrl} target="_blank" rel="noopener" class="btn btn-primary mt-4">Get directions<span class="sr-only"> (opens Google Maps in a new tab)</span></a>
+      {social.length > 0 && (
+        <>
+          <h2 class="m-0 mt-6 text-[1.5rem]">Follow us</h2>
+          <ul class="m-0 list-none p-0">
+            {social.map((s) => <li><a href={s.href} target="_blank" rel="noopener" class="tap">{s.label}<span class="sr-only"> (opens in a new tab)</span></a></li>)}
+          </ul>
+        </>
+      )}
     </div>
     <div class="lg:col-span-4">
       <HoursTable caption="Shop hours" />

@@ -1,0 +1,11 @@
+{
+  "note": "Site photos Rae confirmed as VOW's own (Oct 8, vault 96a §3.7.26). scripts/photos.mjs makes the watermarked copies in src/assets/photos/. Old and blurry: replace on photo day. 018-image-7.png (motorhome on red lifts) is also confirmed by Rae but is not used yet: its bright white bay with red columns doesn't look like the shop in 015-vow.jpg, so James checks it is not a stock or manufacturer photo first.",
+  "photos": [
+    {
+      "file": "015-vow.jpg",
+      "out": "shop-slide-rebuild.jpg",
+      "alt": "A travel trailer in the Vacations on Wheels shop with its slide-out removed and set on stands while a technician rebuilds it",
+      "confirmed": "Rae, Oct 8"
+    }
+  ]
+}

@@ -19,12 +19,25 @@
     "Photos of the damage taken when it happened"
   ],
   "faq": [
-    { "q": "Do I call my insurer first, or you?", "a": "Call your insurer to open the claim, then call us to book the inspection.", "confirm": "Insurance claim steps: who calls the insurer first?" },
-    { "q": "Which insurance companies do you work with?", "a": "Call us and tell us who your insurer is.", "confirm": "Which insurers does VOW work with often? (The old site says \"all major insurance companies\", unverified.)" },
-    { "q": "How do I pay the deductible?", "a": "You pay the deductible to us when you pick up the RV.", "confirm": "How is the deductible paid, and when?" }
+    {
+      "q": "Do I call my insurer first, or you?",
+      "a": "Call your insurer first to open the claim. Then call us to book the inspection."
+    },
+    {
+      "q": "Which insurance companies do you work with?",
+      "a": "Any insurance company. Tell us who yours is when you call."
+    },
+    {
+      "q": "How do I pay the deductible?",
+      "a": "Your insurer tells us your deductible. You pay it to us when you pick up the RV."
+    }
   ],
-  "related": ["leak-detection", "awnings-and-accessories", "warranty-repair"],
+  "related": [
+    "leak-detection",
+    "awnings-and-accessories",
+    "warranty-repair"
+  ],
   "photo": "storm damage on an RV being repaired",
-  "confirmed": false,
-  "confirm": ["The insurance claim steps, start to finish (plan §5 #8)"]
+  "confirmed": true,
+  "confirm": []
 }

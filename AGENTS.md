@@ -21,7 +21,7 @@
 - No price unless Paul confirmed it: "From $X + HST" when confirmed, otherwise "Quote after inspection". Never "Call for price"
 - No OMVIC or dealer-act wording; no motorhome-brokerage copy until a lawyer has looked. Never "new owner"
 - Google rating as a plain linked line from `business.json`, never a badge widget. No invented reviews, staff, numbers, awards, certifications or insurer names
-- Real photos only (watermarked derivatives); otherwise a sand "Photo coming: [what]" block. No AI or stock imagery. `015-vow.jpg` and `018-image-7.png` are unconfirmed and stay out until Rae confirms them
+- Real photos only (watermarked derivatives from `scripts/photos.mjs`, listed in `src/data/photos.json`); otherwise a sand "Photo coming: [what]" block. No AI or stock imagery. Rae confirmed `015-vow.jpg` and `018-image-7.png` as VOW's own (Oct 8); `018` stays out until James checks it isn't a stock or manufacturer photo
 - No customer PII in the repo. Forms never ask for SIN, DOB or banking
 - Banned copy: unlock, elevate, seamless, empower, effortless, leverage, streamline, journey, robust, cutting-edge, next-level, "it's not just X", "look no further"
 - Readability: body 17–18 px, 7:1 contrast target, 44–48 px targets, labels above fields, phone in text on every screen. No Inter/Geist, no dark mode, no sliders, no smooth-scroll, no parallax on text, no entry modals
@@ -34,7 +34,7 @@
 - /src/lib — `hours.ts`, `seo.ts` (AutoRepair JSON-LD), `format.ts`, `site.ts` (nav, review mode)
 - /src/assets/brand — VOW logo (raster; vector still an open ask)
 - /src/styles/global.css — Tailwind `@theme` tokens
-- /scripts — `contrast.mjs`, `content-check.mjs`, `confirm-report.mjs`
+- /scripts — `contrast.mjs`, `content-check.mjs`, `confirm-report.mjs`, `photos.mjs` (watermarked site photos from the vault)
 - /tests — Playwright: link crawl, axe, tap targets, font size, reduced motion, screenshots; unit tests for lib
 - /docs — `plan.md`, `site-capture/`, `confirm-report.md` (generated); /tasks — todo, status, decisions
 
